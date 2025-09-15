@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class UsuarioModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Usuario")
-    private long id;
+    private long idUsuario;
 
     @Column(name = "Nome_Usuario", nullable = false, unique = true)
     private String nomeUsuario;
@@ -26,8 +26,11 @@ public class UsuarioModel {
     @Column(name = "Responsavel", nullable = false)
     private String responsavel;
 
-    @Column(name = "Tipo_Usuario", nullable = false)
-    private String tipoUsuario;
+    private enum tipoUsuario{
+        Chefe,
+        Admin,
+        Analista
+    }
 
     @Column(name = "Senha", nullable = false)
     private String senha;
