@@ -55,7 +55,7 @@ public class OcorrenciaModel {
 
     @OneToMany(mappedBy = "Ocorrencia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AnexosModel> anexos;
-//  Erro por não existir a classe AssinaturaModel
+    
     @OneToMany(mappedBy = "Ocorrencia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AssinaturaModel> assinatura;
 }
