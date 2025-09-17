@@ -53,7 +53,6 @@ public class OcorrenciaModel {
     @ManyToOne @JoinColumn(name = "FK_ID_Usuario")
     private UsuarioModel fkIdUsuario;
 
-//  Erro por não existir a classe AnexosModel
     @OneToMany(mappedBy = "Ocorrencia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AnexosModel> anexos;
 //  Erro por não existir a classe AssinaturaModel
