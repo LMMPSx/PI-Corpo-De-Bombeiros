@@ -1,3 +1,4 @@
+/* Esqueceu.css */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
 body, html, #root {
@@ -29,16 +30,20 @@ body, html, #root {
   padding: 40px;
   box-sizing: border-box;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .login-box h2 {
   color: white;
-  font-size: 16px;
+  font-size: 24px;
   line-height: 1.6;
   margin-bottom: 30px;
 }
 
-.login-box h2 span {
+.login-box span {
   font-weight: bold;
 }
 
@@ -69,7 +74,7 @@ body, html, #root {
   margin-right: 10px;
   cursor: default;
 }
-          
+
 .icon.small {
   width: 20px;
   height: 20px;
@@ -79,13 +84,12 @@ body, html, #root {
   cursor: pointer;
 }
 
-.forgot {
-  display: block;
-  text-align: left;
-  margin: 10px 0 25px 55px;
-  font-size: 14px;
+.forgot-message {
   color: white;
-  text-decoration: underline;
+  font-size: 14px;
+  text-align: left;
+  margin: 10px 0;
+  max-width: 492px;
 }
 
 .btn {
@@ -117,7 +121,7 @@ body, html, #root {
   height: auto;
 }
 
-/* 🔹 Responsividade */
+/* Responsividade */
 @media (max-width: 1400px) {
   .login-page {
     gap: 50px;
