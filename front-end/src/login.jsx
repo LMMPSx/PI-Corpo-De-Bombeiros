@@ -1,8 +1,11 @@
 import { useState } from "react";
 import "./Login.css";
 import logo from "./assets/logo.png";
+import cadeado from "./assets/cadeado.png";
 
-<img src={logo} alt="CBMPE" />
+
+<img src={logo.png} alt="CBMPE" />
+
 
 
 
@@ -27,7 +30,7 @@ export default function Login() {
 
         {/* Campo Senha */}
         <div className="input-group">
-          <span className="icon">🔒</span>
+          <img src={cadeado.png} alt="" />
           <input
             type={showPassword ? "text" : "password"}
             placeholder="Senha"
@@ -49,9 +52,10 @@ export default function Login() {
 
       {/* Logo à direita */}
       <div className="logo-box">
-        
-
+          <img src={logo} alt="Logo" className="logo" />
       </div>
+
+      
     </div>
   );
 }
