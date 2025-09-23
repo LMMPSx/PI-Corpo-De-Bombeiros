@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class LogModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Log")
-    private long idLog;
+    private Integer idLog;
 
     private enum tipoAlteracao{
         Create,
