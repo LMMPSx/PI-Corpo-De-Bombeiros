@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class AnexosModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Anexo")
-    private long idAnexos;
+    private Integer idAnexos;
 
     @Column(name = "Nome_Arquivo", nullable = false)
     private String nomeArquivo;

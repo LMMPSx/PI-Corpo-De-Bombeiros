@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class StatusOcorrenciaModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Status")
-    private long idStatus;
+    private Integer idStatus;
 
     @Column(name = "Nome_Status", nullable = false)
     private String nomeStatus;

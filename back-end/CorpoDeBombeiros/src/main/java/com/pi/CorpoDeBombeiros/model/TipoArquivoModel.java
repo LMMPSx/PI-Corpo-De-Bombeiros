@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class TipoArquivoModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Tipo_Arquivo")
-    private long idTipoArquivo;
+    private Integer idTipoArquivo;
 
     @Column(name = "Nome_Tipo_Arquivo", nullable = false, unique = true)
     private String nomeTipoArquivo;

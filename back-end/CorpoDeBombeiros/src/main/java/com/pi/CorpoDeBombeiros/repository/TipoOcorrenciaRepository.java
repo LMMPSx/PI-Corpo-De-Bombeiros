@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TipoOcorrenciaRepository extends JpaRepository<TipoOcorrenciaModel, Long> {
+public interface TipoOcorrenciaRepository extends JpaRepository<TipoOcorrenciaModel, Integer> {
 }

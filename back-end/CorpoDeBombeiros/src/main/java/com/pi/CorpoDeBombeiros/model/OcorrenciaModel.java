@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
 public class OcorrenciaModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Ocorrencia")
-    private long idOcorrencia;
+    private Integer idOcorrencia;
 
     @Column(name = "Nome_Solicitante", nullable = false)
     private String nomeSolicitante;
@@ -30,10 +31,10 @@ public class OcorrenciaModel {
     private LocalDateTime dataOcorrencia;
 
     @Column(name = "Latitude", nullable = false, precision = 10, scale = 8)
-    private Double latitude;
+    private BigDecimal latitude;
 
     @Column(name = "Longitude", nullable = false, precision = 11, scale = 8)
-    private Double longitude;
+    private BigDecimal longitude;
 
     @ManyToOne @JoinColumn(name = "FK_Prioridade_Ocorrencia")
     private PrioridadeOcorrenciaModel fkPrioridadeOcorrencia;
@@ -53,9 +54,9 @@ public class OcorrenciaModel {
     @ManyToOne @JoinColumn(name = "FK_ID_Usuario")
     private UsuarioModel fkIdUsuario;
 
-    @OneToMany(mappedBy = "Ocorrencia", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "fkIdOcorrencia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AnexosModel> anexos;
     
-    @OneToMany(mappedBy = "Ocorrencia", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "fkIdOcorrencia", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AssinaturaModel> assinatura;
 }
