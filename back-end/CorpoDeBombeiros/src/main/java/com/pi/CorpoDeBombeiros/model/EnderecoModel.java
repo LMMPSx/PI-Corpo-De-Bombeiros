@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class EnderecoModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Endereco")
-    private long idEndereco;
+    private Integer idEndereco;
 
     @Column(name = "CEP", nullable = false)
     private String cep;

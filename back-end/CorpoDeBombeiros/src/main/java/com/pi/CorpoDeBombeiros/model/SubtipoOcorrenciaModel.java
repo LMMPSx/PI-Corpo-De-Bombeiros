@@ -15,14 +15,11 @@ import lombok.NoArgsConstructor;
 public class SubtipoOcorrenciaModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Subtipo")
-    private long idSubtipo;
+    private Integer idSubtipo;
 
     @Column(name = "Nome_Subtipo",nullable = false)
     private String nomeSubtipo;
 
     @Column(name = "Descricao_Subtipo")
     private String descricaoSubtipo;
-
-    @OneToMany @JoinColumn(name = "FK_ID_Tipo")
-    private TipoOcorrenciaModel fkIdTipo;
 }

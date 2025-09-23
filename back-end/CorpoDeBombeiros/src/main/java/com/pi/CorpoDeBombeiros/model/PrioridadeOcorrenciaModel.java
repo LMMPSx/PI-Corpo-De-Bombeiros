@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class PrioridadeOcorrenciaModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Prioridade")
-    private long idPrioridade;
+    private Integer idPrioridade;
 
     @Column(name = "Nome_Prioridade", nullable = false)
     private String nomePrioridade;
