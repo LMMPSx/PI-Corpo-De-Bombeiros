@@ -12,4 +12,8 @@ public interface OcorrenciaRepository extends JpaRepository<OcorrenciaModel, Int
     List<OcorrenciaModel> findByDataOcorrenciaBetween(LocalDateTime inicio, LocalDateTime fim);
 
     List<OcorrenciaModel> findByFkStatusOcorrencia_NomeStatus(String Status);
+
+    List<OcorrenciaModel> findByFkTipoOcorrencia_NomeTipo(String nomeTipo);
+
+    List<OcorrenciaModel> findByPrioridadeOcorrencia_NomePrioridade(String nomePrioridade);
 }
