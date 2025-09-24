@@ -65,7 +65,7 @@ public class OcorrenciaService {
                 .collect(Collectors.toList());
     }
 
-    public OcorrenciaDTO finById(Integer id) {
+    public OcorrenciaDTO findById(Integer id) {
         OcorrenciaModel ocorrencia = ocorrenciaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
         return toDTO(ocorrencia);
