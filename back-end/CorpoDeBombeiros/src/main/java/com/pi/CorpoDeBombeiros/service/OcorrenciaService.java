@@ -1,6 +1,7 @@
 package com.pi.CorpoDeBombeiros.service;
 
 import com.pi.CorpoDeBombeiros.dto.OcorrenciaDTO;
+import com.pi.CorpoDeBombeiros.dto.OcorrenciaRequestDTO;
 import com.pi.CorpoDeBombeiros.model.EnderecoModel;
 import com.pi.CorpoDeBombeiros.model.OcorrenciaModel;
 import com.pi.CorpoDeBombeiros.repository.OcorrenciaRepository;

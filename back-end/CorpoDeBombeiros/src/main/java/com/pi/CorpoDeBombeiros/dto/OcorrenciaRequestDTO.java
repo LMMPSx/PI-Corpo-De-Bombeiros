@@ -1,5 +1,6 @@
 package com.pi.CorpoDeBombeiros.dto;
 
+import com.pi.CorpoDeBombeiros.model.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,10 @@ public class OcorrenciaRequestDTO {
     private String telefoneSolicitante;
     private BigDecimal latitude;
     private BigDecimal longitude;
-    private Integer fkPrioridadeOcorrencia;
-    private Integer fkStatusOcorrencia;
-    private Integer fkTipoOcorrencia;
-    private Integer fkSubtipoOcorrencia;
-    private Integer enderecoOcorrencia;
-    private Integer fkIdUsuario;
+    private PrioridadeOcorrenciaModel fkPrioridadeOcorrencia;
+    private StatusOcorrenciaModel fkStatusOcorrencia;
+    private TipoOcorrenciaModel fkTipoOcorrencia;
+    private SubtipoOcorrenciaModel fkSubtipoOcorrencia;
+    private EnderecoModel enderecoOcorrencia;
+    private UsuarioModel fkIdUsuario;
 }
