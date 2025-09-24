@@ -11,5 +11,5 @@ import java.util.List;
 public interface OcorrenciaRepository extends JpaRepository<OcorrenciaModel, Integer> {
     List<OcorrenciaModel> findByDataOcorrenciaBetween(LocalDateTime inicio, LocalDateTime fim);
 
-    List<OcorrenciaModel> findByFkStatusOcorrencia_IdStatus(Integer idStatus);
+    List<OcorrenciaModel> findByFkStatusOcorrencia_NomeStatus(String Status);
 }
