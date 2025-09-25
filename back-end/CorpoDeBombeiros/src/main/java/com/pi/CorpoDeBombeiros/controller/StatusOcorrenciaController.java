@@ -18,12 +18,12 @@ public class StatusOcorrenciaController {
 
     private final StatusOcorrenciaService statusOcorrenciaService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<StatusOcorrenciaDTO>> findAll() {
         return ResponseEntity.ok(statusOcorrenciaService.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<StatusOcorrenciaDTO> findById(@PathVariable Integer id) {
         StatusOcorrenciaDTO statusOcorrencia =  statusOcorrenciaService.findById(id);
         return ResponseEntity.ok(statusOcorrencia);

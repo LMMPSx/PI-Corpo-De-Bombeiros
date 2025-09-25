@@ -9,7 +9,9 @@ import java.util.List;
 @Repository
 public interface LogRepository extends JpaRepository<LogModel, Integer> {
 
-    List<LogModel> findByUsuario(String usuario);
+    List<LogModel> findByFkIdUsuario_NomeUsuario(String nomeUsuario);
 
-    List<LogModel> findByEntidadeAlterada(String entidade);
+    List<LogModel> findByFkIdUsuario_IdUsuario(Integer idUsuario);
+
+    List<LogModel> findByEntidadeAlterada(String entidadeAlterada);
 }

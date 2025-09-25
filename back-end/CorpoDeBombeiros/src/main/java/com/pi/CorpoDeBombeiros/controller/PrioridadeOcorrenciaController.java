@@ -18,12 +18,12 @@ public class PrioridadeOcorrenciaController {
 
     private final PrioridadeOcorrenciaService prioridadeOcorrenciaService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<PrioridadeOcorrenciaDTO>> findAll() {
         return ResponseEntity.ok(prioridadeOcorrenciaService.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<PrioridadeOcorrenciaDTO> findById(@PathVariable Integer id) {
         PrioridadeOcorrenciaDTO prioridadeOcorrencia = prioridadeOcorrenciaService.findById(id);
         return ResponseEntity.ok(prioridadeOcorrencia);

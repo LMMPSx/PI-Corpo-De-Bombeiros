@@ -18,7 +18,7 @@ public class LogController {
 
     private final LogService logService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<LogDTO>> findAll() {
         return ResponseEntity.ok(logService.findAll());
     }
@@ -28,8 +28,13 @@ public class LogController {
         return ResponseEntity.ok(logService.findByEntidade(entidade));
     }
 
-    @GetMapping("/usuario/{usuario}")
-    public ResponseEntity<List<LogDTO>> findByUsuario(@PathVariable String usuario) {
-        return ResponseEntity.ok(logService.findByUsuario(usuario));
+    @GetMapping("/usuario/id/{id}")
+    public ResponseEntity<List<LogDTO>> findByIdUsuario(@PathVariable Integer id) {
+        return ResponseEntity.ok(logService.findByIdUsuario(id));
+    }
+
+    @GetMapping("/usuario/nome/{usuario}")
+    public ResponseEntity<List<LogDTO>> findByIdUsuario_NomeUsuario(@PathVariable String usuario) {
+        return ResponseEntity.ok(logService.findByIdUsuario_NomeUsuario(usuario));
     }
 }

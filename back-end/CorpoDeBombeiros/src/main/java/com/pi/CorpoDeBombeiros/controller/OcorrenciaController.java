@@ -17,7 +17,7 @@ public class OcorrenciaController {
 
     private final OcorrenciaService ocorrenciaService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<OcorrenciaDTO>> findAll() {
         List<OcorrenciaDTO> ocorrencia = ocorrenciaService.findAll();
         return ResponseEntity.ok(ocorrencia);
@@ -29,25 +29,31 @@ public class OcorrenciaController {
         return ResponseEntity.ok(ocorrencias);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<OcorrenciaDTO> findById(@PathVariable Integer id) {
         OcorrenciaDTO ocorrencia = ocorrenciaService.findById(id);
         return ResponseEntity.ok(ocorrencia);
     }
 
-    @PostMapping
+    @GetMapping("/prioridade/{prioridade}")
+    public ResponseEntity<List<OcorrenciaDTO>> findByPrioridade(@PathVariable String prioridade) {
+        List<OcorrenciaDTO> ocorrencias = ocorrenciaService.findByPrioridade(prioridade);
+        return ResponseEntity.ok(ocorrencias);
+    }
+
+    @PostMapping("/createOcorrencia")
     public ResponseEntity<OcorrenciaDTO> create(@RequestBody OcorrenciaRequestDTO ocorrenciaRequest) {
         OcorrenciaDTO ocorrenciaCriada = ocorrenciaService.create(ocorrenciaRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(ocorrenciaCriada);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<OcorrenciaDTO> update(@PathVariable Integer id, @RequestBody OcorrenciaRequestDTO ocorrenciaRequest) {
         OcorrenciaDTO ocorrenciaAtualizada = ocorrenciaService.update(id, ocorrenciaRequest);
         return ResponseEntity.ok(ocorrenciaAtualizada);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<OcorrenciaDTO> delete(@PathVariable Integer id) {
         ocorrenciaService.delete(id);
         return ResponseEntity.noContent().build();

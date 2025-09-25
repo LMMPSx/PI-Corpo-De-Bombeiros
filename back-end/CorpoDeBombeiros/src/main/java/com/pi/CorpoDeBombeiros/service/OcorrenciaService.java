@@ -48,9 +48,13 @@ public class OcorrenciaService {
                 .dataOcorrencia(LocalDateTime.now())
                 .latitude(ocorrenciaRequest.getLatitude())
                 .longitude(ocorrenciaRequest.getLongitude())
+                .fkPrioridadeOcorrencia(ocorrenciaRequest.getFkPrioridadeOcorrencia())
+                .fkStatusOcorrencia(ocorrenciaRequest.getFkStatusOcorrencia())
+                .fkTipoOcorrencia(ocorrenciaRequest.getFkTipoOcorrencia())
+                .fkSubtiboOcorrencia(ocorrenciaRequest.getFkSubtipoOcorrencia())
+                .enderecoOcorrencia(ocorrenciaRequest.getEnderecoOcorrencia())
+                .fkIdUsuario(ocorrenciaRequest.getFkIdUsuario())
                 .build();
-
-
     }
 
     private String formatEndereco(EnderecoModel endereco) {
@@ -77,6 +81,14 @@ public class OcorrenciaService {
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
+
+    public List<OcorrenciaDTO> findByPrioridade(String nomePrioridade) {
+        return ocorrenciaRepository.findByFkPrioridadeOcorrencia_NomePrioridade(nomePrioridade)
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
 
     public OcorrenciaDTO create(OcorrenciaRequestDTO ocorrenciaRequest) {
         OcorrenciaModel ocorrencia = toModel(ocorrenciaRequest);

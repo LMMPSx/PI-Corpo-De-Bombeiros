@@ -42,8 +42,15 @@ public class LogService {
                 .collect(Collectors.toList());
     }
 
-    public List<LogDTO> findByUsuario(String usuario) {
-        return logRepository.findByUsuario(usuario)
+    public List<LogDTO> findByIdUsuario(Integer idUsuario) {
+        return logRepository.findByFkIdUsuario_IdUsuario(idUsuario)
+                .stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
+    public List<LogDTO> findByIdUsuario_NomeUsuario(String nomeUsuario) {
+        return logRepository.findByFkIdUsuario_NomeUsuario(nomeUsuario)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());

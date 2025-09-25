@@ -15,5 +15,5 @@ public interface OcorrenciaRepository extends JpaRepository<OcorrenciaModel, Int
 
     List<OcorrenciaModel> findByFkTipoOcorrencia_NomeTipo(String nomeTipo);
 
-    List<OcorrenciaModel> findByPrioridadeOcorrencia_NomePrioridade(String nomePrioridade);
+    List<OcorrenciaModel> findByFkPrioridadeOcorrencia_NomePrioridade(String nomePrioridade);
 }

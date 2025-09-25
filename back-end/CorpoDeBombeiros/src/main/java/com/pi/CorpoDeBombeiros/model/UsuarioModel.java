@@ -26,11 +26,8 @@ public class UsuarioModel {
     @Column(name = "Responsavel", nullable = false)
     private String responsavel;
 
-    private enum tipoUsuario{
-        Chefe,
-        Admin,
-        Analista
-    }
+    @Column(name = "Tipo_Usuario", nullable = false)
+    private String tipoUsuario;
 
     @Column(name = "Senha", nullable = false)
     private String senha;
