@@ -18,31 +18,31 @@ import java.util.List;
 public class UsuarioController {
     private final UsuarioService usuarioService;
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<UsuarioDTO>> findAll() {
         List<UsuarioDTO> usuarios = usuarioService.findAll();
         return ResponseEntity.ok(usuarios);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
         UsuarioDTO usuario = usuarioService.findById(id);
         return ResponseEntity.ok(usuario);
     }
 
-    @PostMapping
+    @PostMapping("createUsuario/")
     public ResponseEntity<UsuarioDTO> create(@RequestBody UsuarioRequestDTO usuarioRequest) {
         UsuarioDTO usuarioCriado = usuarioService.create(usuarioRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCriado);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/upadete/{id}")
     public ResponseEntity<UsuarioDTO> update(@PathVariable Integer id, @RequestBody UsuarioRequestDTO usuarioRequest) {
         UsuarioDTO usuarioAtualizado = usuarioService.update(id, usuarioRequest);
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
-    @DeleteMapping
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<UsuarioDTO> delete(@PathVariable Integer id) {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();

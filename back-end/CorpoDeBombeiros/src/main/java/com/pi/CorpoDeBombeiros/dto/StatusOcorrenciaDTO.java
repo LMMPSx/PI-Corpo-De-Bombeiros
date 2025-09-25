@@ -1,5 +1,6 @@
 package com.pi.CorpoDeBombeiros.dto;
 
+import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,9 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioDTO {
-    private Integer id;
-    private String nomeUsuario;
-    private String responsavel;
-    private String dataCriacao;
+public class StatusOcorrenciaDTO {
+    private Integer idStatus;
+    private String nomeStatus;
 }

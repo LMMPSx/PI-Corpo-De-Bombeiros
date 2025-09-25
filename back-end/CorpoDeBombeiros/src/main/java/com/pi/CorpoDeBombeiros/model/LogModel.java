@@ -21,12 +21,8 @@ public class LogModel {
     @Column(name = "ID_Log")
     private Integer idLog;
 
-    private enum tipoAlteracao{
-        Create,
-        Read,
-        Update,
-        Delete
-    }
+    @Column(name = "Tipo_Alteracao", nullable = false)
+    private String tipoAlteracao;
 
     @Column(name = "Entidade_Alterada", nullable = false)
     private String entidadeAlterada;
