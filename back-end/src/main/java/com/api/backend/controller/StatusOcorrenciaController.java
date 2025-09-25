@@ -1,6 +1,6 @@
 package com.api.backend.controller;
 
-import com.api.backend.dto.StatusOcorrenciaDTO;
+import com.api.backend.dto.StatusOcorrenciaResponse;
 import com.api.backend.service.StatusOcorrenciaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +19,13 @@ public class StatusOcorrenciaController {
     private final StatusOcorrenciaService statusOcorrenciaService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<StatusOcorrenciaDTO>> findAll() {
+    public ResponseEntity<List<StatusOcorrenciaResponse>> findAll() {
         return ResponseEntity.ok(statusOcorrenciaService.findAll());
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<StatusOcorrenciaDTO> findById(@PathVariable Integer id) {
-        StatusOcorrenciaDTO statusOcorrencia =  statusOcorrenciaService.findById(id);
+    public ResponseEntity<StatusOcorrenciaResponse> findById(@PathVariable Integer id) {
+        StatusOcorrenciaResponse statusOcorrencia =  statusOcorrenciaService.findById(id);
         return ResponseEntity.ok(statusOcorrencia);
     }
 }

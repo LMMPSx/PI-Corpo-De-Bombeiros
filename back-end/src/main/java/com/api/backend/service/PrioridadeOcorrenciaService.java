@@ -1,6 +1,6 @@
 package com.api.backend.service;
 
-import com.api.backend.dto.PrioridadeOcorrenciaDTO;
+import com.api.backend.dto.PrioridadeOcorrenciaResponse;
 import com.api.backend.model.PrioridadeOcorrenciaModel;
 import com.api.backend.repository.PrioridadeOcorrenciaRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,18 +15,18 @@ public class PrioridadeOcorrenciaService {
 
     private final PrioridadeOcorrenciaRepository prioridadeOcorrenciaRepository;
 
-    public PrioridadeOcorrenciaDTO toDTO(PrioridadeOcorrenciaModel prioridade) {
-        return new PrioridadeOcorrenciaDTO(prioridade.getIdPrioridade(), prioridade.getNomePrioridade());
+    public PrioridadeOcorrenciaResponse toDTO(PrioridadeOcorrenciaModel prioridade) {
+        return new PrioridadeOcorrenciaResponse(prioridade.getIdPrioridade(), prioridade.getNomePrioridade());
     }
 
-    public List<PrioridadeOcorrenciaDTO> findAll() {
+    public List<PrioridadeOcorrenciaResponse> findAll() {
         return prioridadeOcorrenciaRepository.findAll()
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public PrioridadeOcorrenciaDTO findById(Integer id) {
+    public PrioridadeOcorrenciaResponse findById(Integer id) {
         PrioridadeOcorrenciaModel prioridade = prioridadeOcorrenciaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Prioridade não encontrada"));
         return toDTO(prioridade);

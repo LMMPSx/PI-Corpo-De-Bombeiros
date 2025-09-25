@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OcorrenciaRequestDTO {
+public class OcorrenciaRequest {
     private String nomeSolicitante;
     private String telefoneSolicitante;
     private BigDecimal latitude;
