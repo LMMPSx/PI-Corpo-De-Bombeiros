@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +31,7 @@ public class UsuarioService {
         return UsuarioModel.builder()
                 .nomeUsuario(usuarioResquest.getNomeUsuario())
                 .responsavel(usuarioResquest.getResponsavel())
-                .dataCriacao(LocalDate.now())
+                .dataCriacao(LocalDateTime.now())
                 .build();
     }
 
