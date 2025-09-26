@@ -40,7 +40,7 @@ public class SecurityConfig {
                         .requestMatchers("/log/**").hasAnyRole("CHEFE", "ADMIN")
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore((Filter) new JwtRequestFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(new JwtRequestFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
