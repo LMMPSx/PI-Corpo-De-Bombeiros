@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# SEGREDOS
+# Não comitar o arquivo que contém a chave secreta do JWT
+src/main/resources/secret.porperties
