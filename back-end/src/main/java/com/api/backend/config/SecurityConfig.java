@@ -41,8 +41,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/ocorrencias/**").hasAnyAuthority("Chefe", "Admin", "Analista")
-                        .requestMatchers("/log/**").hasAnyAuthority("Chefe", "Admin")
+                        .requestMatchers("/ocorrencias/**").hasAnyRole("Chefe", "Admin", "Analista")
+                        .requestMatchers("/log/**").hasAnyRole("Chefe", "Admin")
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtRequestFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
