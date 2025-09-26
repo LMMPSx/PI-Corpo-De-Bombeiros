@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -38,7 +39,7 @@ public class AuthService {
         String token = jwtUtil.generateToken(userDetails);
 
         UsuarioModel usuario = usuarioRepository.findByNomeUsuario(loginRequest.getNomeUsuario())
-                .orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
+                .orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado"));
 
         usuario.setUltimoLogin(LocalDateTime.now());
         usuarioRepository.save(usuario);
