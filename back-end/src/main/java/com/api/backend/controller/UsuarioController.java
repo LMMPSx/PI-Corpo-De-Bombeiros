@@ -1,7 +1,7 @@
 package com.api.backend.controller;
 
-import com.api.backend.dto.UsuarioDTO;
-import com.api.backend.dto.UsuarioRequestDTO;
+import com.api.backend.dto.UsuarioResponse;
+import com.api.backend.dto.UsuarioRequest;
 import com.api.backend.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,31 +17,31 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<UsuarioDTO>> findAll() {
-        List<UsuarioDTO> usuarios = usuarioService.findAll();
+    public ResponseEntity<List<UsuarioResponse>> findAll() {
+        List<UsuarioResponse> usuarios = usuarioService.findAll();
         return ResponseEntity.ok(usuarios);
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<UsuarioDTO> findById(@PathVariable Integer id) {
-        UsuarioDTO usuario = usuarioService.findById(id);
+    public ResponseEntity<UsuarioResponse> findById(@PathVariable Integer id) {
+        UsuarioResponse usuario = usuarioService.findById(id);
         return ResponseEntity.ok(usuario);
     }
 
     @PostMapping("createUsuario/")
-    public ResponseEntity<UsuarioDTO> create(@RequestBody UsuarioRequestDTO usuarioRequest) {
-        UsuarioDTO usuarioCriado = usuarioService.create(usuarioRequest);
+    public ResponseEntity<UsuarioResponse> create(@RequestBody UsuarioRequest usuarioRequest) {
+        UsuarioResponse usuarioCriado = usuarioService.create(usuarioRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCriado);
     }
 
     @PutMapping("/upadete/{id}")
-    public ResponseEntity<UsuarioDTO> update(@PathVariable Integer id, @RequestBody UsuarioRequestDTO usuarioRequest) {
-        UsuarioDTO usuarioAtualizado = usuarioService.update(id, usuarioRequest);
+    public ResponseEntity<UsuarioResponse> update(@PathVariable Integer id, @RequestBody UsuarioRequest usuarioRequest) {
+        UsuarioResponse usuarioAtualizado = usuarioService.update(id, usuarioRequest);
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
     @DeleteMapping("delete/{id}")
-    public ResponseEntity<UsuarioDTO> delete(@PathVariable Integer id) {
+    public ResponseEntity<UsuarioResponse> delete(@PathVariable Integer id) {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();
     }

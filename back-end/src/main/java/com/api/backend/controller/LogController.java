@@ -1,6 +1,6 @@
 package com.api.backend.controller;
 
-import com.api.backend.dto.LogDTO;
+import com.api.backend.dto.LogResponse;
 import com.api.backend.service.LogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,22 +19,22 @@ public class LogController {
     private final LogService logService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<LogDTO>> findAll() {
+    public ResponseEntity<List<LogResponse>> findAll() {
         return ResponseEntity.ok(logService.findAll());
     }
 
     @GetMapping("/entidade/{entidade}")
-    public ResponseEntity<List<LogDTO>> findByEntidade(@PathVariable String entidade) {
+    public ResponseEntity<List<LogResponse>> findByEntidade(@PathVariable String entidade) {
         return ResponseEntity.ok(logService.findByEntidade(entidade));
     }
 
     @GetMapping("/usuario/id/{id}")
-    public ResponseEntity<List<LogDTO>> findByIdUsuario(@PathVariable Integer id) {
+    public ResponseEntity<List<LogResponse>> findByIdUsuario(@PathVariable Integer id) {
         return ResponseEntity.ok(logService.findByIdUsuario(id));
     }
 
     @GetMapping("/usuario/nome/{usuario}")
-    public ResponseEntity<List<LogDTO>> findByIdUsuario_NomeUsuario(@PathVariable String usuario) {
+    public ResponseEntity<List<LogResponse>> findByIdUsuario_NomeUsuario(@PathVariable String usuario) {
         return ResponseEntity.ok(logService.findByIdUsuario_NomeUsuario(usuario));
     }
 }

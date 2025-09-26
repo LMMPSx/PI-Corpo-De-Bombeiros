@@ -1,7 +1,7 @@
 package com.api.backend.service;
 
-import com.api.backend.dto.OcorrenciaDTO;
-import com.api.backend.dto.OcorrenciaRequestDTO;
+import com.api.backend.dto.OcorrenciaResponse;
+import com.api.backend.dto.OcorrenciaRequest;
 import com.api.backend.model.EnderecoModel;
 import com.api.backend.model.OcorrenciaModel;
 import com.api.backend.repository.OcorrenciaRepository;
@@ -18,8 +18,8 @@ public class OcorrenciaService {
 
     private final OcorrenciaRepository ocorrenciaRepository;
 
-    private OcorrenciaDTO toDTO(OcorrenciaModel ocorrencia) {
-        return new OcorrenciaDTO(
+    private OcorrenciaResponse toDTO(OcorrenciaModel ocorrencia) {
+        return new OcorrenciaResponse(
                 ocorrencia.getIdOcorrencia(),
                 ocorrencia.getNomeSolicitante(),
                 ocorrencia.getTelefoneSolicitante(),
@@ -41,7 +41,7 @@ public class OcorrenciaService {
         );
     }
 
-    private OcorrenciaModel toModel(OcorrenciaRequestDTO ocorrenciaRequest) {
+    private OcorrenciaModel toModel(OcorrenciaRequest ocorrenciaRequest) {
         return OcorrenciaModel.builder()
                 .nomeSolicitante(ocorrenciaRequest.getNomeSolicitante())
                 .telefoneSolicitante(ocorrenciaRequest.getTelefoneSolicitante())
@@ -62,27 +62,27 @@ public class OcorrenciaService {
                 endereco.getBairro() + ", " + endereco.getCidade() + " - CEP: " + endereco.getCep();
     }
 
-    public List<OcorrenciaDTO> findAll() {
+    public List<OcorrenciaResponse> findAll() {
         return ocorrenciaRepository.findAll()
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public OcorrenciaDTO findById(Integer id) {
+    public OcorrenciaResponse findById(Integer id) {
         OcorrenciaModel ocorrencia = ocorrenciaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
         return toDTO(ocorrencia);
     }
 
-    public List<OcorrenciaDTO> findByStatus(String status) {
+    public List<OcorrenciaResponse> findByStatus(String status) {
         return ocorrenciaRepository.findByFkStatusOcorrencia_NomeStatus(status)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<OcorrenciaDTO> findByPrioridade(String nomePrioridade) {
+    public List<OcorrenciaResponse> findByPrioridade(String nomePrioridade) {
         return ocorrenciaRepository.findByFkPrioridadeOcorrencia_NomePrioridade(nomePrioridade)
                 .stream()
                 .map(this::toDTO)
@@ -90,13 +90,13 @@ public class OcorrenciaService {
     }
 
 
-    public OcorrenciaDTO create(OcorrenciaRequestDTO ocorrenciaRequest) {
+    public OcorrenciaResponse create(OcorrenciaRequest ocorrenciaRequest) {
         OcorrenciaModel ocorrencia = toModel(ocorrenciaRequest);
         OcorrenciaModel ocorrenciaSalva = ocorrenciaRepository.save(ocorrencia);
         return toDTO(ocorrenciaSalva);
     }
 
-    public OcorrenciaDTO update(Integer id, OcorrenciaRequestDTO ocorrenciaRequest) {
+    public OcorrenciaResponse update(Integer id, OcorrenciaRequest ocorrenciaRequest) {
         OcorrenciaModel ocorrenciaExistente = ocorrenciaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
 

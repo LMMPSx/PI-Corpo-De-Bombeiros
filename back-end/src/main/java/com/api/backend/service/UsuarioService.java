@@ -1,13 +1,14 @@
 package com.api.backend.service;
 
-import com.api.backend.dto.UsuarioDTO;
-import com.api.backend.dto.UsuarioRequestDTO;
+import com.api.backend.dto.UsuarioResponse;
+import com.api.backend.dto.UsuarioRequest;
 import com.api.backend.model.UsuarioModel;
 import com.api.backend.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,8 +18,8 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
 
-    private UsuarioDTO toDTO(UsuarioModel usuario) {
-        return new UsuarioDTO(
+    private UsuarioResponse toDTO(UsuarioModel usuario) {
+        return new UsuarioResponse(
                 usuario.getIdUsuario(),
                 usuario.getNomeUsuario(),
                 usuario.getResponsavel(),
@@ -26,34 +27,34 @@ public class UsuarioService {
         );
     }
 
-    private UsuarioModel toModel(UsuarioRequestDTO usuarioResquest) {
+    private UsuarioModel toModel(UsuarioRequest usuarioResquest) {
         return UsuarioModel.builder()
                 .nomeUsuario(usuarioResquest.getNomeUsuario())
                 .responsavel(usuarioResquest.getResponsavel())
-                .dataCriacao(LocalDate.now())
+                .dataCriacao(LocalDateTime.now())
                 .build();
     }
 
-    public List<UsuarioDTO> findAll() {
+    public List<UsuarioResponse> findAll() {
         return usuarioRepository.findAll()
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public UsuarioDTO findById(Integer id) {
+    public UsuarioResponse findById(Integer id) {
         UsuarioModel usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
         return toDTO(usuario);
     }
 
-    public UsuarioDTO create(UsuarioRequestDTO usuarioRequest) {
+    public UsuarioResponse create(UsuarioRequest usuarioRequest) {
         UsuarioModel usuario = toModel(usuarioRequest);
         UsuarioModel usuarioSalvo = usuarioRepository.save(usuario);
         return toDTO(usuarioSalvo);
     }
 
-    public UsuarioDTO update(Integer id, UsuarioRequestDTO usuarioRequest) {
+    public UsuarioResponse update(Integer id, UsuarioRequest usuarioRequest) {
         UsuarioModel usuarioExistente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
 

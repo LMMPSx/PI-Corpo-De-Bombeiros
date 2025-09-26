@@ -1,6 +1,6 @@
 package com.api.backend.controller;
 
-import com.api.backend.dto.PrioridadeOcorrenciaDTO;
+import com.api.backend.dto.PrioridadeOcorrenciaResponse;
 import com.api.backend.service.PrioridadeOcorrenciaService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +19,13 @@ public class PrioridadeOcorrenciaController {
     private final PrioridadeOcorrenciaService prioridadeOcorrenciaService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<PrioridadeOcorrenciaDTO>> findAll() {
+    public ResponseEntity<List<PrioridadeOcorrenciaResponse>> findAll() {
         return ResponseEntity.ok(prioridadeOcorrenciaService.findAll());
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<PrioridadeOcorrenciaDTO> findById(@PathVariable Integer id) {
-        PrioridadeOcorrenciaDTO prioridadeOcorrencia = prioridadeOcorrenciaService.findById(id);
+    public ResponseEntity<PrioridadeOcorrenciaResponse> findById(@PathVariable Integer id) {
+        PrioridadeOcorrenciaResponse prioridadeOcorrencia = prioridadeOcorrenciaService.findById(id);
         return ResponseEntity.ok(prioridadeOcorrencia);
     }
 }

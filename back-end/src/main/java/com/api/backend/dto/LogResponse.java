@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LogDTO {
+public class LogResponse {
     private Integer idLog;
     private String tipoAlteracao;
     private String entidadeAlterada;

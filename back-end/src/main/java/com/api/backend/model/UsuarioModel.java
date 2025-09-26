@@ -26,15 +26,22 @@ public class UsuarioModel {
     @Column(name = "Responsavel", nullable = false)
     private String responsavel;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Tipo_Usuario", nullable = false)
-    private String tipoUsuario;
+    private TipoUsuario tipoUsuario;
 
     @Column(name = "Senha", nullable = false)
     private String senha;
 
     @Column(name = "Data_Criacao", nullable = false, updatable = false)
-    private LocalDate dataCriacao;
+    private LocalDateTime dataCriacao;
 
     @Column(name = "Ultimo_login", nullable = false)
     private LocalDateTime ultimoLogin;
+
+    public enum TipoUsuario {
+        Chefe,
+        Admin,
+        Analista
+    }
 }

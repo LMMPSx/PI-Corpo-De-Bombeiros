@@ -1,6 +1,6 @@
 package com.api.backend.service;
 
-import com.api.backend.dto.LogDTO;
+import com.api.backend.dto.LogResponse;
 import com.api.backend.model.LogModel;
 import com.api.backend.repository.LogRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +15,8 @@ public class LogService {
 
     private final LogRepository logRepository;
 
-    private LogDTO toDTO(LogModel log) {
-        return new LogDTO(
+    private LogResponse toDTO(LogModel log) {
+        return new LogResponse(
           log.getIdLog(),
           log.getTipoAlteracao(),
           log.getEntidadeAlterada(),
@@ -28,28 +28,28 @@ public class LogService {
         );
     }
 
-    public List<LogDTO> findAll() {
+    public List<LogResponse> findAll() {
         return logRepository.findAll()
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<LogDTO> findByEntidade(String entidade) {
+    public List<LogResponse> findByEntidade(String entidade) {
         return logRepository.findByEntidadeAlterada(entidade)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<LogDTO> findByIdUsuario(Integer idUsuario) {
+    public List<LogResponse> findByIdUsuario(Integer idUsuario) {
         return logRepository.findByFkIdUsuario_IdUsuario(idUsuario)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<LogDTO> findByIdUsuario_NomeUsuario(String nomeUsuario) {
+    public List<LogResponse> findByIdUsuario_NomeUsuario(String nomeUsuario) {
         return logRepository.findByFkIdUsuario_NomeUsuario(nomeUsuario)
                 .stream()
                 .map(this::toDTO)
