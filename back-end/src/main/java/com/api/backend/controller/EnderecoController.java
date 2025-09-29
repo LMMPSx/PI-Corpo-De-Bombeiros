@@ -29,19 +29,19 @@ public class EnderecoController {
         return ResponseEntity.ok(endereco);
     }
 
-    @PostMapping("/create-endereco")
+    @PostMapping("/create")
     public ResponseEntity<EnderecoResponse> create(@RequestBody EnderecoRequest enderecoRequest) {
         EnderecoResponse enderecoCriado = enderecoService.create(enderecoRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(enderecoCriado);
     }
 
-    @PutMapping("/update-endereco/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<EnderecoResponse> update(@PathVariable Integer id, @RequestBody EnderecoRequest enderecoRequest) {
         EnderecoResponse enderecoAtualizado = enderecoService.update(id, enderecoRequest);
         return  ResponseEntity.ok(enderecoAtualizado);
     }
 
-    @DeleteMapping("/delete-endereco/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<EnderecoResponse> delete(@PathVariable Integer id) {
         enderecoService.delete(id);
         return ResponseEntity.noContent().build();
