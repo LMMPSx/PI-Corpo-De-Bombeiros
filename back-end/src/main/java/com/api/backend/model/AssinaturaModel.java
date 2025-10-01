@@ -26,7 +26,7 @@ public class AssinaturaModel {
     @Column(name = "Caminho_Assinatura")
     private String caminhoAssinatura;
 
-    @Column(name = "Data_Assinatura")
+    @Column(name = "Data_Assinatura", updatable = false)
     private LocalDateTime dataAssinatura;
 
     @ManyToOne @JoinColumn(name = "FK_ID_Ocorrencia")

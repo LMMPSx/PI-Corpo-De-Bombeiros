@@ -4,9 +4,11 @@ import com.api.backend.dto.AssinaturaRequest;
 import com.api.backend.dto.AssinaturaResponse;
 import com.api.backend.model.AssinaturaModel;
 import com.api.backend.repository.AssinaturaRepository;
+import com.api.backend.repository.OcorrenciaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,21 +16,31 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AssinaturaService {
     private final AssinaturaRepository assinaturaRepository;
+    private final OcorrenciaRepository ocorrenciaRepository;
 
-    private AssinaturaResponse toDTO(AssinaturaModel nomeAssinante){
+    private AssinaturaResponse toDTO(AssinaturaModel assinatura){
+        String fkOcorrenciaIdString = assinatura.getFkIdOcorrencia() != null
+                ? assinatura.getFkIdOcorrencia().getIdOcorrencia().toString()
+                : null;
+
         return new AssinaturaResponse(
-                nomeAssinante.getIdAssinatura(),
-                nomeAssinante.getNomeAssinante(),
-                nomeAssinante.getCaminhoAssinatura(),
-                nomeAssinante.getDataAssinatura(),
-                nomeAssinante.getFkIdOcorrencia().toString()
+                assinatura.getIdAssinatura(),
+                assinatura.getNomeAssinante(),
+                assinatura.getCaminhoAssinatura(),
+                assinatura.getDataAssinatura(),
+                fkOcorrenciaIdString
         );
     }
 
     private AssinaturaModel toModel(AssinaturaRequest assinaturaRequest){
+        var ocorrencia = ocorrenciaRepository.findById(assinaturaRequest.getFkIdOcorrencia())
+                .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada para a assinatura."));
+
         return AssinaturaModel.builder()
                 .nomeAssinante(assinaturaRequest.getNomeAssinante())
                 .caminhoAssinatura(assinaturaRequest.getCaminhoAssinatura())
+                .dataAssinatura(LocalDateTime.now())
+                .fkIdOcorrencia(ocorrencia)
                 .build();
     }
 
@@ -53,8 +65,9 @@ public class AssinaturaService {
         AssinaturaModel assinaturaExistente = assinaturaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Assinatura não encontrada."));
 
-        assinaturaExistente.setNomeAssinante(assinaturaRequest.getNomeAssinante());
-        assinaturaExistente.setCaminhoAssinatura(assinaturaRequest.getCaminhoAssinatura());
+        if (assinaturaRequest.getCaminhoAssinatura() != null && !assinaturaRequest.getCaminhoAssinatura().trim().isEmpty()) {
+            assinaturaExistente.setCaminhoAssinatura(assinaturaRequest.getCaminhoAssinatura());
+        }
 
         AssinaturaModel assinaturaAtualizada = assinaturaRepository.save(assinaturaExistente);
         return toDTO(assinaturaAtualizada);
