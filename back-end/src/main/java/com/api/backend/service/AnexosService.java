@@ -25,6 +25,11 @@ public class AnexosService {
                 anexosModel.getFkIdOcorrencia().toString()
         );
     }
+    public AnexosResponse findById(Integer id){
+        AnexosModel anexos = anexosRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("Anexo não encontrado."));
+        return toDTO(anexos);
+    }
     
     private AnexosModel toModel(AnexosRequest anexosRequest){
         return AnexosModel.builder().nomeArquivo(anexosRequest.getNomeArquivo())

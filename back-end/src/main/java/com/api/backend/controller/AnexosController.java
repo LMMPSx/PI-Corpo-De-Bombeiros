@@ -21,6 +21,11 @@ public class AnexosController {
         List<AnexosResponse> anexosResponse = anexosService.findAll();
         return ResponseEntity.ok(anexosResponse);
     }
+    @GetMapping("/id/{id}")
+    public ResponseEntity<AnexosResponse> findById(@PathVariable Integer id){
+        AnexosResponse anexos = anexosService.findById(id);
+        return ResponseEntity.ok(anexos);
+    }
     @PostMapping("/create")
     public ResponseEntity<AnexosResponse> create(@RequestBody AnexosRequest anexosRequest){
         AnexosResponse anexosCreate = anexosService.create(anexosRequest);
