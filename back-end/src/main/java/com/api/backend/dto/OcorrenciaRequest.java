@@ -1,6 +1,5 @@
 package com.api.backend.dto;
 
-import com.api.backend.model.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,10 +14,10 @@ public class OcorrenciaRequest {
     private String telefoneSolicitante;
     private BigDecimal latitude;
     private BigDecimal longitude;
-    private PrioridadeOcorrenciaModel fkPrioridadeOcorrencia;
-    private StatusOcorrenciaModel fkStatusOcorrencia;
-    private TipoOcorrenciaModel fkTipoOcorrencia;
-    private SubtipoOcorrenciaModel fkSubtipoOcorrencia;
-    private EnderecoModel enderecoOcorrencia;
-    private UsuarioModel fkIdUsuario;
+    private Integer fkPrioridadeOcorrencia;
+    private Integer fkStatusOcorrencia;
+    private Integer fkTipoOcorrencia;
+    private Integer fkSubtipoOcorrencia;
+    private Integer enderecoOcorrencia;
+    private Integer fkIdUsuario;
 }
