@@ -39,7 +39,7 @@ public class AssinaturaController {
         return ResponseEntity.ok(assinaturaAtualizada);
     }
 
-    @DeleteMapping("/delete{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<AssinaturaResponse> delete(@PathVariable Integer id){
         assinaturaService.delete(id);
         return ResponseEntity.noContent().build();
