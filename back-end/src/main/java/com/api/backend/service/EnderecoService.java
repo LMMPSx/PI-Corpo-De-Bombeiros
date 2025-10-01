@@ -62,12 +62,30 @@ public class EnderecoService {
         EnderecoModel enderecoExistente = enderecoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
 
-        enderecoExistente.setCep(enderecoRequest.getCep());
-        enderecoExistente.setCidade(enderecoRequest.getCidade());
-        enderecoExistente.setBairro(enderecoRequest.getBairro());
-        enderecoExistente.setRua(enderecoRequest.getRua());
-        enderecoExistente.setNumero(enderecoRequest.getNumero());
-        enderecoExistente.setPontoReferencia(enderecoRequest.getPontoReferencia());
+        if (enderecoRequest.getCep() != null && !enderecoRequest.getCep().trim().isEmpty()) {
+            enderecoExistente.setCep(enderecoRequest.getCep());
+        }
+
+        if (enderecoRequest.getCidade() != null && !enderecoRequest.getCidade().trim().isEmpty()) {
+            enderecoExistente.setCidade(enderecoRequest.getCidade());
+        }
+
+        if (enderecoRequest.getBairro() != null && !enderecoRequest.getBairro().trim().isEmpty()) {
+            enderecoExistente.setBairro(enderecoRequest.getBairro());
+        }
+
+        if (enderecoRequest.getRua() != null && !enderecoRequest.getRua().trim().isEmpty()) {
+            enderecoExistente.setRua(enderecoRequest.getRua());
+        }
+
+        if (enderecoRequest.getNumero() != null && !enderecoRequest.getNumero().trim().isEmpty()) {
+            enderecoExistente.setNumero(enderecoRequest.getNumero());
+        }
+
+        if (enderecoRequest.getPontoReferencia() != null && !enderecoRequest.getPontoReferencia().trim().isEmpty()) {
+            enderecoExistente.setPontoReferencia(enderecoRequest.getPontoReferencia());
+
+        }
 
         EnderecoModel enderecoAtualizado = enderecoRepository.save(enderecoExistente);
         return toDTO(enderecoAtualizado);
