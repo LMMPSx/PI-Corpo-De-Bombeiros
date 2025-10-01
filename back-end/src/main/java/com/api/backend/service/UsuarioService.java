@@ -66,8 +66,13 @@ public class UsuarioService {
         UsuarioModel usuarioExistente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
 
-        usuarioExistente.setNomeUsuario(usuarioRequest.getNomeUsuario());
-        usuarioExistente.setResponsavel(usuarioRequest.getResponsavel());
+        if (usuarioRequest.getNomeUsuario() != null && !usuarioRequest.getNomeUsuario().isEmpty()) {
+            usuarioExistente.setNomeUsuario(usuarioRequest.getNomeUsuario());
+        }
+
+        if (usuarioRequest.getResponsavel() != null && !usuarioRequest.getResponsavel().isEmpty()) {
+            usuarioExistente.setResponsavel(usuarioRequest.getResponsavel());
+        }
 
         if (usuarioRequest.getTipoUsuario() != null && !usuarioRequest.getTipoUsuario().isEmpty()) {
             usuarioExistente.setTipoUsuario(UsuarioModel.TipoUsuario.valueOf(usuarioRequest.getTipoUsuario()));
