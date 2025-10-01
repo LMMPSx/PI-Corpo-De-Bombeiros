@@ -2,10 +2,7 @@ package com.api.backend.service;
 
 import com.api.backend.dto.AssinaturaRequest;
 import com.api.backend.dto.AssinaturaResponse;
-import com.api.backend.dto.UsuarioDTO;
-import com.api.backend.dto.UsuarioRequestDTO;
 import com.api.backend.model.AssinaturaModel;
-import com.api.backend.model.UsuarioModel;
 import com.api.backend.repository.AssinaturaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
