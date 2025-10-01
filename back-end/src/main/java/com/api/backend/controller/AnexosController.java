@@ -26,13 +26,13 @@ public class AnexosController {
         AnexosResponse anexosCreate = anexosService.create(anexosRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(anexosCreate);
     }
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity<AnexosResponse> update(@PathVariable Integer id, @RequestBody AnexosRequest anexosRequest){
         AnexosResponse anexosAtualizado = anexosService.update(id, anexosRequest);
         return ResponseEntity.ok(anexosAtualizado);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<AnexosResponse> delete(@PathVariable Integer id){
         anexosService.delete(id);
         return ResponseEntity.noContent().build();

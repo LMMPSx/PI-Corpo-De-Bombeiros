@@ -40,18 +40,16 @@ public class AnexosService {
     }
 
     private AnexosModel toModel(AnexosRequest anexosRequest){
-        // Busca a entidade TipoArquivo pelo ID
         var tipoArquivo = tipoArquivoRepository.findById(anexosRequest.getFkTipoArquivo())
                 .orElseThrow(() -> new RuntimeException("Tipo de Arquivo não encontrado."));
 
-        // Busca a entidade Ocorrencia pelo ID
         var ocorrencia = ocorrenciaRepository.findById(anexosRequest.getFkIdOcorrencia())
                 .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada."));
 
         return AnexosModel.builder()
                 .nomeArquivo(anexosRequest.getNomeArquivo())
                 .caminhoArquivo(anexosRequest.getCaminhoArquivo())
-                .dataEnvio(LocalDateTime.now()) // Define a data de criação (Imutável)
+                .dataEnvio(LocalDateTime.now())
                 .fkTipoArquivo(tipoArquivo)
                 .fkIdOcorrencia(ocorrencia)
                 .build();
