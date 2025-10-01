@@ -33,13 +33,13 @@ public class AssinaturaController {
         AssinaturaResponse assinaturaCreate = assinaturaService.create(assinaturaRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(assinaturaCreate);
     }
-    @PutMapping("/update")
+    @PutMapping("/update/{id}")
     public ResponseEntity<AssinaturaResponse> update(@PathVariable Integer id, @RequestBody AssinaturaRequest assinaturaRequest){
         AssinaturaResponse assinaturaAtualizada = assinaturaService.update(id, assinaturaRequest);
         return ResponseEntity.ok(assinaturaAtualizada);
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/delete{id}")
     public ResponseEntity<AssinaturaResponse> delete(@PathVariable Integer id){
         assinaturaService.delete(id);
         return ResponseEntity.noContent().build();
