@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 public class AnexosRequest {
     private String nomeArquivo;
     private String caminhoArquivo;
-    private TipoArquivoModel fkTipoArquivo;
-    private OcorrenciaModel fkIdOcorrencia;
+    private Integer fkTipoArquivo;
+    private Integer fkIdOcorrencia;
 }
