@@ -11,5 +11,7 @@ public class UsuarioResponse {
     private Integer id;
     private String nomeUsuario;
     private String responsavel;
+    private String tipoUsuairo;
     private String dataCriacao;
+    private String ultimoLogin;
 }
