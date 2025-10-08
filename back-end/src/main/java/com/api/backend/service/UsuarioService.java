@@ -26,7 +26,8 @@ public class UsuarioService {
         return new UsuarioResponse(
                 usuario.getIdUsuario(),
                 usuario.getNomeUsuario(),
-                usuario.getResponsavel(),
+                usuario.getCpf(),
+                usuario.getEmail(),
                 usuario.getTipoUsuario().toString(),
                 usuario.getDataCriacao().toString(),
                 ultimoLoginString
@@ -51,7 +52,8 @@ public class UsuarioService {
 
         UsuarioModel usuario = UsuarioModel.builder()
                 .nomeUsuario(usuarioRequest.getNomeUsuario())
-                .responsavel(usuarioRequest.getResponsavel())
+                .cpf(usuarioRequest.getCpf())
+                .email(usuarioRequest.getEmail())
                 .tipoUsuario(UsuarioModel.TipoUsuario.valueOf(usuarioRequest.getTipoUsuario()))
                 .senha(senhaCriptografada)
                 .dataCriacao(LocalDateTime.now())
@@ -70,8 +72,11 @@ public class UsuarioService {
             usuarioExistente.setNomeUsuario(usuarioRequest.getNomeUsuario());
         }
 
-        if (usuarioRequest.getResponsavel() != null && !usuarioRequest.getResponsavel().isEmpty()) {
-            usuarioExistente.setResponsavel(usuarioRequest.getResponsavel());
+        if (usuarioRequest.getCpf() != null && !usuarioRequest.getCpf().isEmpty()) {
+            usuarioExistente.setCpf(usuarioRequest.getCpf());
+        }
+        if (usuarioRequest.getEmail()!= null && !usuarioRequest.getEmail().isEmpty()) {
+            usuarioExistente.setEmail(usuarioRequest.getEmail());
         }
 
         if (usuarioRequest.getTipoUsuario() != null && !usuarioRequest.getTipoUsuario().isEmpty()) {

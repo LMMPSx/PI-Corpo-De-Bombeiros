@@ -10,7 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsuarioRequest {
     private String nomeUsuario;
-    private String responsavel;
+    private String cpf;
+    private String email;
     private String tipoUsuario;
     private String senha;
 }
