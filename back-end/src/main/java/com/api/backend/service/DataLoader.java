@@ -22,7 +22,8 @@ public class DataLoader implements CommandLineRunner {
         if (usuarioRepository.findByNomeUsuario("admin").isEmpty()) {
             UsuarioModel admin = UsuarioModel.builder()
                     .nomeUsuario("admin")
-                    .responsavel("Administrador do Sistema")
+                    .cpf("Administrador do Sistema")
+                    .email("admin.teste@gmail.com")
                     .tipoUsuario(UsuarioModel.TipoUsuario.Admin)
                     .senha(passwordEncoder.encode("admin"))
                     .dataCriacao(LocalDateTime.now())
@@ -33,7 +34,8 @@ public class DataLoader implements CommandLineRunner {
         if (usuarioRepository.findByNomeUsuario("joao").isEmpty()) {
             UsuarioModel joao = UsuarioModel.builder()
                     .nomeUsuario("joao")
-                    .responsavel("João da Silva")
+                    .cpf("João da Silva")
+                    .email("joao.silva@gmail.com")
                     .tipoUsuario(UsuarioModel.TipoUsuario.Analista)
                     .senha(passwordEncoder.encode("123456"))
                     .dataCriacao(LocalDateTime.now())
