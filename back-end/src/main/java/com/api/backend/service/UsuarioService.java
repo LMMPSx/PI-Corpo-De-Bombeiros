@@ -28,8 +28,8 @@ public class UsuarioService {
                 usuario.getNomeUsuario(),
                 usuario.getCpf(),
                 usuario.getEmail(),
-                usuario.getCaminhoFoto(),
                 usuario.getTipoUsuario().toString(),
+                usuario.getCaminhoFoto(),
                 usuario.getDataCriacao().toString(),
                 ultimoLoginString
         );
