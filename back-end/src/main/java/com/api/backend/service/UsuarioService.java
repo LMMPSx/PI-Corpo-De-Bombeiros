@@ -28,6 +28,7 @@ public class UsuarioService {
                 usuario.getNomeUsuario(),
                 usuario.getCpf(),
                 usuario.getEmail(),
+                usuario.getCaminhoFoto(),
                 usuario.getTipoUsuario().toString(),
                 usuario.getDataCriacao().toString(),
                 ultimoLoginString
@@ -56,6 +57,7 @@ public class UsuarioService {
                 .email(usuarioRequest.getEmail())
                 .tipoUsuario(UsuarioModel.TipoUsuario.valueOf(usuarioRequest.getTipoUsuario()))
                 .senha(senhaCriptografada)
+                .caminhoFoto(usuarioRequest.getCaminhoFoto())
                 .dataCriacao(LocalDateTime.now())
                 .build();
 
@@ -86,6 +88,10 @@ public class UsuarioService {
         if (usuarioRequest.getSenha() != null && !usuarioRequest.getSenha().isEmpty()) {
             String novaSenhaCriptografada = passwordEncoder.encode(usuarioRequest.getSenha());
             usuarioExistente.setSenha(novaSenhaCriptografada);
+        }
+
+        if (usuarioRequest.getCaminhoFoto() != null && !usuarioRequest.getCaminhoFoto().isEmpty()) {
+            usuarioExistente.setCaminhoFoto(usuarioRequest.getCaminhoFoto());
         }
 
         UsuarioModel usuarioAtualizado = usuarioRepository.save(usuarioExistente);

@@ -36,6 +36,9 @@ public class UsuarioModel {
     @Column(name = "Senha", nullable = false)
     private String senha;
 
+    @Column(name = "Caminho_Foto", nullable = false)
+    private String caminhoFoto;
+
     @Column(name = "Data_Criacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
 

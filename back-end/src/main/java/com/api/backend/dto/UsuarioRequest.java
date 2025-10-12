@@ -14,4 +14,5 @@ public class UsuarioRequest {
     private String email;
     private String tipoUsuario;
     private String senha;
+    private String caminhoFoto;
 }

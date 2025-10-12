@@ -26,6 +26,7 @@ public class DataLoader implements CommandLineRunner {
                     .email("admin.teste@gmail.com")
                     .tipoUsuario(UsuarioModel.TipoUsuario.Admin)
                     .senha(passwordEncoder.encode("admin"))
+                    .caminhoFoto("fotos/admin.png")
                     .dataCriacao(LocalDateTime.now())
                     .build();
             usuarioRepository.save(admin);
@@ -38,6 +39,7 @@ public class DataLoader implements CommandLineRunner {
                     .email("joao.silva@gmail.com")
                     .tipoUsuario(UsuarioModel.TipoUsuario.Analista)
                     .senha(passwordEncoder.encode("123456"))
+                    .caminhoFoto("fotos/analista.png")
                     .dataCriacao(LocalDateTime.now())
                     .build();
             usuarioRepository.save(joao);
