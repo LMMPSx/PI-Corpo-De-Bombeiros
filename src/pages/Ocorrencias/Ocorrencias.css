@@ -1,0 +1,224 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+
+:root {
+    --cor-fundo: #f0f2f5;
+    --cor-sidebar: #0a2540;
+    --cor-texto-principal: #333;
+    --cor-vermelho: #c84045;
+    --cor-amarelo: #f1c94c;
+    --cor-azul-claro: #a8d7f9;
+    --cor-borda: #e0e0e0;
+    --sombra: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.ocorrencias-container {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto-principal);
+    padding: 30px;
+}
+
+/* Cabeçalho */
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.page-header h2 {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.btn-registrar {
+    background-color: var(--cor-vermelho);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.btn-registrar:hover { 
+    background-color: #a53337; 
+}
+
+/* Cards de prioridade */
+.prioridade-cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--cor-borda);
+    padding-bottom: 25px;
+}
+
+.card-prioridade {
+    flex: 1;
+    padding: 20px;
+    border-radius: 12px;
+    color: white;
+    box-shadow: var(--sombra);
+    text-align: center;
+}
+
+.card-prioridade span {
+    font-size: 2.5rem;
+    font-weight: 700;
+    display: block;
+}
+
+.card-prioridade p {
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.card-prioridade.alta { background-color: var(--cor-vermelho); }
+.card-prioridade.media { background-color: var(--cor-amarelo); color: var(--cor-texto-principal); }
+.card-prioridade.baixa { background-color: var(--cor-azul-claro); color: var(--cor-texto-principal); }
+
+/* Filtros */
+.filtros-container {
+    background-color: var(--cor-sidebar);
+    padding: 20px;
+    border-radius: 12px;
+    color: white;
+    margin-bottom: 25px;
+}
+
+.filtros-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.filtros-inputs {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.filtros-inputs select, 
+.filtros-inputs input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 0.9rem;
+}
+
+.search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-wrapper i {
+    position: absolute;
+    left: 12px;
+    color: #888;
+}
+
+.search-wrapper input {
+    padding-left: 35px;
+}
+
+.btn-aplicar {
+    background-color: var(--cor-amarelo);
+    color: var(--cor-texto-principal);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Tabela */
+.tabela-wrapper {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: var(--sombra);
+    position: relative;
+    border: 1px solid var(--cor-borda);
+}
+
+.tabela-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.tabela-header h3 {
+    font-size: 1.2rem;
+    margin: 0;
+}
+
+.tabela-container {
+    overflow-x: auto;
+}
+
+/* Scroll moderno */
+.tabela-container::-webkit-scrollbar {
+    height: 8px;
+}
+.tabela-container::-webkit-scrollbar-thumb {
+    background: var(--cor-amarelo);
+    border-radius: 4px;
+}
+.tabela-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 15px 20px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+thead {
+    background-color: #e9eaec;
+}
+
+thead th {
+    color: var(--cor-texto-principal);
+    font-weight: 500;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Focus inputs */
+.filtros-inputs input:focus, .filtros-inputs select:focus {
+    outline: 2px solid var(--cor-amarelo);
+    border-color: var(--cor-amarelo);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .prioridade-cards {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .filtros-inputs {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-registrar {
+        width: 100%;
+        text-align: center;
+    }
+}

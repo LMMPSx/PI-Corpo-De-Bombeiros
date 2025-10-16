@@ -1,0 +1,178 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 200px;
+  background-color: #0b2b54;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 30px;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.menu li {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  color: white;
+  cursor: pointer;
+}
+
+.menu li img {
+  width: 20px;
+  margin-right: 10px;
+}
+
+/* Topbar */
+.topbar {
+  background-color: #0b2b54;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+}
+
+.menu-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hamburger {
+  font-size: 20px;
+}
+
+.menu-label {
+  font-size: 12px;
+}
+
+/* Conteúdo */
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px 50px;
+}
+
+.content h2{
+    text-align: center;
+    margin-bottom: 20px;
+}
+.chatbox {
+  background: #0b2b54;
+  border-radius: 12px; 
+  padding: 25px; 
+  width: 800px; 
+  min-height: 700px; 
+  max-width: 900px; 
+  color: black;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2); 
+  display: flex; 
+  flex-direction: column;
+}
+.message {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.avatar {
+  background: #ddd;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+.bubble {
+  background: white;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+.user {
+  justify-content: flex-end;
+}
+
+.user-bubble {
+  background: #56c2e5;
+  margin-right: 8px;
+}
+
+.user-avatar {
+  margin-left: 8px;
+}
+
+.options {
+  display: flex;
+  gap: 10px;
+  margin: 15px 0;
+}
+
+.btn {
+  border: none;
+  padding: 8px 15px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  color: white;
+}
+
+.red {
+  background: #d32f2f;
+}
+
+.yellow {
+  background: #fbc02d;
+  color: black;
+}
+
+.blue {
+  background: #0288d1;
+}
+
+.input-box {
+  margin-top: auto; 
+  width: 100%;
+  box-sizing: border-box; 
+}
+.input-box input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
