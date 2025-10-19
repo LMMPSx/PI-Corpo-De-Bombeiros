@@ -1,0 +1,169 @@
+/* src/pages/Perfil/cadastrarUsuario.css */
+
+/* ---------------------------------- */
+/* BASE / DESKTOP (MOBILE FIRST) */
+/* ---------------------------------- */
+
+.register-user-page {
+  padding: 20px;
+  background-color: #f0f2f5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.register-user-title {
+  color: #333;
+  font-size: 28px;
+  margin-bottom: 30px;
+  align-self: flex-start;
+  width: 100%;
+  max-width: 934px; /* Manter o max-width para telas grandes */
+}
+
+/* Card Principal do Formulário */
+.register-user-card {
+  background-color: #0d1a2f;
+  border-radius: 15px;
+  padding: 30px; /* Reduzindo um pouco o padding para telas menores */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  /* A largura será 100% menos o padding da página, facilitando o ajuste em telas pequenas */
+  width: 100%;
+  max-width: 934px; /* Limite para telas grandes */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+/* Formulário e Campos de Input */
+.register-user-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Reduzindo o espaçamento em telas menores */
+  align-items: center;
+}
+
+/* Estilo Base para Inputs e Selects */
+.form-input {
+  /* DIMENSÕES REQUERIDAS */
+  width: 100%;
+  height: 60px; /* Reduzindo a altura para melhor visualização em mobile */
+
+  padding: 10px 20px; /* Reduzindo o padding */
+  border: none;
+  border-radius: 15px;
+  background-color: white;
+  color: #333;
+  font-size: 16px; /* Reduzindo o tamanho da fonte */
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.form-input::placeholder {
+  color: #666;
+}
+
+/* Campo de Perfil (Select) */
+.form-select-container {
+  width: 100%;
+  position: relative;
+}
+
+.form-select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+/* Seta customizada do Perfil */
+.select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 20px; /* Ajuste a posição para telas menores */
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  border-left: 6px solid transparent; /* Seta menor */
+  border-right: 6px solid transparent; /* Seta menor */
+  border-top: 6px solid #666;
+}
+
+/* Área de Adicionar Foto */
+.photo-input-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.photo-icon {
+  font-size: 20px; /* Ícone menor */
+  color: #666;
+}
+
+/* Botão Cadastrar */
+.submit-button {
+  /* DIMENSÕES AJUSTADAS PARA MOBILE */
+  width: 100%; /* Ocupa a largura total do card em mobile */
+  max-width: 250px;
+  height: 70px;
+  border-radius: 15px;
+
+  margin-top: 20px;
+  background-color: #a30018;
+  color: white;
+  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.submit-button:hover {
+  background-color: #c20025;
+}
+
+/* ---------------------------------- */
+/* MEDIA QUERY: AJUSTE PARA TELAS MAIORES (> 768px) */
+/* ---------------------------------- */
+@media (min-width: 768px) {
+  .register-user-card {
+    padding: 40px; /* Restaurar padding original */
+  }
+
+  .register-user-form {
+    gap: 20px; /* Restaurar espaçamento original */
+  }
+
+  .form-input {
+    height: 80px; /* Restaurar altura original */
+    padding: 15px 25px; /* Restaurar padding original */
+    font-size: 18px; /* Restaurar tamanho da fonte original */
+  }
+
+  .select-arrow {
+    right: 25px; /* Restaurar posição da seta original */
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #666;
+  }
+
+  .photo-icon {
+    font-size: 24px; /* Restaurar tamanho do ícone */
+  }
+
+  .submit-button {
+    /* DIMENSÕES REQUERIDAS */
+    width: 322px;
+    height: 85.19px;
+    font-size: 24px; /* Restaurar tamanho da fonte */
+  }
+}

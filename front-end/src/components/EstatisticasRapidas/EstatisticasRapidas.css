@@ -1,0 +1,60 @@
+/* components/EstatisticasRapidas/EstatisticasRapidas.css */
+.estatisticas-rapidas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 100%;
+}
+
+.estatistica-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--surface-color);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0; /* Importante para flexbox shrinking */
+}
+
+.card-content {
+  min-width: 0; /* Permite que o texto quebre */
+  flex: 1;
+}
+
+.card-content h3 {
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  margin: 0;
+  color: var(--text-color);
+  word-wrap: break-word;
+}
+
+.card-title {
+  font-weight: 600;
+  margin: 0.25rem 0;
+  color: var(--text-color);
+  word-wrap: break-word;
+}
+
+.card-description {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  word-wrap: break-word;
+}
+
+@media (max-width: 768px) {
+  .estatisticas-rapidas {
+    grid-template-columns: 1fr;
+  }
+  
+  .estatistica-card {
+    padding: 1rem;
+  }
+}

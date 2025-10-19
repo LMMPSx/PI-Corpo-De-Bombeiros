@@ -1,0 +1,209 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  --primary-bg: #f4f7fa;
+  --btn-red: #c82333;
+  --btn-yellow: #ffc107;
+  --text-dark: #333;
+  --card-bg: #ffffff;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--primary-bg);
+}
+
+.gestao-page-wrapper {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.gestao-page-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  flex-grow: 1;
+}
+
+.gestao-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+}
+
+.gestao-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.btn-cadastrar {
+  background-color: var(--btn-red);
+  color: white;
+  border: none;
+
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  max-width: 300px;
+}
+
+.btn-cadastrar:hover {
+  background-color: #a21b29;
+}
+
+.user-list-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.user-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.avatar {
+  background-color: #e0e0e0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.user-info strong {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.user-info span {
+  font-size: 0.9rem;
+  color: #555;
+  overflow-wrap: break-word;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn-action {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.btn-action:hover {
+  opacity: 0.8;
+}
+
+.btn-edit {
+  background-color: var(--btn-yellow);
+  color: #212529;
+}
+
+.btn-delete {
+  background-color: var(--btn-red);
+  color: white;
+}
+
+/* Responsividade */
+@media (max-width: 1024px) {
+  .gestao-page-container {
+    padding: 25px;
+  }
+}
+
+@media (max-width: 768px) {
+  .gestao-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .btn-cadastrar {
+    width: 100%;
+    text-align: center;
+  }
+
+  .user-list-container {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gestao-page-container {
+    padding: 15px;
+  }
+
+  .user-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .avatar {
+    width: 50px;
+    height: 50px;
+    align-self: center;
+  }
+
+  .user-info strong {
+    font-size: 1rem;
+  }
+
+  .user-info span {
+    font-size: 0.85rem;
+  }
+
+  .action-buttons {
+    width: 100%;
+    margin-top: 10px;
+    display: flex;
+    gap: 10px;
+  }
+
+  .btn-action {
+    flex-grow: 1;
+    padding: 10px 0;
+    font-size: 13px;
+  }
+}
