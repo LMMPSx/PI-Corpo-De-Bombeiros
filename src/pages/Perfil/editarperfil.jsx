@@ -1,46 +1,77 @@
-import React, { useState } from "react";
-import "./editarperfil.css";
+// src/pages/Perfil/EditarUsuario.jsx
 
+import React, { useState } from 'react';
+import './editarperfil.css'; // Importa o CSS para esta tela
 
-export default function EditarPerfil() {
+const EditarUsuario = () => {
+  // Estado para armazenar os valores dos campos do formulário
   const [formData, setFormData] = useState({
-    nome: "",
-    cpf: "",
-    cargo: "",
-    email: "",
-    foto: null,
+    nome: '',
+    cpf: '',
+    perfil: '',
+    email: '',
+    senha: '',
+    foto: null, // Para armazenar o arquivo da foto
   });
 
+  // Handler para atualizar o estado quando um campo de input muda
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleFoto = (e) => {
+  // Handler para quando a foto é adicionada
+  const handlePhotoChange = (e) => {
     const file = e.target.files[0];
+    setFormData((prevData) => ({
+      ...prevData,
+      foto: file,
+    }));
+    // Você pode querer exibir uma pré-visualização da imagem aqui
     if (file) {
-      setFormData({ ...formData, foto: URL.createObjectURL(file) });
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // Exemplo de como você poderia usar o reader.result para exibir a imagem
+        console.log('Pré-visualização da imagem:', reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Dados salvos:", formData);
-    alert("Perfil salvo com sucesso!");
+  // Handler para o botão Salvar
+  const handleSave = (e) => {
+    e.preventDefault(); // Previne o comportamento padrão do formulário de recarregar a página
+    console.log('Dados do usuário para salvar:', formData);
+    alert('Usuário salvo com sucesso! (Verifique o console para os dados)');
+    // Aqui você enviaria os dados para um backend (API)
+  };
+
+  // Handler para o botão Cancelar
+  const handleCancel = () => {
+    console.log('Operação de edição cancelada.');
+    alert('Edição cancelada!');
+    // Aqui você voltaria para a tela anterior, por exemplo:
+    // navigate('/gestao-usuarios'); 
   };
 
   return (
-    <div className="editar-perfil">
-      <h2 className="titulo">Editar perfil</h2>
+    <div className="edit-user-page">
+      <h1 className="edit-user-title">Editar usuário</h1>
 
-      <div className="form-container">
-        <form className="form" onSubmit={handleSubmit}>
+      <div className="edit-user-card">
+        <form onSubmit={handleSave} className="edit-user-form">
+          {/* Campos de Input */}
           <input
             type="text"
             name="nome"
-            placeholder="Nome"
+            placeholder="Nome*"
             value={formData.nome}
             onChange={handleChange}
+            required
+            className="form-input"
           />
           <input
             type="text"
@@ -48,13 +79,16 @@ export default function EditarPerfil() {
             placeholder="CPF*"
             value={formData.cpf}
             onChange={handleChange}
+            required
+            className="form-input"
           />
           <input
             type="text"
-            name="cargo"
-            placeholder="Cargo"
-            value={formData.cargo}
+            name="perfil"
+            placeholder="Perfil"
+            value={formData.perfil}
             onChange={handleChange}
+            className="form-input"
           />
           <input
             type="email"
@@ -62,43 +96,43 @@ export default function EditarPerfil() {
             placeholder="E-mail"
             value={formData.email}
             onChange={handleChange}
+            className="form-input"
+          />
+          <input
+            type="password"
+            name="senha"
+            placeholder="Senha"
+            value={formData.senha}
+            onChange={handleChange}
+            className="form-input"
           />
 
-          <div className="foto-area">
-            {formData.foto ? (
-              <img
-                src={formData.foto}
-                alt="Foto de perfil"
-                className="foto-preview"
-              />
-            ) : (
-              <div className="foto-placeholder">Adicionar foto</div>
-            )}
+          {/* Área para Adicionar Foto */}
+          <div className="add-photo-area">
             <input
               type="file"
+              id="photoUpload"
+              name="foto"
               accept="image/*"
-              onChange={handleFoto}
-              className="input-foto"
+              onChange={handlePhotoChange}
+              style={{ display: 'none' }} // Esconde o input de arquivo padrão
             />
+            <label htmlFor="photoUpload" className="add-photo-button">
+              Adicionar foto
+            </label>
+            {formData.foto && <p className="file-name">{formData.foto.name}</p>}
           </div>
 
-          <div className="botoes">
+          {/* Botões de Ação */}
+          <div className="action-buttons">
             <button
-              type="button"
-              className="btn cancelar"
-              onClick={() =>
-                setFormData({
-                  nome: "",
-                  cpf: "",
-                  cargo: "",
-                  email: "",
-                  foto: null,
-                })
-              }
+              type="button" // Use 'button' para evitar que cancele submeta o form
+              className="cancel-button"
+              onClick={handleCancel}
             >
               Cancelar
             </button>
-            <button type="submit" className="btn salvar">
+            <button type="submit" className="save-button">
               Salvar
             </button>
           </div>
@@ -106,4 +140,6 @@ export default function EditarPerfil() {
       </div>
     </div>
   );
-}
+};
+
+export default EditarUsuario;

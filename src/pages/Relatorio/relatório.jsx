@@ -2,12 +2,8 @@ import "./relatorio.css";
 import logo from "./assets/logo.png";
 import graficoPizza from "./assets/graficopizza.png";
 import graficoBarra from "./assets/graficobarra.png";
-import MenuIcon from "./assets/menu.png";
 
-import HomeIcon from "./assets/icons/Home.png"      
-import AlertIcon from "./assets/icons/ocorrencia.png";    
-import ReportIcon from "./assets/icons/relatorio.png";   
-import UserIcon from "./assets/icons/usuario.png";   
+
 
 export default function Relatorio() {
   return (

@@ -104,7 +104,222 @@ body {
 }
 
 .btn-cadastrar:hover {
-  background-color: #a21b29;
+  background-color: #a21b29;/* gestao.css - Versão Final (Imagem Correspondente) */
+
+/* ---------------------------------- */
+/* Container e Layout Principal */
+/* ---------------------------------- */
+.user-management-container {
+  padding: 20px;
+  background-color: #0d1a2f;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  display: flex; /* Permite centralizar o inner container */
+  justify-content: center; /* Centraliza o inner-container */
+}
+
+/* Container interno para largura máxima e alinhamento do conteúdo principal */
+.user-management-inner {
+    width: 100%;
+    /* A largura máxima será a largura do grid (aprox. 399*2 + 30) para alinhar tudo */
+    max-width: 828px; /* 2 cards de 399px + 30px de gap */
+    display: flex;
+    flex-direction: column; /* Organiza header e grid verticalmente */
+    /* Nenhum align-items aqui, pois o header e o grid serão alinhados individualmente */
+}
+
+
+/* Cabeçalho */
+.header {
+  display: flex;
+  justify-content: space-between; /* Título à esquerda, botão à direita */
+  align-items: center;
+  margin-bottom: 30px;
+  width: 100%; /* Ocupa a largura total do inner container */
+}
+
+.title {
+  color: #fff;
+  font-size: 24px;
+}
+
+/* Botão de Cadastrar Novo Usuário */
+.new-user-button {
+  background-color: #a30018; 
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+.new-user-button:hover {
+  background-color: #c20025;
+}
+
+/* ---------------------------------- */
+/* Layout de Colunas (Grid de Cards) */
+/* ---------------------------------- */
+.cards-grid {
+  display: flex;
+  flex-wrap: wrap; /* Permite quebrar linha em telas menores */
+  gap: 30px; /* Espaçamento entre as duas colunas e entre cards */
+  /* *** ALINHAMENTO À DIREITA *** */
+  justify-content: flex-end; /* Empurra o grid de cards para a direita */
+  width: 100%; /* Ocupa a largura total do user-management-inner */
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espaçamento vertical entre os cards */
+  /* No desktop, cada coluna terá largura fixa */
+  width: 399px; 
+}
+
+/* ---------------------------------- */
+/* Card de Usuário (Retângulo) */
+/* ---------------------------------- */
+.user-card {
+  width: 399px; /* DIMENSÕES REQUERIDAS para desktop */
+  height: 115px; 
+  border-radius: 15px; 
+  box-sizing: border-box; /* Garante que padding e border não aumentem a largura total */
+  
+  background-color: #dcdcdc;
+  padding: 10px 20px; /* Padding original, revertido do 150px */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.user-info-area {
+  display: flex;
+  align-items: center;
+}
+
+/* Avatar (Círculo Branco) */
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  background-color: white; 
+  border-radius: 50%;
+  margin-right: 15px;
+  border: 1px solid #ccc;
+}
+
+.user-details h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.user-details p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* ---------------------------------- */
+/* Botões de Ação (Editar e Excluir) */
+/* ---------------------------------- */
+.user-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.action-button {
+  width: 60px; 
+  height: 25px;
+  border: none;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  line-height: 25px; /* Centraliza o texto verticalmente */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: opacity 0.2s;
+}
+
+.action-button:hover {
+  opacity: 0.8;
+}
+
+/* Botão Editar (Amarelo/Dourado) */
+.edit-button {
+  background-color: #ffc107; 
+  color: #333;
+}
+
+/* Botão Excluir (Vermelho) */
+.delete-button {
+  background-color: #dc3545; 
+  color: white;
+}
+
+
+/* ---------------------------------- */
+/* MEDIA QUERY: RESPONSIVIDADE PARA TELAS MENORES (MOBILE) */
+/* ---------------------------------- */
+@media (max-width: 859px) { /* Abaixo de 860px */
+  
+  .user-management-inner {
+      /* Em mobile, o inner-container não precisa de largura máxima, 
+         e pode ter um padding para o conteúdo não colar nas bordas */
+      max-width: 100%;
+      padding: 0 10px; /* Um pequeno padding lateral */
+  }
+
+  /* Cabeçalho */
+  .header {
+    flex-direction: column; /* Empilha o título e o botão */
+    align-items: flex-start; /* Alinha o título e o botão à esquerda */
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .new-user-button {
+    width: 100%; /* Botão ocupa a largura total */
+    max-width: none; /* Remove o limite máximo de largura */
+  }
+  
+  /* Layout de Cards em Coluna Única para Mobile */
+  .cards-grid {
+    flex-direction: column; /* Os cards ficam em uma única coluna */
+    align-items: center; /* Centraliza os cards individualmente */
+    justify-content: center; /* Centraliza a coluna de cards */
+    gap: 20px;
+  }
+
+  /* As colunas individuais se tornam um único fluxo de cards */
+  .column {
+    width: 100%; /* Ocupa toda a largura disponível */
+    align-items: center; /* Centraliza os cards dentro da 'coluna' */
+  }
+  
+  /* Card de Usuário - Ajusta largura para mobile */
+  .user-card {
+    width: 100%; /* Ocupa toda a largura do container */
+    max-width: 350px; /* Limite máximo para não ficar gigante em tablets pequenos */
+    padding: 10px 15px; /* Padding ajustado para mobile */
+    min-height: 100px; /* Pode ser um pouco menor em mobile */
+  }
+
+  /* Detalhes do texto ajustados para mobile */
+  .user-details h3 {
+    font-size: 16px;
+  }
+
+  .user-details p {
+    font-size: 13px;
+  }
+}
 }
 
 /* --- Lista de Usuários e Cards --- */

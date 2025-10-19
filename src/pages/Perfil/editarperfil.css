@@ -1,93 +1,192 @@
-.editar-perfil {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+/* src/pages/Perfil/editarUsuario.css */
+
+/* ---------------------------------- */
+/* BASE / MOBILE-FIRST (Estilos para Telas Pequenas) */
+/* ---------------------------------- */
+
+.edit-user-page {
+  padding: 20px;
+  background-color: #f0f2f5;
   min-height: 100vh;
-  background-color: #f4f4f4;
-  font-family: "Roboto", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
 }
 
-.titulo {
-  font-size: 24px;
-  margin-bottom: 20px;
+.edit-user-title {
   color: #333;
-}
-
-.form-container {
-  background-color: white;
-  padding: 30px;
-  border-radius: 10px;
+  font-size: 24px; /* Reduzindo o tamanho do título para mobile */
+  margin-bottom: 20px;
+  align-self: flex-start;
   width: 100%;
-  max-width: 450px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  padding-left: 0; /* Remove padding lateral em mobile */
 }
 
-.form input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.foto-area {
+/* Card Principal do Formulário */
+.edit-user-card {
+  background-color: #0d1a2f;
+  border-radius: 15px;
+  padding: 30px; /* Reduzindo padding para mobile */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+  /* REMOVENDO LARGURA FIXA */
+  max-width: 600px; 
+  width: 100%; /* Garante que ocupe o máximo de espaço disponível em mobile */
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
-  position: relative;
 }
 
-.foto-placeholder {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  background-color: #ddd;
+/* Formulário e Campos de Input */
+.edit-user-form {
+  width: 100%;
   display: flex;
+  flex-direction: column;
+  gap: 15px;
   align-items: center;
-  justify-content: center;
-  color: #555;
 }
 
-.foto-preview {
-  width: 120px;
-  height: 120px;
-  border-radius: 50%;
-  object-fit: cover;
+.form-input {
+  width: 100%;
+  padding: 10px 15px; /* Ajustando padding */
+  border: none;
+  border-radius: 8px;
+  background-color: #dcdcdc;
+  color: #333;
+  font-size: 16px;
+  outline: none;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  box-sizing: border-box; /* Importante para responsividade */
 }
 
-.input-foto {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  opacity: 0;
-  cursor: pointer;
+.form-input::placeholder {
+  color: #666;
 }
 
-.botoes {
+.form-input:focus {
+  background-color: #ebebeb;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 0 2px #a30018;
+}
+
+/* Área para Adicionar Foto */
+.add-photo-area {
+  margin: 20px 0; /* Reduzindo margem para mobile */
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
   gap: 10px;
 }
 
-.btn {
-  flex: 1;
-  padding: 10px;
-  border: none;
-  border-radius: 5px;
-  color: white;
+.add-photo-button {
+  /* Reduzindo o tamanho do círculo para mobile */
+  width: 120px;
+  height: 120px;
+  background-color: white;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #333;
+  font-size: 12px; /* Reduzindo a fonte */
+  text-align: center;
   cursor: pointer;
+  border: 2px dashed #ccc;
+  transition: border-color 0.3s, background-color 0.3s;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.btn.cancelar {
-  background-color: #888;
+.add-photo-button:hover {
+  border-color: #a30018;
+  background-color: #f9f9f9;
 }
 
-.btn.salvar {
-  background-color: #28a745;
+.file-name {
+  color: #ccc;
+  font-size: 12px;
+  margin-top: 5px;
 }
 
-.btn:hover {
-  opacity: 0.9;
+/* Botões de Ação (Cancelar e Salvar) */
+.action-buttons {
+  display: flex;
+  /* Em mobile, empilhamos os botões para economizar espaço horizontal */
+  flex-direction: column; 
+  gap: 15px; 
+  margin-top: 20px;
+  width: 100%;
+}
+
+.cancel-button,
+.save-button {
+  /* Ocupam 100% da largura em mobile */
+  width: 100%; 
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.cancel-button {
+  background-color: #ccc;
+  color: #333;
+}
+
+.cancel-button:hover {
+  background-color: #b0b0b0;
+}
+
+.save-button {
+  background-color: #a30018;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #c20025;
+}
+
+
+/* ---------------------------------- */
+/* MEDIA QUERY: AJUSTE PARA TELAS MAIORES (> 600px) */
+/* ---------------------------------- */
+@media (min-width: 600px) {
+  
+  .edit-user-title {
+    font-size: 28px; /* Restaurar tamanho original */
+    padding-left: 20px; /* Restaurar padding para centralizar */
+  }
+  
+  .edit-user-card {
+    padding: 40px; /* Restaurar padding original */
+    /* width: 600px; é substituído por max-width: 600px e width: 100% */
+  }
+  
+  .add-photo-button {
+    /* Restaurar tamanho do círculo */
+    width: 150px; 
+    height: 150px;
+    font-size: 14px; 
+  }
+
+  .action-buttons {
+    /* Retorna a disposição em linha */
+    flex-direction: row; 
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .cancel-button,
+  .save-button {
+    /* Os botões voltam a ter largura baseada no conteúdo, não mais 100% */
+    width: auto; 
+    padding: 12px 30px;
+    font-size: 18px;
+  }
 }
