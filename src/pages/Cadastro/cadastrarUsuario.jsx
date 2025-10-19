@@ -1,21 +1,23 @@
 // src/pages/Perfil/CadastrarUsuario.jsx
 
 import React, { useState } from 'react';
-import './cadastrarUsuario.css'; // Importa o CSS para esta tela
-import { FaImage } from 'react-icons/fa'; // Importa um ícone de imagem (necessita de 'npm install react-icons')
+import './cadastrarUsuario.css';
+import { FaImage } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; // Importa para redirecionar
 
 const CadastrarUsuario = () => {
-  // Estados para armazenar os valores dos campos do formulário
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     nome: '',
     cpf: '',
     email: '',
     perfil: '',
     senha: '',
-    foto: null, 
+    foto: null,
   });
 
-  // Handler para atualizar o estado quando um campo de input/select muda
+  // Atualiza os campos de texto
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -24,24 +26,32 @@ const CadastrarUsuario = () => {
     }));
   };
 
-  // Handler para quando a foto é adicionada
+  // Atualiza a foto
   const handlePhotoChange = (e) => {
     const file = e.target.files[0];
     setFormData((prevData) => ({
       ...prevData,
-      foto: file,
+      foto: file ? URL.createObjectURL(file) : null, // gera URL pra visualizar depois
     }));
-    if (file) {
-        console.log('Arquivo de foto selecionado:', file.name);
-    }
   };
 
-  // Handler para o botão Cadastrar
+  // Envia o formulário
   const handleSubmit = (e) => {
-    e.preventDefault(); 
-    console.log('Dados do novo usuário:', formData);
-    alert('Novo usuário cadastrado com sucesso! (Verifique o console para os dados)');
-    // Aqui você enviaria os dados para um backend (API)
+    e.preventDefault();
+
+    // Busca os usuários já salvos (ou cria um array novo)
+    const usuariosSalvos = JSON.parse(localStorage.getItem('usuarios')) || [];
+
+    // Adiciona o novo usuário
+    const novosUsuarios = [...usuariosSalvos, formData];
+
+    // Salva no localStorage
+    localStorage.setItem('usuarios', JSON.stringify(novosUsuarios));
+
+    alert('Usuário cadastrado com sucesso!');
+
+    // Redireciona para a tela de gestão
+    navigate('/usuarios');
   };
 
   return (
@@ -50,7 +60,6 @@ const CadastrarUsuario = () => {
 
       <div className="register-user-card">
         <form onSubmit={handleSubmit} className="register-user-form">
-          {/* Input: Nome */}
           <input
             type="text"
             name="nome"
@@ -60,8 +69,7 @@ const CadastrarUsuario = () => {
             required
             className="form-input"
           />
-          
-          {/* Input: CPF */}
+
           <input
             type="text"
             name="cpf"
@@ -71,8 +79,7 @@ const CadastrarUsuario = () => {
             required
             className="form-input"
           />
-          
-          {/* Input: E-mail */}
+
           <input
             type="email"
             name="email"
@@ -81,8 +88,7 @@ const CadastrarUsuario = () => {
             onChange={handleChange}
             className="form-input"
           />
-          
-          {/* Select: Perfil */}
+
           <div className="form-select-container">
             <select
               name="perfil"
@@ -96,11 +102,9 @@ const CadastrarUsuario = () => {
               <option value="Analista">Analista</option>
               <option value="Administrador">Administrador</option>
             </select>
-            {/* Seta customizada (usada no CSS) */}
-            <span className="select-arrow"></span> 
+            <span className="select-arrow"></span>
           </div>
 
-          {/* Input: Senha */}
           <input
             type="password"
             name="senha"
@@ -111,7 +115,6 @@ const CadastrarUsuario = () => {
             className="form-input"
           />
 
-          {/* Área para Adicionar Foto (Input do tipo file estilizado) */}
           <div className="add-photo-area">
             <input
               type="file"
@@ -119,7 +122,7 @@ const CadastrarUsuario = () => {
               name="foto"
               accept="image/*"
               onChange={handlePhotoChange}
-              style={{ display: 'none' }} 
+              style={{ display: 'none' }}
             />
             <label htmlFor="photoUpload" className="form-input photo-input-label">
               Adicionar foto
@@ -127,7 +130,6 @@ const CadastrarUsuario = () => {
             </label>
           </div>
 
-          {/* Botão Cadastrar */}
           <button type="submit" className="submit-button">
             Cadastrar
           </button>

@@ -1,41 +1,41 @@
-/* src/pages/Perfil/editarUsuario.css */
-
 /* ---------------------------------- */
-/* BASE / MOBILE-FIRST (Estilos para Telas Pequenas) */
+/* BASE / MOBILE-FIRST (TELAS PEQUENAS) */
 /* ---------------------------------- */
 
+/* Página de edição */
 .edit-user-page {
   padding: 20px;
   background-color: #f0f2f5;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* antes estava center */
   font-family: Arial, sans-serif;
+  margin-left: 80px; /* desloca tudo para a direita, mantendo leitura mais à esquerda da tela */
 }
 
+/* Título da Página */
 .edit-user-title {
   color: #333;
-  font-size: 24px; /* Reduzindo o tamanho do título para mobile */
+  font-size: 24px;
   margin-bottom: 20px;
-  align-self: flex-start;
   width: 100%;
   max-width: 600px;
-  padding-left: 0; /* Remove padding lateral em mobile */
+  padding-left: 10px; /* pequeno recuo para o título */
 }
 
 /* Card Principal do Formulário */
 .edit-user-card {
   background-color: #0d1a2f;
   border-radius: 15px;
-  padding: 30px; /* Reduzindo padding para mobile */
+  padding: 30px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-  /* REMOVENDO LARGURA FIXA */
-  max-width: 600px; 
-  width: 100%; /* Garante que ocupe o máximo de espaço disponível em mobile */
+  max-width: 600px;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start; /* conteúdo do card alinhado à esquerda */
+  margin-left: 10px; /* leve deslocamento à esquerda */
   margin-bottom: 20px;
 }
 
@@ -48,9 +48,10 @@
   align-items: center;
 }
 
+/* Mantém o restante igual */
 .form-input {
   width: 100%;
-  padding: 10px 15px; /* Ajustando padding */
+  padding: 10px 15px;
   border: none;
   border-radius: 8px;
   background-color: #dcdcdc;
@@ -59,7 +60,7 @@
   outline: none;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease;
-  box-sizing: border-box; /* Importante para responsividade */
+  box-sizing: border-box;
 }
 
 .form-input::placeholder {
@@ -73,7 +74,7 @@
 
 /* Área para Adicionar Foto */
 .add-photo-area {
-  margin: 20px 0; /* Reduzindo margem para mobile */
+  margin: 20px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -81,7 +82,6 @@
 }
 
 .add-photo-button {
-  /* Reduzindo o tamanho do círculo para mobile */
   width: 120px;
   height: 120px;
   background-color: white;
@@ -90,7 +90,7 @@
   justify-content: center;
   align-items: center;
   color: #333;
-  font-size: 12px; /* Reduzindo a fonte */
+  font-size: 12px;
   text-align: center;
   cursor: pointer;
   border: 2px dashed #ccc;
@@ -104,25 +104,23 @@
 }
 
 .file-name {
-  color: #ccc;
+  color: #666;
   font-size: 12px;
   margin-top: 5px;
 }
 
-/* Botões de Ação (Cancelar e Salvar) */
+/* Botões de Ação */
 .action-buttons {
   display: flex;
-  /* Em mobile, empilhamos os botões para economizar espaço horizontal */
-  flex-direction: column; 
-  gap: 15px; 
+  flex-direction: column;
+  gap: 15px;
   margin-top: 20px;
   width: 100%;
 }
 
 .cancel-button,
 .save-button {
-  /* Ocupam 100% da largura em mobile */
-  width: 100%; 
+  width: 100%;
   padding: 12px 20px;
   border: none;
   border-radius: 8px;
@@ -149,44 +147,4 @@
 
 .save-button:hover {
   background-color: #c20025;
-}
-
-
-/* ---------------------------------- */
-/* MEDIA QUERY: AJUSTE PARA TELAS MAIORES (> 600px) */
-/* ---------------------------------- */
-@media (min-width: 600px) {
-  
-  .edit-user-title {
-    font-size: 28px; /* Restaurar tamanho original */
-    padding-left: 20px; /* Restaurar padding para centralizar */
-  }
-  
-  .edit-user-card {
-    padding: 40px; /* Restaurar padding original */
-    /* width: 600px; é substituído por max-width: 600px e width: 100% */
-  }
-  
-  .add-photo-button {
-    /* Restaurar tamanho do círculo */
-    width: 150px; 
-    height: 150px;
-    font-size: 14px; 
-  }
-
-  .action-buttons {
-    /* Retorna a disposição em linha */
-    flex-direction: row; 
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
-  .cancel-button,
-  .save-button {
-    /* Os botões voltam a ter largura baseada no conteúdo, não mais 100% */
-    width: auto; 
-    padding: 12px 30px;
-    font-size: 18px;
-  }
 }
