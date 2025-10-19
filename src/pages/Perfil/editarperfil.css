@@ -1,156 +1,93 @@
-/* Layout geral */
-.app {
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-  font-family: Arial, sans-serif;
-}
-
-/* Sidebar */
-.sidebar {
-  width: 220px;
-  background-color: #0b2b54;
-  color: white;
+.editar-perfil {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px;
-}
-
-.logo {
-  width: 120px;
-  margin-bottom: 30px;
-}
-
-.menu {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  width: 100%;
-}
-
-.menu-btn {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  padding: 10px 15px;
-  text-align: left;
-  transition: background 0.3s;
-}
-
-.menu-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-}
-
-.menu-btn img {
-  width: 20px;
-  height: 20px;
-}
-
-/* Área principal */
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: #f5f5f5;
-}
-
-/* Topbar */
-.topbar {
-  height: 60px;
-  background-color: #0b2b54;
-  color: white;
-  font-size: 18px;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  padding-left: 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-/* Conteúdo */
-.content {
-  flex: 1;
-  padding: 40px 60px;
+  justify-content: center;
+  min-height: 100vh;
+  background-color: #f4f4f4;
+  font-family: "Roboto", sans-serif;
 }
 
 .titulo {
-  font-size: 22px;
-  font-weight: bold;
+  font-size: 24px;
   margin-bottom: 20px;
-}
-
-/* Formulário */
-.form-container {
-  display: flex;
-  justify-content: center;
-}
-
-.form {
-  background-color: #0b2b54;
-  padding: 40px;
-  border-radius: 8px;
-  width: 350px;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.form input {
-  padding: 10px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-  font-size: 15px;
-}
-
-/* Área da foto */
-.foto-area {
-  display: flex;
-  justify-content: center;
-  margin: 15px 0;
-}
-
-.foto-placeholder {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background-color: white;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #0b2b54;
-  font-weight: bold;
-}
-
-/* Botões */
-.botoes {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
-.btn {
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: none;
-  font-size: 15px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.cancelar {
-  background-color: #c5c5c5;
   color: #333;
 }
 
-.salvar {
-  background-color: #c9162b;
+.form-container {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.foto-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.foto-placeholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+}
+
+.foto-preview {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.input-foto {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.botoes {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.btn {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
   color: white;
+  cursor: pointer;
+}
+
+.btn.cancelar {
+  background-color: #888;
+}
+
+.btn.salvar {
+  background-color: #28a745;
+}
+
+.btn:hover {
+  opacity: 0.9;
 }

@@ -1,0 +1,221 @@
+/* --- Variáveis Globais e Reset --- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  --sidebar-width-open: 240px;
+  --sidebar-width-closed: 0px; /* Esconde a sidebar completamente */
+  --header-height: 70px;
+  --primary-bg: #f4f7fa;
+  --sidebar-bg: #0c2d48; /* Azul escuro */
+  --header-bg: #ffffff;
+  --card-bg: #ffffff;
+  --btn-red: #c82333;
+  --btn-yellow: #ffc107;
+  --text-dark: #333;
+  --text-light: #f1f1f1;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--primary-bg);
+}
+
+/* --- Layout Principal da Aplicação --- */
+.app-container {
+  display: flex;
+  transition: padding-left 0.3s ease-in-out;
+}
+
+/* O conteúdo principal que se ajusta à sidebar */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto; /* Permite scroll apenas no conteúdo principal */
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* --- Lógica da Sidebar (Exemplo) --- */
+/* Estes estilos devem ser aplicados nos seus componentes Sidebar e Header */
+.sidebar {
+  width: var(--sidebar-width-open);
+  background-color: var(--sidebar-bg);
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  transition: width 0.3s ease-in-out;
+}
+
+.header {
+  height: var(--header-height);
+  background-color: var(--header-bg);
+  position: sticky; /* Fica fixo no topo do .main-content */
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Ajustes quando a sidebar está aberta */
+.app-container.sidebar-open .main-content {
+  margin-left: var(--sidebar-width-open);
+}
+
+/* Ajustes quando a sidebar está fechada */
+.app-container.sidebar-closed .sidebar {
+  width: var(--sidebar-width-closed);
+}
+.app-container.sidebar-closed .main-content {
+  margin-left: var(--sidebar-width-closed);
+}
+
+/* CSS CORRIGIDO E AJUSTADO */
+.gestao-page-container {
+  padding: 100px 30px 30px; 
+  flex-grow: 1;
+}
+
+.gestao-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.gestao-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.btn-cadastrar {
+  background-color: var(--btn-red);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-cadastrar:hover {
+  background-color: #a21b29;
+}
+
+/* --- Lista de Usuários e Cards --- */
+.user-list-container {
+  display: grid;
+  /* Cria colunas responsivas: elas terão no mínimo 350px e no máximo 1fr (espaço disponível) */
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.user-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.avatar {
+  background-color: #e0e0e0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.user-info strong {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.user-info span {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-action {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+.btn-action:hover {
+  opacity: 0.8;
+}
+
+.btn-edit {
+  background-color: var(--btn-yellow);
+  color: #212529;
+}
+
+.btn-delete {
+  background-color: var(--btn-red);
+  color: white;
+}
+
+/* --- Seção Responsiva --- */
+@media (max-width: 768px) {
+  /* Em telas menores, a sidebar fica fechada por padrão e o conteúdo ocupa tudo */
+  .app-container.sidebar-open .main-content,
+  .app-container.sidebar-closed .main-content {
+    margin-left: 0;
+  }
+  
+  .gestao-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gestao-page-container {
+    padding: 20px;
+  }
+
+  .user-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .action-buttons {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .btn-action {
+      flex-grow: 1; /* Faz os botões dividirem o espaço */
+  }
+}

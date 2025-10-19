@@ -1,64 +1,108 @@
-import React from "react";
+import React, { useState } from "react";
 import "./editarperfil.css";
 
-// Ícones do menu lateral (PNG)
-import HomeIcon from "./assets/home.png";
-import ReportIcon from "./assets/report.png";
-import ChartIcon from "./assets/chart.png";
-import UserIcon from "./assets/user.png";
-import Logo from "./assets/logo.png";
 
 export default function EditarPerfil() {
+  const [formData, setFormData] = useState({
+    nome: "",
+    cpf: "",
+    cargo: "",
+    email: "",
+    foto: null,
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFoto = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setFormData({ ...formData, foto: URL.createObjectURL(file) });
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log("Dados salvos:", formData);
+    alert("Perfil salvo com sucesso!");
+  };
+
   return (
-    <div className="app">
-      {/* Sidebar */}
-      <aside className="sidebar">
-        <img src={Logo} alt="Logo" className="logo" />
-        <nav className="menu">
-          <button className="menu-btn">
-            <img src={HomeIcon} alt="Início" /> Início
-          </button>
-          <button className="menu-btn">
-            <img src={ReportIcon} alt="Ocorrências" /> Ocorrências
-          </button>
-          <button className="menu-btn">
-            <img src={ChartIcon} alt="Relatórios" /> Relatórios
-          </button>
-          <button className="menu-btn">
-            <img src={UserIcon} alt="Usuários" /> Usuários
-          </button>
-        </nav>
-      </aside>
+    <div className="editar-perfil">
+      <h2 className="titulo">Editar perfil</h2>
 
-      {/* Área principal */}
-      <div className="main">
-        {/* Topbar */}
-        <header className="topbar">
-          Painel de coleta e gestão de ocorrências - SisBMPE
-        </header>
+      <div className="form-container">
+        <form className="form" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="nome"
+            placeholder="Nome"
+            value={formData.nome}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="cpf"
+            placeholder="CPF*"
+            value={formData.cpf}
+            onChange={handleChange}
+          />
+          <input
+            type="text"
+            name="cargo"
+            placeholder="Cargo"
+            value={formData.cargo}
+            onChange={handleChange}
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="E-mail"
+            value={formData.email}
+            onChange={handleChange}
+          />
 
-        {/* Conteúdo */}
-        <div className="content">
-          <h2 className="titulo">Editar perfil</h2>
-
-          <div className="form-container">
-            <form className="form">
-              <input type="text" placeholder="Nome" />
-              <input type="text" placeholder="CPF*" />
-              <input type="text" placeholder="Cargo" />
-              <input type="email" placeholder="E-mail" />
-
-              <div className="foto-area">
-                <div className="foto-placeholder">Adicionar foto</div>
-              </div>
-
-              <div className="botoes">
-                <button className="btn cancelar">Cancelar</button>
-                <button className="btn salvar">Salvar</button>
-              </div>
-            </form>
+          <div className="foto-area">
+            {formData.foto ? (
+              <img
+                src={formData.foto}
+                alt="Foto de perfil"
+                className="foto-preview"
+              />
+            ) : (
+              <div className="foto-placeholder">Adicionar foto</div>
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleFoto}
+              className="input-foto"
+            />
           </div>
-        </div>
+
+          <div className="botoes">
+            <button
+              type="button"
+              className="btn cancelar"
+              onClick={() =>
+                setFormData({
+                  nome: "",
+                  cpf: "",
+                  cargo: "",
+                  email: "",
+                  foto: null,
+                })
+              }
+            >
+              Cancelar
+            </button>
+            <button type="submit" className="btn salvar">
+              Salvar
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
