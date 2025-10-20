@@ -1,6 +1,7 @@
 // src/App.jsx
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useState } from "react";
+import { setAuthToken } from './services/AuthService';
 
 import Login from "./pages/Login/login";
 import EsqueceuSenha from "./pages/Login/esqueceu";
@@ -23,6 +24,11 @@ import CadastrarUsuario from "./pages/Cadastro/CadastrarUsuario";
 import EditarUsuario from "./pages/Perfil/editarperfil";
 
 import "./App.css";
+
+const storedToken = localStorage.getItem('jwtToken');
+if (storedToken) {
+    setAuthToken(storedToken); // ⭐️ Garante que o cabeçalho é setado ao carregar a página
+}
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);

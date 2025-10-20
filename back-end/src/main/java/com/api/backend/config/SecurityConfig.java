@@ -40,19 +40,21 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/usuarios").hasAnyRole("Chefe", "Admin")
-//                        .requestMatchers("/anexos/**").hasAnyRole("Chefe", "Admin", "Analista")
-//                        .requestMatchers("/assinatura/**").hasAnyRole("Chefe", "Admin", "Analista")
-//                        .requestMatchers("/endereco/**").hasAnyRole("Chefe", "Admin", "Analista")
-//                        .requestMatchers("/prioridade-ocorrencia/**").hasAnyRole("Chefe", "Admin", "Analista")
-//                        .requestMatchers("/status-ocorrencia/**").hasAnyRole("Chefe", "Admin", "Analista")
-//                        .requestMatchers("/subtipo-ocorrencia/**").hasAnyRole("Chefe", "Admin", "Analista")
-//                        .requestMatchers("/tipo-arquivo/**").hasAnyRole("Chefe", "Admin", "Analista")
-//                        .requestMatchers("/tipo-ocorrencia/**").hasAnyRole("Chefe", "Admin", "Analista")
-                        .requestMatchers("/ocorrencias/**").hasAnyRole("Chefe", "Admin", "Analista")
-                        .requestMatchers("/log/**").hasAnyRole("Chefe", "Admin")
-                        .anyRequest().authenticated()
+                                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                                .requestMatchers("/auth/**").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/usuarios").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin")
+                                .requestMatchers("/ocorrencias/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin", "ROLE_Analista")
+                                .requestMatchers("/log/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin")
+                                .anyRequest().authenticated()
+//                        .requestMatchers("/anexos/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin", "ROLE_Analista")
+//                        .requestMatchers("/assinatura/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin", "ROLE_Analista")
+//                        .requestMatchers("/endereco/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin", "ROLE_Analista")
+//                        .requestMatchers("/prioridade-ocorrencia/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin", "ROLE_Analista")
+//                        .requestMatchers("/status-ocorrencia/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin", "ROLE_Analista")
+//                        .requestMatchers("/subtipo-ocorrencia/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin", "ROLE_Analista")
+//                        .requestMatchers("/tipo-arquivo/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin", "ROLE_Analista")
+//                        .requestMatchers("/tipo-ocorrencia/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin", "ROLE_Analista")
+
                 )
                 .addFilterBefore(new JwtRequestFilter(jwtUtil, userDetailsService), UsernamePasswordAuthenticationFilter.class);
 
@@ -79,8 +81,9 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:5173"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
+        configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "Accept"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);
 

@@ -6,7 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Ocorrencia")
@@ -27,13 +28,19 @@ public class OcorrenciaModel {
     private String nomeSolicitante;
 
     @Column(name = "Data_Ocorrencia", nullable = false)
-    private LocalDate dataOcorrencia;
+    private LocalDateTime dataOcorrencia;
 
     @Column(name = "Descricao", nullable = false)
     private String descricao;
 
     @Column(name = "Localizacao", nullable = false)
     private String localizacao;
+
+    @Column(name = "Latitude", nullable = false, precision = 10, scale = 8)
+    private BigDecimal latitude;
+
+    @Column(name = "Longitude", nullable = false, precision = 11, scale = 8)
+    private BigDecimal longitude;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Prioridade_Ocorrencia", nullable = false)
@@ -59,7 +66,7 @@ public class OcorrenciaModel {
         Baixa,
         Média,
         Alta,
-        Urgente
+        Crítica
     }
 
     public enum StatusOcorrencia {

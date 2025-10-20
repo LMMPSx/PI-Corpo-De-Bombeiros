@@ -15,15 +15,17 @@ function UltimasOcorrencias({ ocorrencias }) {
   };
 
   const getStatusColor = (status) => {
+    const lowerStatus = status ? status.toLowerCase() : '';
     switch (status) {
-      case 'resolvido': return 'success';
-      case 'em_andamento': return 'warning';
-      case 'pendente': return 'danger';
+      case 'Resolvida': return 'success';
+      case 'Em_Andamento': return 'warning';
+      case 'Pendente': return 'danger';
       default: return 'secondary';
     }
   };
 
   const getTipoIcone = (tipo) => {
+    const lowerTipo = tipo ? tipo.toLowerCase() : '';
     switch (tipo) {
       case 'infraestrutura': return 'bi-tools';
       case 'iluminacao': return 'bi-lightbulb';
@@ -65,10 +67,10 @@ function UltimasOcorrencias({ ocorrencias }) {
 
               <div className="ocorrencia-status">
                 <span className={`status-badge ${getStatusColor(ocorrencia.status)}`}>
-                  {ocorrencia.status.replace('_', ' ')}
+                  {ocorrencia.status ? ocorrencia.status.replace('_', ' ') : 'N/A'}
                 </span>
                 <span className={`prioridade-badge ${ocorrencia.prioridade}`}>
-                  {ocorrencia.prioridade}
+                  {ocorrencia.prioridade || 'N/A'}
                 </span>
               </div>
             </div>

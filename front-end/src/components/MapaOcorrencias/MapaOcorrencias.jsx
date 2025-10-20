@@ -33,11 +33,13 @@ const criarIcone = (prioridade) => {
 };
 
 const getCorPrioridade = (prioridade) => {
+  const lowerPrioridade = prioridade ? prioridade.toLowerCase() : '';
+
   switch (prioridade) {
-    case 'critica': return '#dc3545';
-    case 'alta': return '#fd7e14';
-    case 'media': return '#ffc107';
-    case 'baixa': return '#198754';
+    case 'Crítica': return '#dc3545';
+    case 'Alta': return '#fd7e14';
+    case 'Média': return '#ffc107';
+    case 'Baixa': return '#198754';
     default: return '#6c757d';
   }
 };
@@ -46,19 +48,27 @@ const getCorPrioridade = (prioridade) => {
 function AjustarMapa({ ocorrencias }) {
   const map = useMap();
   
-  React.useEffect(() => {
+React.useEffect(() => {
     if (ocorrencias.length > 0) {
-      const group = new L.FeatureGroup(
-        ocorrencias.map(ocorrencia => 
-          L.marker([ocorrencia.latitude, ocorrencia.longitude])
-        )
-      );
-      map.fitBounds(group.getBounds().pad(0.1));
+        const validMarkers = ocorrencias
+            // ⭐️ Filtre novamente aqui para máxima segurança
+            .filter(o => o.latitude && o.longitude) 
+            .map(ocorrencia => 
+                L.marker([ocorrencia.latitude, ocorrencia.longitude])
+            );
+        
+        // Verifica se há marcadores válidos antes de criar o grupo
+        if (validMarkers.length > 0) {
+            const group = new L.FeatureGroup(validMarkers);
+            map.fitBounds(group.getBounds().pad(0.1));
+        } else {
+            // Se não houver marcadores válidos, volte para a posição padrão
+            map.setView([-8.0476, -34.8770], 10);
+        }
     } else {
-      // Foco em Pernambuco (Recife e região metropolitana)
-      map.setView([-8.0476, -34.8770], 10);
+        map.setView([-8.0476, -34.8770], 10);
     }
-  }, [ocorrencias, map]);
+}, [ocorrencias, map]);
 
   return null;
 }
@@ -66,173 +76,60 @@ function AjustarMapa({ ocorrencias }) {
 function MapaOcorrencias({ ocorrencias }) {
   // Coordenadas de Recife, Pernambuco
   const posicaoPadrao = [-8.0476, -34.8770];
-  
-  // Ocorrências reais em Pernambuco
-  const ocorrenciasPernambuco = ocorrencias.length > 0 ? ocorrencias : [
-    {
-      id: 1,
-      titulo: "Alagamento - Boa Viagem",
-      endereco: "Av. Boa Viagem, 1500 - Boa Viagem, Recife",
-      latitude: -8.1196,
-      longitude: -34.9030,
-      tipo: "infraestrutura",
-      status: "em_andamento",
-      prioridade: "alta",
-      data: "2024-01-15T14:30:00",
-      descricao: "Alagamento após chuva forte, trânsito interrompido"
-    },
-    {
-      id: 2,
-      titulo: "Buraco na PE-15 - Olinda",
-      endereco: "PE-15, Km 5 - Olinda",
-      latitude: -8.0081,
-      longitude: -34.8550,
-      tipo: "infraestrutura",
-      status: "pendente",
-      prioridade: "media",
-      data: "2024-01-14T09:20:00",
-      descricao: "Buraco na pista sentido Recife-Olinda"
-    },
-    {
-      id: 3,
-      titulo: "Iluminação Pública - Casa Forte",
-      endereco: "Rua Real da Torre, 400 - Casa Forte, Recife",
-      latitude: -8.0425,
-      longitude: -34.9168,
-      tipo: "iluminacao",
-      status: "resolvido",
-      prioridade: "baixa",
-      data: "2024-01-13T18:45:00",
-      descricao: "Lâmpada queimada no poste da praça"
-    },
-    {
-      id: 4,
-      titulo: "Coleta de Lixo Atrasada - Boa Vista",
-      endereco: "Rua da Concórdia, 250 - Boa Vista, Recife",
-      latitude: -8.0615,
-      longitude: -34.8853,
-      tipo: "limpeza",
-      status: "em_andamento",
-      prioridade: "alta",
-      data: "2024-01-15T08:15:00",
-      descricao: "Lixo acumulado há 4 dias no centro"
-    },
-    {
-      id: 5,
-      titulo: "Risco de Desabamento - Santo Amaro",
-      endereco: "Rua do Apolo, 200 - Santo Amaro, Recife",
-      latitude: -8.0639,
-      longitude: -34.8723,
-      tipo: "estrutural",
-      status: "pendente",
-      prioridade: "critica",
-      data: "2024-01-12T16:30:00",
-      descricao: "Prédio histórico com rachaduras aparentes"
-    },
-    {
-      id: 6,
-      titulo: "Semáforo Queimado - Caxangá",
-      endereco: "Av. Caxangá, 3500 - Caxangá, Recife",
-      latitude: -8.0528,
-      longitude: -34.9506,
-      tipo: "transito",
-      status: "pendente",
-      prioridade: "alta",
-      data: "2024-01-15T07:00:00",
-      descricao: "Semáforo não funciona no cruzamento movimentado"
-    },
-    {
-      id: 7,
-      titulo: "Esgoto a Céu Aberto - Afogados",
-      endereco: "Rua dos Afogados, 500 - Afogados, Recife",
-      latitude: -8.0750,
-      longitude: -34.9125,
-      tipo: "sanitario",
-      status: "em_andamento",
-      prioridade: "critica",
-      data: "2024-01-14T10:00:00",
-      descricao: "Vazamento de esgoto há 1 semana"
-    },
-    {
-      id: 8,
-      titulo: "Árvore Caída - Graças",
-      endereco: "Rua das Graças, 150 - Graças, Recife",
-      latitude: -8.0542,
-      longitude: -34.8986,
-      tipo: "meio_ambiente",
-      status: "resolvido",
-      prioridade: "media",
-      data: "2024-01-11T22:15:00",
-      descricao: "Árvore caída durante temporal, já removida"
-    },
-    {
-      id: 9,
-      titulo: "Fiação Elétrica Solta - São José",
-      endereco: "Rua da Imperatriz, 300 - São José, Recife",
-      latitude: -8.0631,
-      longitude: -34.8739,
-      tipo: "eletrica",
-      status: "pendente",
-      prioridade: "critica",
-      data: "2024-01-15T12:00:00",
-      descricao: "Fiação da Celpe solta e com risco de curto"
-    },
-    {
-      id: 10,
-      titulo: "Ponte com Estrutura Comprometida - Jaboatão",
-      endereco: "PE-15, Ponte sobre Rio Jaboatão - Jaboatão dos Guararapes",
-      latitude: -8.1128,
-      longitude: -34.9367,
-      tipo: "estrutural",
-      status: "em_andamento",
-      prioridade: "critica",
-      data: "2024-01-13T15:45:00",
-      descricao: "Estrutura da ponte apresenta fissuras"
-    },
-    {
-      id: 11,
-      titulo: "Praça com Manutenção Necessária - Pina",
-      endereco: "Praça do Pina - Pina, Recife",
-      latitude: -8.0869,
-      longitude: -34.8886,
-      tipo: "urbanismo",
-      status: "pendente",
-      prioridade: "baixa",
-      data: "2024-01-14T11:30:00",
-      descricao: "Bancos e equipamentos da praça danificados"
-    },
-    {
-      id: 12,
-      titulo: "Sinalização de Trânsito Apagada - Derby",
-      endereco: "Rua do Derby, 200 - Derby, Recife",
-      latitude: -8.0622,
-      longitude: -34.8981,
-      tipo: "transito",
-      status: "resolvido",
-      prioridade: "media",
-      data: "2024-01-12T14:20:00",
-      descricao: "Placa de pare danificada, já substituída"
-    }
-  ];
 
-  const formatarData = (dataString) => {
-    return new Date(dataString).toLocaleDateString('pt-BR', {
+const formatarData = (dataString) => {
+    if (!dataString) return 'Data não informada';
+
+    // ⭐️ Trunca a string de data para garantir compatibilidade
+    const truncatedString = dataString.split('.')[0]; 
+    
+    const data = new Date(truncatedString);
+    
+    // Se a data ainda for inválida, retorne uma mensagem de erro
+    if (isNaN(data)) {
+        return 'Erro de Data';
+    }
+
+    return data.toLocaleDateString('pt-BR', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
       hour: '2-digit',
       minute: '2-digit'
     });
+};
+  const getStatusText = (status) => {
+    if (!status) {
+        return 'N/A';
+    }
+
+    const statusMap = {
+      'Aberta': 'Aberta',
+      'Pendente': 'Pendente',
+      'Em_Andamento': 'Em Andamento',
+      'Resolvida': 'Resolvida'
+    
+    };
+    // ⚠️ ATENÇÃO: Se os ENUMs do Spring forem "Aberta", "Em_Andamento", etc., 
+    // você precisará ajustar o status aqui ou na função de mapeamento do service.
+    // Vamos assumir que você está enviando os valores padronizados e minúsculos.
+    return statusMap[status.toLowerCase()] || status;
   };
 
-  const getStatusText = (status) => {
-    const statusMap = {
-      'pendente': 'Pendente',
-      'em_andamento': 'Em Andamento',
-      'resolvido': 'Resolvido'
-    };
-    return statusMap[status] || status;
-  };
+  const prioridades = [
+    { nivel: 'Crítica', label: 'Crítica' },
+    { nivel: 'Alta', label: 'Alta' },
+    { nivel: 'Média', label: 'Média' },
+    { nivel: 'Baixa', label: 'Baixa' }
+  ];
+
+  const bairros = [
+    { value: "boa-viagem", label: "Boa Viagem" },
+    { value: "boa-vista", label: "Boa Vista" },
+    { value: "casa-forte", label: "Casa Forte" },
+    { value: "olinda", label: "Olinda" },
+    { value: "jaboatao", label: "Jaboatão" },
+  ];
 
   return (
     <div className="mapa-ocorrencias-real">
@@ -247,9 +144,9 @@ function MapaOcorrencias({ ocorrencias }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         
-        <AjustarMapa ocorrencias={ocorrenciasPernambuco} />
+        <AjustarMapa ocorrencias={ocorrencias} />
         
-        {ocorrenciasPernambuco.map((ocorrencia) => (
+        {ocorrencias.map((ocorrencia) => (
           <Marker
             key={ocorrencia.id}
             position={[ocorrencia.latitude, ocorrencia.longitude]}
@@ -292,34 +189,15 @@ function MapaOcorrencias({ ocorrencias }) {
       <div className="mapa-legenda-real">
         <h4>🗺️ Pernambuco - Prioridades</h4>
         <div className="legenda-content">
-          <div className="legenda-item">
-            <div className="legenda-marker critica"></div>
-            <span>Crítica</span>
-            <span className="legenda-count">
-              ({ocorrenciasPernambuco.filter(o => o.prioridade === 'critica').length})
-            </span>
-          </div>
-          <div className="legenda-item">
-            <div className="legenda-marker alta"></div>
-            <span>Alta</span>
-            <span className="legenda-count">
-              ({ocorrenciasPernambuco.filter(o => o.prioridade === 'alta').length})
-            </span>
-          </div>
-          <div className="legenda-item">
-            <div className="legenda-marker media"></div>
-            <span>Média</span>
-            <span className="legenda-count">
-              ({ocorrenciasPernambuco.filter(o => o.prioridade === 'media').length})
-            </span>
-          </div>
-          <div className="legenda-item">
-            <div className="legenda-marker baixa"></div>
-            <span>Baixa</span>
-            <span className="legenda-count">
-              ({ocorrenciasPernambuco.filter(o => o.prioridade === 'baixa').length})
-            </span>
-          </div>
+          {prioridades.map((p) => (
+            <div className="legenda-item" key={p.nivel}> 
+              <div className={`legenda-marker ${p.nivel}`}></div>
+              <span>{p.label}</span>
+              <span className="legenda-count">
+                ({ocorrencias.filter(o => o.prioridade === p.nivel).length})
+              </span>
+            </div>
+          ))}
         </div>
       </div>
 
@@ -327,19 +205,17 @@ function MapaOcorrencias({ ocorrencias }) {
       <div className="mapa-stats">
         <div className="stats-badge">
           <i className="bi bi-pin-map"></i>
-          {ocorrenciasPernambuco.length} ocorrências em PE
+          {ocorrencias.length} ocorrências em PE
         </div>
       </div>
 
       {/* Filtro rápido por bairro */}
-      <div className="mapa-filtros">
+<div className="mapa-filtros">
         <select className="filtro-bairro">
           <option value="">Todos os bairros</option>
-          <option value="boa-viagem">Boa Viagem</option>
-          <option value="boa-vista">Boa Vista</option>
-          <option value="casa-forte">Casa Forte</option>
-          <option value="olinda">Olinda</option>
-          <option value="jaboatao">Jaboatão</option>
+          {bairros.map(b => (
+            <option key={b.value} value={b.value}>{b.label}</option> 
+          ))}
         </select>
       </div>
     </div>

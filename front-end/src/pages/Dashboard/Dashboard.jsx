@@ -4,9 +4,12 @@ import { useConfig } from '../../contexts/ConfigContext';
 import MapaOcorrencias from '../../components/MapaOcorrencias/MapaOcorrencias';
 import EstatisticasRapidas from '../../components/EstatisticasRapidas/EstatisticasRapidas';
 import UltimasOcorrencias from '../../components/UltimasOcorrencias/UltimasOcorrencias';
+import { fetchOcorrencias } from '../../services/ocorrenciaService';
+import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
 
 function Dashboard() {
+  const navigate = useNavigate();
   const { config } = useConfig();
   const [ocorrencias, setOcorrencias] = useState([]);
   const [estatisticas, setEstatisticas] = useState({
@@ -23,26 +26,31 @@ function Dashboard() {
 
   const carregarDados = async () => {
     setLoading(true);
-    
-    setTimeout(() => {
-      const dadosOcorrencias = [
-        // ... seus dados (mantenha igual)
-      ];
+
+    try {
+      const dadosOcorrencias = await fetchOcorrencias();
 
       setOcorrencias(dadosOcorrencias);
-      
+
       const total = dadosOcorrencias.length;
-      const emAndamento = dadosOcorrencias.filter(o => o.status === 'em_andamento').length;
-      const resolvidas = dadosOcorrencias.filter(o => o.status === 'resolvido').length;
-      const criticas = dadosOcorrencias.filter(o => o.prioridade === 'critica').length;
+
+      const emAndamento = dadosOcorrencias.filter(o => o.status === 'Em_Andamento').length;
+      const resolvidas = dadosOcorrencias.filter(o => o.status === 'Resolvida').length;
+      const criticas = dadosOcorrencias.filter(o => o.prioridade === 'Crítica').length;
 
       setEstatisticas({ total, emAndamento, resolvidas, criticas });
-      setLoading(false);
-    }, 1500);
+
+    } catch (error) {
+        console.error("Erro ao carregar dados do dashboard:", error);
+
+    } finally {
+        setLoading(false);
+
+    }
   };
 
   const handleNovaOcorrencia = () => {
-    window.location.href = '/nova-ocorrencia';
+    navigate('/nova-ocorrencia');;
   };
 
   const handleGerarRelatorio = () => {

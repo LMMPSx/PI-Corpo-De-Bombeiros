@@ -9,6 +9,23 @@ const api = axios.create({
     }
 });
 
+export const apiAuthenticated = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+        'Content-Type': 'application/json',
+    },
+});
+
+export const setAuthToken = (token) => {
+    if (token) {
+        apiAuthenticated.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        localStorage.setItem('jwtToken', token);
+    } else {
+        delete apiAuthenticated.defaults.headers.common['Authorization'];
+        localStorage.removeItem('jwtToken');
+    }
+};
+
 /**
  * Envia as credenciais para o endpoint de login do Spring Boot.
  * @param {string} username - O email ou CPF do usuário.
@@ -18,33 +35,25 @@ const api = axios.create({
 
 export const login = async (username, password) => {
     const LOGIN_URL = "/auth/login";
-
     try {
         const response = await api.post(LOGIN_URL, {
             cpf: username,
             senha: password
         });
+        
+        const token = response.data.token || response.data.accessToken; 
+        
+        // ⭐️ Usa a nova função para definir o header e salvar
+        setAuthToken(token); 
 
         return response.data;
     } catch (error) {
-        console.error("Erro ao fazer login:", error);
-        throw error;
+        // ...
     }
 }
 
 export const logout = () => {
     localStorage.removeItem('jwtToken');
 };
-
-// Se você tiver outras requisições protegidas, este interceptor será útil:
-api.interceptors.request.use(config => {
-    const token = localStorage.getItem('jwtToken');
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-}, error => {
-    return Promise.reject(error);
-});
 
 export default api;

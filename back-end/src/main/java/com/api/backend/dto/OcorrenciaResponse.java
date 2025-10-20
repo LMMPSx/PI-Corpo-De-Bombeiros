@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,6 +16,8 @@ public class OcorrenciaResponse {
     private String dataOcorrencia;
     private String descricao;
     private String localizacao;
+    private BigDecimal latitude;
+    private BigDecimal longitude;
     private String prioridadeOcorrencia;
     private String anexoOcorrencia;
     private String statusOcorrencia;

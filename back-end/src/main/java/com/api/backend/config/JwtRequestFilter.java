@@ -31,13 +31,17 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwt = null;
 
-        try {
-            if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            try {
                 jwt = authorizationHeader.substring(7);
                 username = jwtUtil.extractUsername(jwt);
+            } catch (Exception e) {
+                System.out.println("Erro ao processar o JWT: " + e.getMessage());
             }
+        }
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            try {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
 
                 if (jwtUtil.validateToken(jwt, userDetails)) {
@@ -46,9 +50,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
+            } catch (Exception e) {
+                System.out.println("Erro ao carregar usuário: " + e.getMessage());
             }
-        } catch (Exception e) {
-            System.out.println("Token inválido ou expirado: " + e.getMessage());
         }
         chain.doFilter(request, response);
     }

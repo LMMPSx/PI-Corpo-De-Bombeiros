@@ -16,13 +16,10 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtil {
-    @Value("${jwt.secret.key}")
-    private String secretKeyString;
 
     private final SecretKey key;
 
     public JwtUtil(@Value("${jwt.secret.key}") String secretKeyString) {
-        this.secretKeyString = secretKeyString;
         this.key = Keys.hmacShaKeyFor(secretKeyString.getBytes());
     }
 

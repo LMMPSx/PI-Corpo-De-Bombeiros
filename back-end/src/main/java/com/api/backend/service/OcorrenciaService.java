@@ -7,7 +7,7 @@ import com.api.backend.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +25,8 @@ public class OcorrenciaService {
                 ocorrencia.getDataOcorrencia().toString(),
                 ocorrencia.getDescricao(),
                 ocorrencia.getLocalizacao(),
+                ocorrencia.getLatitude(),
+                ocorrencia.getLongitude(),
                 ocorrencia.getPrioridadeOcorrencia().toString(),
                 ocorrencia.getAnexoOcorrencia(),
                 ocorrencia.getStatusOcorrencia().toString(),
@@ -37,9 +39,11 @@ public class OcorrenciaService {
         return OcorrenciaModel.builder()
                 .naturezaOcorrencia(OcorrenciaModel.NaturezaOcorrencia.valueOf(ocorrenciaRequest.getNaturezaOcorrencia()))
                 .nomeSolicitante(ocorrenciaRequest.getNomeSolicitante())
-                .dataOcorrencia(LocalDate.parse(ocorrenciaRequest.getDataOcorrencia()))
+                .dataOcorrencia(LocalDateTime.now())
                 .descricao(ocorrenciaRequest.getDescricao())
                 .localizacao(ocorrenciaRequest.getLocalizacao())
+                .latitude(ocorrenciaRequest.getLatitude())
+                .longitude(ocorrenciaRequest.getLongitude())
                 .prioridadeOcorrencia(OcorrenciaModel.PrioridadeOcorrencia.valueOf(ocorrenciaRequest.getPrioridadeOcorrencia()))
                 .anexoOcorrencia(ocorrenciaRequest.getAnexoOcorrencia())
                 .statusOcorrencia(OcorrenciaModel.StatusOcorrencia.valueOf(ocorrenciaRequest.getStatusOcorrencia()))
@@ -100,6 +104,14 @@ public class OcorrenciaService {
 
         if (ocorrenciaRequest.getLocalizacao() != null && !ocorrenciaRequest.getLocalizacao().trim().isEmpty()) {
             ocorrenciaExistente.setLocalizacao(ocorrenciaRequest.getLocalizacao());
+        }
+
+        if (ocorrenciaRequest.getLatitude() != null) {
+            ocorrenciaExistente.setLatitude(ocorrenciaRequest.getLatitude());
+        }
+
+        if (ocorrenciaRequest.getLongitude() != null) {
+            ocorrenciaExistente.setLongitude(ocorrenciaRequest.getLongitude());
         }
 
         if (ocorrenciaRequest.getPrioridadeOcorrencia() != null && !ocorrenciaRequest.getPrioridadeOcorrencia().trim().isEmpty()) {
