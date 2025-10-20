@@ -11,5 +11,5 @@ public class LoginResponse {
     private String token;
     private String nomeUsuario;
     private String tipoUsuario;
-    private String responsavel;
+    private String cpf;
 }

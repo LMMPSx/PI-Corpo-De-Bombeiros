@@ -28,19 +28,19 @@ public class UsuarioController {
         return ResponseEntity.ok(usuario);
     }
 
-    @PostMapping("createUsuario/")
+    @PostMapping("/create")
     public ResponseEntity<UsuarioResponse> create(@RequestBody UsuarioRequest usuarioRequest) {
         UsuarioResponse usuarioCriado = usuarioService.create(usuarioRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCriado);
     }
 
-    @PutMapping("/upadete/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<UsuarioResponse> update(@PathVariable Integer id, @RequestBody UsuarioRequest usuarioRequest) {
         UsuarioResponse usuarioAtualizado = usuarioService.update(id, usuarioRequest);
         return ResponseEntity.ok(usuarioAtualizado);
     }
 
-    @DeleteMapping("delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<UsuarioResponse> delete(@PathVariable Integer id) {
         usuarioService.delete(id);
         return ResponseEntity.noContent().build();

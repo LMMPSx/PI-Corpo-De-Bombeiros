@@ -1,5 +1,6 @@
 package com.api.backend.dto;
 
+import com.api.backend.model.UsuarioModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,5 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UsuarioRequest {
     private String nomeUsuario;
-    private String responsavel;
+    private String cpf;
+    private String email;
+    private String tipoUsuario;
+    private String senha;
+    private String caminhoFoto;
 }

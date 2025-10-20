@@ -41,7 +41,7 @@ public class OcorrenciaController {
         return ResponseEntity.ok(ocorrencias);
     }
 
-    @PostMapping("/createOcorrencia")
+    @PostMapping("/create")
     public ResponseEntity<OcorrenciaResponse> create(@RequestBody OcorrenciaRequest ocorrenciaRequest) {
         OcorrenciaResponse ocorrenciaCriada = ocorrenciaService.create(ocorrenciaRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(ocorrenciaCriada);

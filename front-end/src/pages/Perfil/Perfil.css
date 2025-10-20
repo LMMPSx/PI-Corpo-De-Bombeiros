@@ -1,0 +1,436 @@
+/* --- Variáveis Globais e Reset --- */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+:root {
+  --sidebar-width-open: 240px;
+  --sidebar-width-closed: 0px; /* Esconde a sidebar completamente */
+  --header-height: 70px;
+  --primary-bg: #f4f7fa;
+  --sidebar-bg: #0c2d48; /* Azul escuro */
+  --header-bg: #ffffff;
+  --card-bg: #ffffff;
+  --btn-red: #c82333;
+  --btn-yellow: #ffc107;
+  --text-dark: #333;
+  --text-light: #f1f1f1;
+}
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: var(--primary-bg);
+}
+
+/* --- Layout Principal da Aplicação --- */
+.app-container {
+  display: flex;
+  transition: padding-left 0.3s ease-in-out;
+}
+
+/* O conteúdo principal que se ajusta à sidebar */
+.main-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow-y: auto; /* Permite scroll apenas no conteúdo principal */
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* --- Lógica da Sidebar (Exemplo) --- */
+/* Estes estilos devem ser aplicados nos seus componentes Sidebar e Header */
+.sidebar {
+  width: var(--sidebar-width-open);
+  background-color: var(--sidebar-bg);
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100vh;
+  transition: width 0.3s ease-in-out;
+}
+
+.header {
+  height: var(--header-height);
+  background-color: var(--header-bg);
+  position: sticky; /* Fica fixo no topo do .main-content */
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Ajustes quando a sidebar está aberta */
+.app-container.sidebar-open .main-content {
+  margin-left: var(--sidebar-width-open);
+}
+
+/* Ajustes quando a sidebar está fechada */
+.app-container.sidebar-closed .sidebar {
+  width: var(--sidebar-width-closed);
+}
+.app-container.sidebar-closed .main-content {
+  margin-left: var(--sidebar-width-closed);
+}
+
+/* CSS CORRIGIDO E AJUSTADO */
+.gestao-page-container {
+  padding: 100px 30px 30px; 
+  flex-grow: 1;
+}
+
+.gestao-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.gestao-header h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.btn-cadastrar {
+  background-color: var(--btn-red);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-cadastrar:hover {
+  background-color: #a21b29;/* gestao.css - Versão Final (Imagem Correspondente) */
+
+/* ---------------------------------- */
+/* Container e Layout Principal */
+/* ---------------------------------- */
+.user-management-container {
+  padding: 20px;
+  background-color: #0d1a2f;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  display: flex; /* Permite centralizar o inner container */
+  justify-content: center; /* Centraliza o inner-container */
+}
+
+/* Container interno para largura máxima e alinhamento do conteúdo principal */
+.user-management-inner {
+    width: 100%;
+    /* A largura máxima será a largura do grid (aprox. 399*2 + 30) para alinhar tudo */
+    max-width: 828px; /* 2 cards de 399px + 30px de gap */
+    display: flex;
+    flex-direction: column; /* Organiza header e grid verticalmente */
+    /* Nenhum align-items aqui, pois o header e o grid serão alinhados individualmente */
+}
+
+
+/* Cabeçalho */
+.header {
+  display: flex;
+  justify-content: space-between; /* Título à esquerda, botão à direita */
+  align-items: center;
+  margin-bottom: 30px;
+  width: 100%; /* Ocupa a largura total do inner container */
+}
+
+.title {
+  color: #fff;
+  font-size: 24px;
+}
+
+/* Botão de Cadastrar Novo Usuário */
+.new-user-button {
+  background-color: #a30018; 
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s;
+}
+
+.new-user-button:hover {
+  background-color: #c20025;
+}
+
+/* ---------------------------------- */
+/* Layout de Colunas (Grid de Cards) */
+/* ---------------------------------- */
+.cards-grid {
+  display: flex;
+  flex-wrap: wrap; /* Permite quebrar linha em telas menores */
+  gap: 30px; /* Espaçamento entre as duas colunas e entre cards */
+  /* *** ALINHAMENTO À DIREITA *** */
+  justify-content: flex-end; /* Empurra o grid de cards para a direita */
+  width: 100%; /* Ocupa a largura total do user-management-inner */
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espaçamento vertical entre os cards */
+  /* No desktop, cada coluna terá largura fixa */
+  width: 399px; 
+}
+
+/* ---------------------------------- */
+/* Card de Usuário (Retângulo) */
+/* ---------------------------------- */
+.user-card {
+  width: 399px; /* DIMENSÕES REQUERIDAS para desktop */
+  height: 115px; 
+  border-radius: 15px; 
+  box-sizing: border-box; /* Garante que padding e border não aumentem a largura total */
+  
+  background-color: #dcdcdc;
+  padding: 10px 20px; /* Padding original, revertido do 150px */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.user-info-area {
+  display: flex;
+  align-items: center;
+}
+
+/* Avatar (Círculo Branco) */
+.user-avatar {
+  width: 60px;
+  height: 60px;
+  background-color: white; 
+  border-radius: 50%;
+  margin-right: 15px;
+  border: 1px solid #ccc;
+}
+
+.user-details h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.user-details p {
+  margin: 2px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+/* ---------------------------------- */
+/* Botões de Ação (Editar e Excluir) */
+/* ---------------------------------- */
+.user-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.action-button {
+  width: 60px; 
+  height: 25px;
+  border: none;
+  border-radius: 3px;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: center;
+  line-height: 25px; /* Centraliza o texto verticalmente */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  transition: opacity 0.2s;
+}
+
+.action-button:hover {
+  opacity: 0.8;
+}
+
+/* Botão Editar (Amarelo/Dourado) */
+.edit-button {
+  background-color: #ffc107; 
+  color: #333;
+}
+
+/* Botão Excluir (Vermelho) */
+.delete-button {
+  background-color: #dc3545; 
+  color: white;
+}
+
+
+/* ---------------------------------- */
+/* MEDIA QUERY: RESPONSIVIDADE PARA TELAS MENORES (MOBILE) */
+/* ---------------------------------- */
+@media (max-width: 859px) { /* Abaixo de 860px */
+  
+  .user-management-inner {
+      /* Em mobile, o inner-container não precisa de largura máxima, 
+         e pode ter um padding para o conteúdo não colar nas bordas */
+      max-width: 100%;
+      padding: 0 10px; /* Um pequeno padding lateral */
+  }
+
+  /* Cabeçalho */
+  .header {
+    flex-direction: column; /* Empilha o título e o botão */
+    align-items: flex-start; /* Alinha o título e o botão à esquerda */
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+  
+  .new-user-button {
+    width: 100%; /* Botão ocupa a largura total */
+    max-width: none; /* Remove o limite máximo de largura */
+  }
+  
+  /* Layout de Cards em Coluna Única para Mobile */
+  .cards-grid {
+    flex-direction: column; /* Os cards ficam em uma única coluna */
+    align-items: center; /* Centraliza os cards individualmente */
+    justify-content: center; /* Centraliza a coluna de cards */
+    gap: 20px;
+  }
+
+  /* As colunas individuais se tornam um único fluxo de cards */
+  .column {
+    width: 100%; /* Ocupa toda a largura disponível */
+    align-items: center; /* Centraliza os cards dentro da 'coluna' */
+  }
+  
+  /* Card de Usuário - Ajusta largura para mobile */
+  .user-card {
+    width: 100%; /* Ocupa toda a largura do container */
+    max-width: 350px; /* Limite máximo para não ficar gigante em tablets pequenos */
+    padding: 10px 15px; /* Padding ajustado para mobile */
+    min-height: 100px; /* Pode ser um pouco menor em mobile */
+  }
+
+  /* Detalhes do texto ajustados para mobile */
+  .user-details h3 {
+    font-size: 16px;
+  }
+
+  .user-details p {
+    font-size: 13px;
+  }
+}
+}
+
+/* --- Lista de Usuários e Cards --- */
+.user-list-container {
+  display: grid;
+  /* Cria colunas responsivas: elas terão no mínimo 350px e no máximo 1fr (espaço disponível) */
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.user-card {
+  background-color: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.user-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+}
+
+.avatar {
+  background-color: #e0e0e0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex-grow: 1;
+}
+
+.user-info strong {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.user-info span {
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-action {
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+.btn-action:hover {
+  opacity: 0.8;
+}
+
+.btn-edit {
+  background-color: var(--btn-yellow);
+  color: #212529;
+}
+
+.btn-delete {
+  background-color: var(--btn-red);
+  color: white;
+}
+
+/* --- Seção Responsiva --- */
+@media (max-width: 768px) {
+  /* Em telas menores, a sidebar fica fechada por padrão e o conteúdo ocupa tudo */
+  .app-container.sidebar-open .main-content,
+  .app-container.sidebar-closed .main-content {
+    margin-left: 0;
+  }
+  
+  .gestao-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .gestao-page-container {
+    padding: 20px;
+  }
+
+  .user-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .action-buttons {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .btn-action {
+      flex-grow: 1; /* Faz os botões dividirem o espaço */
+  }
+}

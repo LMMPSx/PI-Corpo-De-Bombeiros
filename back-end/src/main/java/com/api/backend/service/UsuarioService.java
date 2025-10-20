@@ -5,9 +5,9 @@ import com.api.backend.dto.UsuarioRequest;
 import com.api.backend.model.UsuarioModel;
 import com.api.backend.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,22 +17,22 @@ import java.util.stream.Collectors;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
+    private final PasswordEncoder passwordEncoder;
 
     private UsuarioResponse toDTO(UsuarioModel usuario) {
+        String ultimoLoginString = usuario.getUltimoLogin() != null
+                ? usuario.getUltimoLogin().toString()
+                : "N/A - Novo Usuário";
         return new UsuarioResponse(
                 usuario.getIdUsuario(),
                 usuario.getNomeUsuario(),
-                usuario.getResponsavel(),
-                usuario.getDataCriacao().toString()
+                usuario.getCpf(),
+                usuario.getEmail(),
+                usuario.getTipoUsuario().toString(),
+                usuario.getCaminhoFoto(),
+                usuario.getDataCriacao().toString(),
+                ultimoLoginString
         );
-    }
-
-    private UsuarioModel toModel(UsuarioRequest usuarioResquest) {
-        return UsuarioModel.builder()
-                .nomeUsuario(usuarioResquest.getNomeUsuario())
-                .responsavel(usuarioResquest.getResponsavel())
-                .dataCriacao(LocalDateTime.now())
-                .build();
     }
 
     public List<UsuarioResponse> findAll() {
@@ -49,17 +49,50 @@ public class UsuarioService {
     }
 
     public UsuarioResponse create(UsuarioRequest usuarioRequest) {
-        UsuarioModel usuario = toModel(usuarioRequest);
+        String senhaCriptografada = passwordEncoder.encode(usuarioRequest.getSenha());
+
+        UsuarioModel usuario = UsuarioModel.builder()
+                .nomeUsuario(usuarioRequest.getNomeUsuario())
+                .cpf(usuarioRequest.getCpf())
+                .email(usuarioRequest.getEmail())
+                .tipoUsuario(UsuarioModel.TipoUsuario.valueOf(usuarioRequest.getTipoUsuario()))
+                .senha(senhaCriptografada)
+                .caminhoFoto(usuarioRequest.getCaminhoFoto())
+                .dataCriacao(LocalDateTime.now())
+                .build();
+
         UsuarioModel usuarioSalvo = usuarioRepository.save(usuario);
         return toDTO(usuarioSalvo);
     }
 
     public UsuarioResponse update(Integer id, UsuarioRequest usuarioRequest) {
+
         UsuarioModel usuarioExistente = usuarioRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Usuario não encontrado"));
 
-        usuarioExistente.setNomeUsuario(usuarioRequest.getNomeUsuario());
-        usuarioExistente.setResponsavel(usuarioRequest.getResponsavel());
+        if (usuarioRequest.getNomeUsuario() != null && !usuarioRequest.getNomeUsuario().isEmpty()) {
+            usuarioExistente.setNomeUsuario(usuarioRequest.getNomeUsuario());
+        }
+
+        if (usuarioRequest.getCpf() != null && !usuarioRequest.getCpf().isEmpty()) {
+            usuarioExistente.setCpf(usuarioRequest.getCpf());
+        }
+        if (usuarioRequest.getEmail()!= null && !usuarioRequest.getEmail().isEmpty()) {
+            usuarioExistente.setEmail(usuarioRequest.getEmail());
+        }
+
+        if (usuarioRequest.getTipoUsuario() != null && !usuarioRequest.getTipoUsuario().isEmpty()) {
+            usuarioExistente.setTipoUsuario(UsuarioModel.TipoUsuario.valueOf(usuarioRequest.getTipoUsuario()));
+        }
+
+        if (usuarioRequest.getSenha() != null && !usuarioRequest.getSenha().isEmpty()) {
+            String novaSenhaCriptografada = passwordEncoder.encode(usuarioRequest.getSenha());
+            usuarioExistente.setSenha(novaSenhaCriptografada);
+        }
+
+        if (usuarioRequest.getCaminhoFoto() != null && !usuarioRequest.getCaminhoFoto().isEmpty()) {
+            usuarioExistente.setCaminhoFoto(usuarioRequest.getCaminhoFoto());
+        }
 
         UsuarioModel usuarioAtualizado = usuarioRepository.save(usuarioExistente);
         return toDTO(usuarioAtualizado);

@@ -4,6 +4,7 @@ import com.api.backend.dto.OcorrenciaResponse;
 import com.api.backend.dto.OcorrenciaRequest;
 import com.api.backend.model.EnderecoModel;
 import com.api.backend.model.OcorrenciaModel;
+import com.api.backend.repository.*;
 import com.api.backend.repository.OcorrenciaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,12 @@ import java.util.stream.Collectors;
 public class OcorrenciaService {
 
     private final OcorrenciaRepository ocorrenciaRepository;
+    private final PrioridadeOcorrenciaRepository prioridadeRepository;
+    private final StatusOcorrenciaRepository statusRepository;
+    private final TipoOcorrenciaRepository tipoRepository;
+    private final SubtipoOcorrenciaRepository subtipoRepository;
+    private final EnderecoRepository enderecoRepository;
+    private final UsuarioRepository usuarioRepository;
 
     private OcorrenciaResponse toDTO(OcorrenciaModel ocorrencia) {
         return new OcorrenciaResponse(
@@ -42,18 +49,37 @@ public class OcorrenciaService {
     }
 
     private OcorrenciaModel toModel(OcorrenciaRequest ocorrenciaRequest) {
+
+        var prioridade = prioridadeRepository.findById(ocorrenciaRequest.getFkPrioridadeOcorrencia())
+                .orElseThrow(() -> new RuntimeException("Prioridade não encontrada com o ID fornecido."));
+
+        var status = statusRepository.findById(ocorrenciaRequest.getFkStatusOcorrencia())
+                .orElseThrow(() -> new RuntimeException("Status não encontrado com o ID fornecido."));
+
+        var tipo = tipoRepository.findById(ocorrenciaRequest.getFkTipoOcorrencia())
+                .orElseThrow(() -> new RuntimeException("Tipo não encontrado com o ID fornecido."));
+
+        var subtipo = subtipoRepository.findById(ocorrenciaRequest.getFkSubtipoOcorrencia())
+                .orElseThrow(() -> new RuntimeException("Subtipo não encontrado com o ID fornecido."));
+
+        var endereco = enderecoRepository.findById(ocorrenciaRequest.getEnderecoOcorrencia())
+                .orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+
+        var usuario = usuarioRepository.findById(ocorrenciaRequest.getFkIdUsuario())
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID fornecido."));
+
         return OcorrenciaModel.builder()
                 .nomeSolicitante(ocorrenciaRequest.getNomeSolicitante())
                 .telefoneSolicitante(ocorrenciaRequest.getTelefoneSolicitante())
                 .dataOcorrencia(LocalDateTime.now())
                 .latitude(ocorrenciaRequest.getLatitude())
                 .longitude(ocorrenciaRequest.getLongitude())
-                .fkPrioridadeOcorrencia(ocorrenciaRequest.getFkPrioridadeOcorrencia())
-                .fkStatusOcorrencia(ocorrenciaRequest.getFkStatusOcorrencia())
-                .fkTipoOcorrencia(ocorrenciaRequest.getFkTipoOcorrencia())
-                .fkSubtiboOcorrencia(ocorrenciaRequest.getFkSubtipoOcorrencia())
-                .enderecoOcorrencia(ocorrenciaRequest.getEnderecoOcorrencia())
-                .fkIdUsuario(ocorrenciaRequest.getFkIdUsuario())
+                .fkPrioridadeOcorrencia(prioridade)
+                .fkStatusOcorrencia(status)
+                .fkTipoOcorrencia(tipo)
+                .fkSubtiboOcorrencia(subtipo)
+                .enderecoOcorrencia(endereco)
+                .fkIdUsuario(usuario)
                 .build();
     }
 
@@ -100,10 +126,62 @@ public class OcorrenciaService {
         OcorrenciaModel ocorrenciaExistente = ocorrenciaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
 
-        ocorrenciaExistente.setNomeSolicitante(ocorrenciaRequest.getNomeSolicitante());
-        ocorrenciaExistente.setTelefoneSolicitante(ocorrenciaRequest.getTelefoneSolicitante());
-        ocorrenciaExistente.setLatitude(ocorrenciaRequest.getLatitude());
-        ocorrenciaExistente.setLongitude(ocorrenciaRequest.getLongitude());
+        if (ocorrenciaRequest.getNomeSolicitante() != null && !ocorrenciaRequest.getNomeSolicitante().trim().isEmpty()) {
+            ocorrenciaExistente.setNomeSolicitante(ocorrenciaRequest.getNomeSolicitante());
+        }
+
+        if (ocorrenciaRequest.getTelefoneSolicitante() != null && !ocorrenciaRequest.getTelefoneSolicitante().trim().isEmpty()) {
+            ocorrenciaExistente.setTelefoneSolicitante(ocorrenciaRequest.getTelefoneSolicitante());
+        }
+
+        if (ocorrenciaRequest.getLatitude() != null) {
+            ocorrenciaExistente.setLatitude(ocorrenciaRequest.getLatitude());
+        }
+
+        if (ocorrenciaRequest.getLongitude() != null) {
+            ocorrenciaExistente.setLongitude(ocorrenciaRequest.getLongitude());
+        }
+
+        if (ocorrenciaRequest.getFkPrioridadeOcorrencia() != null) {
+            var prioridade = prioridadeRepository.findById(ocorrenciaRequest.getFkPrioridadeOcorrencia())
+                    .orElseThrow(() -> new RuntimeException("Prioridade não encontrada com o ID fornecido."));
+            ocorrenciaExistente.setFkPrioridadeOcorrencia(prioridade);
+        }
+
+        if (ocorrenciaRequest.getFkStatusOcorrencia() != null) {
+            var status = statusRepository.findById(ocorrenciaRequest.getFkStatusOcorrencia())
+                    .orElseThrow(() -> new RuntimeException("Status não encontrado com o ID fornecido."));
+            ocorrenciaExistente.setFkStatusOcorrencia(status);
+        }
+
+        if (ocorrenciaRequest.getFkTipoOcorrencia() != null) {
+            var tipo = tipoRepository.findById(ocorrenciaRequest.getFkTipoOcorrencia())
+                    .orElseThrow(() -> new RuntimeException("Tipo não encontrado com o ID fornecido."));
+            ocorrenciaExistente.setFkTipoOcorrencia(tipo);
+        }
+
+        if (ocorrenciaRequest.getFkSubtipoOcorrencia() != null) {
+            var subtipo = subtipoRepository.findById(ocorrenciaRequest.getFkSubtipoOcorrencia())
+                    .orElseThrow(() -> new RuntimeException("Subtipo não encontrado com o ID fornecido."));
+            ocorrenciaExistente.setFkSubtiboOcorrencia(subtipo);
+        }
+
+        // Endereço (Aqui, assumimos que o objeto EnderecoModel pode ser enviado no Request,
+        // mas se ele tiver um ID próprio, é melhor usar o padrão de ID também!)
+        if (ocorrenciaRequest.getEnderecoOcorrencia() != null) {
+            var endereco = enderecoRepository.findById(ocorrenciaRequest.getEnderecoOcorrencia())
+                            .orElseThrow(() -> new RuntimeException("Endereço não encontrado com o ID fornecido."));
+            ocorrenciaExistente.setEnderecoOcorrencia(endereco);
+        }
+
+        if (ocorrenciaRequest.getFkIdUsuario() != null) {
+            var usuario = usuarioRepository.findById(ocorrenciaRequest.getFkIdUsuario())
+                    .orElseThrow(() -> new RuntimeException("Usuário não encontrado com o ID fornecido."));
+            ocorrenciaExistente.setFkIdUsuario(usuario);
+        }
+
+        // A data da ocorrência (dataOcorrencia) deve ser deixada de fora do update,
+        // pois ela representa o momento da abertura.
 
         OcorrenciaModel ocorrenciaAtualizada = ocorrenciaRepository.save(ocorrenciaExistente);
         return toDTO(ocorrenciaAtualizada);

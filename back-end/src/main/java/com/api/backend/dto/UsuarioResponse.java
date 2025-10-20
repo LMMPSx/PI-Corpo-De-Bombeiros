@@ -10,6 +10,10 @@ import lombok.NoArgsConstructor;
 public class UsuarioResponse {
     private Integer id;
     private String nomeUsuario;
-    private String responsavel;
+    private String cpf;
+    private String email;
+    private String tipoUsuairo;
+    private String caminhoFoto;
     private String dataCriacao;
+    private String ultimoLogin;
 }

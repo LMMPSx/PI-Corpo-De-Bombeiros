@@ -13,5 +13,5 @@ import lombok.NoArgsConstructor;
 public class AssinaturaRequest {
     private String nomeAssinante;
     private String caminhoAssinatura;
-    private OcorrenciaModel fkIdOcorrencia;
+    private Integer fkIdOcorrencia;
 }

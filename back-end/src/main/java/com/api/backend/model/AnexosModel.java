@@ -25,7 +25,7 @@ public class AnexosModel {
     @Column(name = "Caminho_Arquivo", nullable = false)
     private String caminhoArquivo;
 
-    @Column(name = "Data_Envio", nullable = false)
+    @Column(name = "Data_Envio", nullable = false, updatable = false)
     private LocalDateTime dataEnvio;
 
     @ManyToOne @JoinColumn(name = "FK_Tipo_Arquivo")

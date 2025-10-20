@@ -20,11 +20,14 @@ public class UsuarioModel {
     @Column(name = "ID_Usuario")
     private Integer idUsuario;
 
-    @Column(name = "Nome_Usuario", nullable = false, unique = true)
+    @Column(name = "Nome_Usuario", nullable = false)
     private String nomeUsuario;
 
-    @Column(name = "Responsavel", nullable = false)
-    private String responsavel;
+    @Column(name = "CPF", nullable = false, unique = true)
+    private String cpf;
+
+    @Column(name = "Email", nullable = false)
+    private String email;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "Tipo_Usuario", nullable = false)
@@ -32,6 +35,9 @@ public class UsuarioModel {
 
     @Column(name = "Senha", nullable = false)
     private String senha;
+
+    @Column(name = "Caminho_Foto")
+    private String caminhoFoto;
 
     @Column(name = "Data_Criacao", nullable = false, updatable = false)
     private LocalDateTime dataCriacao;
