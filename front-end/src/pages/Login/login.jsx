@@ -5,14 +5,55 @@ import logo from "../../assets/logo.png";
 import cadeado from "../../assets/cadeado.png";
 import Olho from "../../assets/olho.png";
 import icone from "../../assets/icone.png";
+import { login as authLogin } from "../../services/AuthService";
 
 export default function Login({ onLogin }) {
   const [showPassword, setShowPassword] = useState(false);
   const [emailCpf, setEmailCpf] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false); 
+  const [error, setError] = useState(null);
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    if(!emailCpf || !password) {
+      setLoading(false);
+      alert("Por favor, preencha todos os campos.");
+      return;
+    }
+
+    try {
+        const responseData = await authLogin(emailCpf, password);
+
+        const token = responseData.token || responseData.jwt;
+
+        if (token) {
+            localStorage.setItem('jwtToken', token);
+
+            if (onLogin && typeof onLogin === 'function') {
+                onLogin();
+            }
+        } else {
+            alert("Token não encontrado na resposta do servidor.");
+        }
+
+    } catch (error) {
+        const errorMsg = err.response 
+                             ? err.response.data.message || 'Credenciais inválidas.' // Tenta pegar a mensagem do Spring
+                             : 'Erro de conexão com o servidor.'; // Falha de rede/CORS
+
+            setError(errorMsg);
+            alert(`Erro de Login: ${errorMsg}`);
+
+    } finally {
+        setLoading(false);
+
+    }
+
+
     
     if (emailCpf && password) {
       if (onLogin && typeof onLogin === 'function') {

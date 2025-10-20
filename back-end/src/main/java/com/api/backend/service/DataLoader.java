@@ -7,7 +7,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Component
@@ -19,10 +18,10 @@ public class DataLoader implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        if (usuarioRepository.findByNomeUsuario("admin").isEmpty()) {
+        if (usuarioRepository.findByCpf("0000").isEmpty()) {
             UsuarioModel admin = UsuarioModel.builder()
                     .nomeUsuario("admin")
-                    .cpf("Administrador do Sistema")
+                    .cpf("0000")
                     .email("admin.teste@gmail.com")
                     .tipoUsuario(UsuarioModel.TipoUsuario.Admin)
                     .senha(passwordEncoder.encode("admin"))
@@ -32,10 +31,10 @@ public class DataLoader implements CommandLineRunner {
             usuarioRepository.save(admin);
         }
 
-        if (usuarioRepository.findByNomeUsuario("joao").isEmpty()) {
+        if (usuarioRepository.findByCpf("1111").isEmpty()) {
             UsuarioModel joao = UsuarioModel.builder()
                     .nomeUsuario("joao")
-                    .cpf("João da Silva")
+                    .cpf("1111")
                     .email("joao.silva@gmail.com")
                     .tipoUsuario(UsuarioModel.TipoUsuario.Analista)
                     .senha(passwordEncoder.encode("123456"))

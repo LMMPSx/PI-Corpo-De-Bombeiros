@@ -27,18 +27,18 @@ public class AuthService {
     public LoginResponse login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequest.getNomeUsuario(),
+                        loginRequest.getCpf(),
                         loginRequest.getSenha()
                 )
         );
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDetails userDetails = UserDetailsService.loadUserByUsername(loginRequest.getNomeUsuario());
+        UserDetails userDetails = UserDetailsService.loadUserByUsername(loginRequest.getCpf());
 
         String token = jwtUtil.generateToken(userDetails);
 
-        UsuarioModel usuario = usuarioRepository.findByNomeUsuario(loginRequest.getNomeUsuario())
+        UsuarioModel usuario = usuarioRepository.findByCpf(loginRequest.getCpf())
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado"));
 
         usuario.setUltimoLogin(LocalDateTime.now());

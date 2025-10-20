@@ -20,14 +20,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UsuarioRepository usuarioRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String nomeUsuario) throws UsernameNotFoundException {
-        UsuarioModel usuario = usuarioRepository.findByNomeUsuario(nomeUsuario)
+    public UserDetails loadUserByUsername(String cpf) throws UsernameNotFoundException {
+        UsuarioModel usuario = usuarioRepository.findByCpf(cpf)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario não encontrado"));
 
         SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + usuario.getTipoUsuario().name());
 
         return new User(
-                usuario.getNomeUsuario(),
+                usuario.getCpf(),
                 usuario.getSenha(),
                 Collections.singletonList(authority)
         );
