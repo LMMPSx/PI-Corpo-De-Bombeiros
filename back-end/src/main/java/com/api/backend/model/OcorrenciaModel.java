@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.List;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "Ocorrencia")
@@ -21,42 +19,53 @@ public class OcorrenciaModel {
     @Column(name = "ID_Ocorrencia")
     private Integer idOcorrencia;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Natureza_Ocorrencia", nullable = false)
+    private NaturezaOcorrencia naturezaOcorrencia;
+
     @Column(name = "Nome_Solicitante", nullable = false)
     private String nomeSolicitante;
 
-    @Column(name = "Telefone_Solicitante", nullable = false)
-    private String telefoneSolicitante;
-
     @Column(name = "Data_Ocorrencia", nullable = false)
-    private LocalDateTime dataOcorrencia;
+    private LocalDate dataOcorrencia;
 
-    @Column(name = "Latitude", nullable = false, precision = 10, scale = 8)
-    private BigDecimal latitude;
+    @Column(name = "Descricao", nullable = false)
+    private String descricao;
 
-    @Column(name = "Longitude", nullable = false, precision = 11, scale = 8)
-    private BigDecimal longitude;
+    @Column(name = "Localizacao", nullable = false)
+    private String localizacao;
 
-    @ManyToOne @JoinColumn(name = "FK_Prioridade_Ocorrencia")
-    private PrioridadeOcorrenciaModel fkPrioridadeOcorrencia;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Prioridade_Ocorrencia", nullable = false)
+    private PrioridadeOcorrencia prioridadeOcorrencia;
 
-    @ManyToOne @JoinColumn(name = "FK_Status_Ocorrencia")
-    private StatusOcorrenciaModel fkStatusOcorrencia;
+    @Column(name = "Anexo_Ocorrencia", nullable = false)
+    private String anexoOcorrencia;
 
-    @ManyToOne @JoinColumn(name = "FK_Tipo_Ocorrencia")
-    private TipoOcorrenciaModel fkTipoOcorrencia;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "Status_Ocorrencia", nullable = false)
+    private StatusOcorrencia statusOcorrencia;
 
-    @ManyToOne @JoinColumn(name = "FK_Subtipo_Ocorrencia")
-    private SubtipoOcorrenciaModel fkSubtiboOcorrencia;
+    @Column(name = "Assinatura_Ocorrencia", nullable = false)
+    private String assinaturaOcorrencia;
 
-    @ManyToOne @JoinColumn(name = "Endereco_Ocorrencia")
-    private EnderecoModel enderecoOcorrencia;
+    public enum NaturezaOcorrencia {
+        Urgente,
+        Rotina,
+        Preventiva
+    }
 
-    @ManyToOne @JoinColumn(name = "FK_ID_Usuario")
-    private UsuarioModel fkIdUsuario;
+    public enum PrioridadeOcorrencia {
+        Baixa,
+        Média,
+        Alta,
+        Urgente
+    }
 
-    @OneToMany(mappedBy = "fkIdOcorrencia", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AnexosModel> anexos;
-    
-    @OneToMany(mappedBy = "fkIdOcorrencia", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AssinaturaModel> assinatura;
+    public enum StatusOcorrencia {
+        Aberta,
+        Em_Andamento,
+        Pendente,
+        Resolvida
+    }
 }
