@@ -18,7 +18,7 @@ public class LogService {
     private LogResponse toDTO(LogModel log) {
         return new LogResponse(
           log.getIdLog(),
-          log.getTipoAlteracao(),
+          log.getTipoAlteracao().toString(),
           log.getEntidadeAlterada(),
           log.getAtributoAlterado(),
                 log.getValorAntigo(),

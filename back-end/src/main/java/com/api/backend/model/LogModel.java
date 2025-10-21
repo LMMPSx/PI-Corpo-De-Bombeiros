@@ -21,8 +21,9 @@ public class LogModel {
     @Column(name = "ID_Log")
     private Integer idLog;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "Tipo_Alteracao", nullable = false)
-    private String tipoAlteracao;
+    private TipoAlteracao tipoAlteracao;
 
     @Column(name = "Entidade_Alterada", nullable = false)
     private String entidadeAlterada;
@@ -42,5 +43,9 @@ public class LogModel {
     @ManyToOne @JoinColumn(name = "FK_ID_Usuario")
     private UsuarioModel fkIdUsuario;
 
-
+    public enum TipoAlteracao {
+        CREATE,
+        UPDATE,
+        DELETE
+    }
 }

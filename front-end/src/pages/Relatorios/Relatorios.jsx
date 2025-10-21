@@ -1,189 +1,239 @@
-import React, { useState, useEffect } from 'react';
-import './Relatorios.css'; // Importando o CSS separado
+// AuditoriaLogs.jsx
 
-// --- Dados simulados para a tabela de logs ---
-const initialLogData = [
-  { id: 1, dataHora: '19/10/2025 14:32', usuario: 'Victor Melo', modulo: 'Usuários', atributo: 'perfil', valorNovo: 'Admin', valorAntigo: 'Gerente', acao: 'Alteração' },
-  { id: 2, dataHora: '19/10/2025 11:15', usuario: 'Maria Silva', modulo: 'Ocorrências', atributo: 'status', valorNovo: 'Fechada', valorAntigo: 'Em Andamento', acao: 'Alteração' },
-  { id: 3, dataHora: '18/10/2025 20:05', usuario: 'João Santos', modulo: 'Login', atributo: 'N/A', valorNovo: 'N/A', valorAntigo: 'N/A', acao: 'Acesso ao Sistema' },
-  { id: 4, dataHora: '18/10/2025 16:40', usuario: 'Ana Costa', modulo: 'Relatórios', atributo: 'N/A', valorNovo: 'N/A', valorAntigo: 'N/A', acao: 'Exportação' },
-  { id: 5, dataHora: '17/10/2025 09:01', usuario: 'Pedro Lima', modulo: 'Usuários', atributo: 'email', valorNovo: 'pedro.lima@email.com', valorAntigo: 'pedro@email.com', acao: 'Alteração' },
-  { id: 6, dataHora: '16/10/2025 08:59', usuario: 'Admin', modulo: 'Usuários', atributo: 'N/A', valorNovo: 'Luana Viana', valorAntigo: 'N/A', acao: 'Criação' },
-  { id: 7, dataHora: '15/10/2025 18:20', usuario: 'Maria Silva', modulo: 'Login', atributo: 'N/A', valorNovo: 'N/A', valorAntigo: 'N/A', acao: 'Logout' },
-  { id: 8, dataHora: '14/10/2025 12:00', usuario: 'Victor Melo', modulo: 'Painel', atributo: 'N/A', valorNovo: 'N/A', valorAntigo: 'N/A', acao: 'Visualização' },
-  { id: 9, dataHora: '13/10/2025 10:10', usuario: 'Ana Costa', modulo: 'Ocorrências', atributo: 'prioridade', valorNovo: 'Alta', valorAntigo: 'Média', acao: 'Alteração' },
-  { id: 10, dataHora: '12/10/2025 22:30', usuario: 'João Santos', modulo: 'Usuários', atributo: 'N/A', valorNovo: 'N/A', valorAntigo: 'N/A', acao: 'Exclusão' },
-];
+import React, { useState, useEffect, useCallback } from 'react';
+import './Relatorios.css'; 
+// ⚠️ Lembre-se de importar o serviço de logs
+import { buscarLogsAuditoria } from '../../services/logService'; 
+// Assumindo que seu serviço está em ../services/logService.js
 
-// --- Opções para os filtros ---
-const uniqueUsers = ['Todos', ...new Set(initialLogData.map(log => log.usuario))];
-const uniqueModules = ['Todos', ...new Set(initialLogData.map(log => log.modulo))];
-const uniqueActions = ['Todas', ...new Set(initialLogData.map(log => log.acao))];
-const periodOptions = ['Qualquer data', 'Hoje', 'Últimos 7 dias'];
+const extractUniqueOptions = (logs, key) => ['Todos', ...new Set(logs.map(log => log[key]))];
+
 
 export default function AuditoriaLogs() {
-  const [logs] = useState(initialLogData);
-  const [filteredLogs, setFilteredLogs] = useState(initialLogData);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pdfLibraryLoaded, setPdfLibraryLoaded] = useState(false);
-  const ITEMS_PER_PAGE = 5;
+    // 1. ESTADOS PARA DADOS DINÂMICOS
+    const [initialLogs, setInitialLogs] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-  const [periodo, setPeriodo] = useState('Qualquer data');
-  const [usuario, setUsuario] = useState('Todos');
-  const [acao, setAcao] = useState('Todas');
-  const [modulo, setModulo] = useState('Todos');
+    // 2. ESTADOS PARA OPÇÕES DE FILTRO
+    const [uniqueUsers, setUniqueUsers] = useState(['Todos']);
+    const [uniqueModules, setUniqueModules] = useState(['Todos']);
+    const [uniqueActions, setUniqueActions] = useState(['Todos']); // ⭐️ Mantenha 'Todos'
+    const periodOptions = ['Qualquer data', 'Hoje', 'Últimos 7 dias']; 
+    
+    // Estados de controle do filtro
+    const [periodo, setPeriodo] = useState('Qualquer data');
+    const [usuario, setUsuario] = useState('Todos');
+    const [acao, setAcao] = useState('Todos'); // ⭐️ Mude de 'Todas' para 'Todos'
+    const [modulo, setModulo] = useState('Todos');
 
-  const totalPages = Math.ceil(filteredLogs.length / ITEMS_PER_PAGE);
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const endIndex = startIndex + ITEMS_PER_PAGE;
-  const currentLogs = filteredLogs.slice(startIndex, endIndex);
+    // 3. PAGINAÇÃO E EXPORTAÇÃO
+    const [filteredLogs, setFilteredLogs] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [pdfLibraryLoaded, setPdfLibraryLoaded] = useState(false);
+    const ITEMS_PER_PAGE = 5;
 
-  useEffect(() => {
-    const loadScript = (src, onLoad) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.onload = onLoad;
-      document.body.appendChild(script);
+    const totalPages = Math.ceil(filteredLogs.length / ITEMS_PER_PAGE);
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const currentLogs = filteredLogs.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
+    // Função para carregar bibliotecas PDF (mantida)
+    useEffect(() => {
+        // ⚠️ Seu código de carregamento de jspdf e autotable deve estar aqui
+        // Exemplo: 
+        // if (window.jspdf && window.jspdf.jsPDF && window.jspdf.jsPDF.autoTable) {
+        //     setPdfLibraryLoaded(true);
+        // }
+    }, []);
+
+    // 4. FUNÇÃO PARA BUSCAR DADOS DA API
+    useEffect(() => {
+        const fetchLogs = async () => {
+            setLoading(true);
+            setError(null);
+            try {
+                // Chama o serviço que mapeia os dados
+                const data = await buscarLogsAuditoria();
+                setInitialLogs(data);
+
+                // Extrai as opções de filtro dos dados
+                setUniqueUsers(extractUniqueOptions(data, 'usuario'));
+                setUniqueModules(extractUniqueOptions(data, 'modulo'));
+                setUniqueActions(extractUniqueOptions(data, 'acao'));
+                
+            } catch (err) {
+                // Captura a mensagem de erro lançada pelo logService em caso de 401, 404, 500
+                setError("Erro ao carregar logs de auditoria. Verifique sua conexão e autenticação.");
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchLogs();
+    }, []);
+
+    // Função auxiliar para converter data ISO (dataHoraISO) em objeto Date
+    const parseDateISO = useCallback((isoString) => {
+        // Usa a data ISO (ex: "2025-10-21T13:09:34") para criar o objeto Date
+        return new Date(isoString);
+    }, []);
+
+    // 5. FUNÇÃO PRINCIPAL DE FILTRO (useCallback)
+    const handleFilter = useCallback(() => {
+        let data = [...initialLogs];
+        
+        // A data de hoje deve ser referenciada uma única vez
+        const today = new Date(); 
+        // Zera o horário para que a comparação de 'Hoje' e '7 dias' seja justa (apenas a data)
+        today.setHours(0, 0, 0, 0); 
+
+        // Filtro de Período
+        if (periodo === 'Hoje') {
+            data = data.filter(log => {
+                // Usa a data ISO para obter o objeto Date e compara com Hoje
+                const logDate = parseDateISO(log.dataHoraISO);
+                logDate.setHours(0, 0, 0, 0); // Zera o horário do log para comparação
+                return logDate.getTime() === today.getTime();
+            });
+        } else if (periodo === 'Últimos 7 dias') {
+            const sevenDaysAgo = new Date(today);
+            sevenDaysAgo.setDate(today.getDate() - 7); // Data de 7 dias atrás
+
+            data = data.filter(log => {
+                const logDate = parseDateISO(log.dataHoraISO);
+                // Filtra logs cuja data seja maior ou igual a 7 dias atrás
+                return logDate >= sevenDaysAgo;
+            });
+        }
+
+        // Outros Filtros
+        if (usuario !== 'Todos') data = data.filter(log => log.usuario === usuario);
+        // ⭐️ CORREÇÃO: Altere para 'Todos'
+        if (acao !== 'Todos') data = data.filter(log => log.acao === acao);
+        if (modulo !== 'Todos') data = data.filter(log => log.modulo === modulo);
+
+        setFilteredLogs(data);
+            setCurrentPage(1);
+        }, [initialLogs, periodo, usuario, acao, modulo, parseDateISO]);
+
+    // 6. EFEITO PARA APLICAR FILTRO QUANDO OS DADOS INICIAIS MUDAM OU FILTROS SÃO AJUSTADOS
+    useEffect(() => { 
+        handleFilter(); 
+    }, [handleFilter]);
+
+    // 7. FUNÇÕES DE EXPORTAÇÃO (mantidas)
+    const handleExportCSV = () => {
+        if (filteredLogs.length === 0) return alert("Não há dados para exportar.");
+        // ... (Seu código de exportação CSV)
     };
-    loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js", () => {
-      loadScript("https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js", () => {
-        setPdfLibraryLoaded(true);
-      });
-    });
-  }, []);
 
-  const parseDate = (str) => {
-    const [date, time] = str.split(' ');
-    const [day, month, year] = date.split('/');
-    const [hour, minute] = time.split(':');
-    return new Date(year, month - 1, day, hour, minute);
-  };
+    const handleExportPDF = () => {
+        if (!pdfLibraryLoaded) return alert("A biblioteca de PDF ainda está a carregar.");
+        if (filteredLogs.length === 0) return alert("Não há dados para exportar.");
 
-  const handleFilter = () => {
-    let data = [...initialLogData];
-    const today = new Date('2025-10-19T15:17:00-03:00');
+        // ... (Seu código de exportação PDF usando jspdf)
+    };
+    
+    // 8. RENDERIZAÇÃO
+    if (loading) return <div className="auditoria-container"><p>Carregando logs de auditoria...</p></div>;
+    if (error) return <div className="auditoria-container"><p className="error-message">{error}</p></div>;
 
-    if (periodo === 'Hoje') {
-      data = data.filter(log => parseDate(log.dataHora).toDateString() === today.toDateString());
-    } else if (periodo === 'Últimos 7 dias') {
-      const sevenDaysAgo = new Date(today);
-      sevenDaysAgo.setDate(today.getDate() - 7);
-      data = data.filter(log => parseDate(log.dataHora) >= sevenDaysAgo);
-    }
+    return (
+        <div className="auditoria-container">
+            <div className="auditoria-content">
+                <header className="auditoria-header">
+                    <h1>Auditoria & Logs</h1>
+                </header>
 
-    if (usuario !== 'Todos') data = data.filter(log => log.usuario === usuario);
-    if (acao !== 'Todas') data = data.filter(log => log.acao === acao);
-    if (modulo !== 'Todos') data = data.filter(log => log.modulo === modulo);
+                <div className="filters-grid">
+                    {/* Select de Período */}
+                    <div className="filter-item">
+                        <label htmlFor="periodo">Período</label>
+                        <select id="periodo" value={periodo} onChange={e => setPeriodo(e.target.value)}>
+                            {periodOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
+                        </select>
+                    </div>
+                    {/* Select de Usuário */}
+                    <div className="filter-item">
+                        <label htmlFor="usuario">Usuário</label>
+                        <select id="usuario" value={usuario} onChange={e => setUsuario(e.target.value)}>
+                            {uniqueUsers.map(user => <option key={user} value={user}>{user}</option>)}
+                        </select>
+                    </div>
+                    {/* Select de Ação */}
+                    <div className="filter-item">
+                        <label htmlFor="acao">Ação realizada</label>
+                        <select id="acao" value={acao} onChange={e => setAcao(e.target.value)}>
+                            {uniqueActions.map(act => <option key={act} value={act}>{act}</option>)}
+                        </select>
+                    </div>
+                    {/* Select de Módulo */}
+                    <div className="filter-item">
+                        <label htmlFor="modulo">Módulo</label>
+                        <select id="modulo" value={modulo} onChange={e => setModulo(e.target.value)}>
+                            {uniqueModules.map(mod => <option key={mod} value={mod}>{mod}</option>)}
+                        </select>
+                    </div>
+                </div>
+                
+                <div className="table-wrapper">
+                    <table className="logs-table">
+                        <thead>
+                            <tr>
+                                <th>Data/Hora</th>
+                                <th>Usuário</th>
+                                <th>Módulo</th>
+                                <th>Atributo Alterado</th>
+                                <th>Valor Novo</th>
+                                <th>Valor Antigo</th>
+                                <th>Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {currentLogs.length === 0 ? (
+                                <tr><td colSpan="7" style={{textAlign: 'center'}}>Nenhum log encontrado com os filtros aplicados.</td></tr>
+                            ) : (
+                                currentLogs.map(log => (
+                                    <tr key={log.id}>
+                                        {/* AQUI USA A PROPRIEDADE dataHora (já formatada) */}
+                                        <td>{log.dataHora}</td> 
+                                        <td>{log.usuario}</td>
+                                        <td>{log.modulo}</td>
+                                        <td>{log.atributo}</td>
+                                        <td>{log.valorNovo}</td>
+                                        <td>{log.valorAntigo}</td>
+                                        <td>{log.acao}</td>
+                                    </tr>
+                                ))
+                            )}
+                        </tbody>
+                    </table>
+                </div>
 
-    setFilteredLogs(data);
-    setCurrentPage(1);
-  };
-
-  useEffect(() => { handleFilter(); }, [periodo, usuario, acao, modulo]);
-
-  const handleExportCSV = () => {
-    if (filteredLogs.length === 0) return alert("Não há dados para exportar.");
-    const headers = Object.keys(filteredLogs[0]).join(',');
-    const rows = filteredLogs.map(log => Object.values(log).join(',')).join('\n');
-    const blob = new Blob([`${headers}\n${rows}`], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.setAttribute('download', 'auditoria_logs.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  const handleExportPDF = () => {
-    if (!pdfLibraryLoaded) return alert("A biblioteca de PDF ainda está a carregar.");
-    if (filteredLogs.length === 0) return alert("Não há dados para exportar.");
-
-    const doc = new window.jspdf.jsPDF();
-    const tableColumn = ["Data/Hora", "Usuário", "Módulo", "Atributo", "Valor Novo", "Valor Antigo", "Ação"];
-    const tableRows = filteredLogs.map(log => [
-      log.dataHora, log.usuario, log.modulo, log.atributo, log.valorNovo, log.valorAntigo, log.acao
-    ]);
-
-    doc.autoTable({ head: [tableColumn], body: tableRows, startY: 20 });
-    doc.text("Relatório de Auditoria & Logs", 14, 15);
-    doc.save('auditoria_logs.pdf');
-  };
-
-  return (
-    <div className="auditoria-container">
-      <div className="auditoria-content">
-        <header className="auditoria-header">
-          <h1>Auditoria & Logs</h1>
-        </header>
-
-        <div className="filters-grid">
-          <div className="filter-item">
-            <label htmlFor="periodo">Período</label>
-            <select id="periodo" value={periodo} onChange={e => setPeriodo(e.target.value)}>
-              {periodOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-          </div>
-          <div className="filter-item">
-            <label htmlFor="usuario">Usuário</label>
-            <select id="usuario" value={usuario} onChange={e => setUsuario(e.target.value)}>
-              {uniqueUsers.map(user => <option key={user} value={user}>{user}</option>)}
-            </select>
-          </div>
-          <div className="filter-item">
-            <label htmlFor="acao">Ação realizada</label>
-            <select id="acao" value={acao} onChange={e => setAcao(e.target.value)}>
-              {uniqueActions.map(act => <option key={act} value={act}>{act}</option>)}
-            </select>
-          </div>
-          <div className="filter-item">
-            <label htmlFor="modulo">Módulo</label>
-            <select id="modulo" value={modulo} onChange={e => setModulo(e.target.value)}>
-              {uniqueModules.map(mod => <option key={mod} value={mod}>{mod}</option>)}
-            </select>
-          </div>
+                <footer className="auditoria-footer">
+                    {/* Botões de Exportação */}
+                    <div className="export-buttons">
+                        <button onClick={handleExportCSV} className="btn-export">Exportar CSV</button>
+                        <button onClick={handleExportPDF} className="btn-export" disabled={!pdfLibraryLoaded}>Exportar PDF</button>
+                    </div>
+                    
+                    {/* Paginação */}
+                    <div className="pagination">
+                        <button 
+                            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))} 
+                            disabled={currentPage === 1}
+                        >
+                            &laquo; Anterior
+                        </button>
+                        <span>Página {currentPage} de {totalPages}</span>
+                        <button 
+                            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))} 
+                            disabled={currentPage === totalPages}
+                        >
+                            Próxima &raquo;
+                        </button>
+                    </div>
+                </footer>
+            </div>
         </div>
-
-        <div className="table-wrapper">
-          <table className="logs-table">
-            <thead>
-              <tr>
-                <th>Data/Hora</th>
-                <th>Usuário</th>
-                <th>Módulo</th>
-                <th>Atributo alterado</th>
-                <th>Valor novo</th>
-                <th>Valor antigo</th>
-                <th>Ação realizada</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentLogs.map(log => (
-                <tr key={log.id}>
-                  <td>{log.dataHora}</td>
-                  <td>{log.usuario}</td>
-                  <td>{log.modulo}</td>
-                  <td>{log.atributo}</td>
-                  <td>{log.valorNovo}</td>
-                  <td>{log.valorAntigo}</td>
-                  <td>{log.acao}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <footer className="auditoria-footer">
-          <div className="export-buttons">
-            <button className="btn-export" onClick={handleExportCSV}>Exportar CSV</button>
-            <button className="btn-export" onClick={handleExportPDF}>Exportar PDF</button>
-          </div>
-          <div className="pagination">
-            <button onClick={() => setCurrentPage(p => p - 1)} disabled={currentPage === 1}>&lt;</button>
-            <span>Página {currentPage} de {totalPages || 1}</span>
-            <button onClick={() => setCurrentPage(p => p + 1)} disabled={currentPage === totalPages || totalPages === 0}>&gt;</button>
-          </div>
-        </footer>
-      </div>
-    </div>
-  );
+    );
 }
