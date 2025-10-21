@@ -26,8 +26,12 @@ import EditarUsuario from "./pages/Perfil/editarperfil";
 import "./App.css";
 
 const storedToken = localStorage.getItem('jwtToken');
+const storedNome = localStorage.getItem('nomeUsuario');
+const storedTipo = localStorage.getItem('tipoUsuario');
+
 if (storedToken) {
-    setAuthToken(storedToken); // ⭐️ Garante que o cabeçalho é setado ao carregar a página
+    // ⭐️ Passa os dados lidos do localStorage para reconfigurar a autenticação
+    setAuthToken(storedToken, storedNome, storedTipo); 
 }
 
 export default function App() {

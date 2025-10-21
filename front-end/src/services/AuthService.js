@@ -16,13 +16,19 @@ export const apiAuthenticated = axios.create({
     },
 });
 
-export const setAuthToken = (token) => {
+export const setAuthToken = (token, nomeUsuario, tipoUsuario) => {
     if (token) {
         apiAuthenticated.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         localStorage.setItem('jwtToken', token);
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('nomeUsuario', nomeUsuario);
+        localStorage.setItem('tipoUsuario', tipoUsuario);
     } else {
         delete apiAuthenticated.defaults.headers.common['Authorization'];
         localStorage.removeItem('jwtToken');
+        localStorage.setItem('isAuthenticated', 'false');
+        localStorage.removeItem('nomeUsuario');
+        localStorage.removeItem('tipoUsuario');
     }
 };
 
@@ -41,10 +47,13 @@ export const login = async (username, password) => {
             senha: password
         });
         
-        const token = response.data.token || response.data.accessToken; 
+        const token = response.data.token || response.data.accessToken;
+
+        const nomeUsuario = response.data.nomeUsuario;
+        const tipoUsuario = response.data.tipoUsuairo;
         
-        // ⭐️ Usa a nova função para definir o header e salvar
-        setAuthToken(token); 
+        
+        setAuthToken(token, nomeUsuario, tipoUsuario);
 
         return response.data;
     } catch (error) {
