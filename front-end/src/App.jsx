@@ -26,11 +26,12 @@ import EditarUsuario from "./pages/Perfil/editarperfil";
 import "./App.css";
 
 const storedToken = localStorage.getItem('jwtToken');
+// ⭐️ LENDO OS DADOS DO LOCALSTORAGE
 const storedNome = localStorage.getItem('nomeUsuario');
-const storedTipo = localStorage.getItem('tipoUsuario');
+const storedTipo = localStorage.getItem('tipoUsuario'); // Lendo a chave correta
 
 if (storedToken) {
-    // ⭐️ Passa os dados lidos do localStorage para reconfigurar a autenticação
+    // ⭐️ Chamando setAuthToken com os três parâmetros lidos
     setAuthToken(storedToken, storedNome, storedTipo); 
 }
 

@@ -50,8 +50,7 @@ export const login = async (username, password) => {
         const token = response.data.token || response.data.accessToken;
 
         const nomeUsuario = response.data.nomeUsuario;
-        const tipoUsuario = response.data.tipoUsuairo;
-        
+        const tipoUsuario = response.data.tipoUsuario;
         
         setAuthToken(token, nomeUsuario, tipoUsuario);
 
@@ -63,6 +62,9 @@ export const login = async (username, password) => {
 
 export const logout = () => {
     localStorage.removeItem('jwtToken');
+    localStorage.removeItem('nomeUsuario');
+    localStorage.removeItem('tipoUsuario');
+    localStorage.removeItem('isAuthenticated');
 };
 
 export default api;

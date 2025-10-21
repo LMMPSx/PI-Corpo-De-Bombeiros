@@ -12,7 +12,7 @@ public class UsuarioResponse {
     private String nomeUsuario;
     private String cpf;
     private String email;
-    private String tipoUsuairo;
+    private String tipoUsuario;
     private String caminhoFoto;
     private String dataCriacao;
     private String ultimoLogin;
