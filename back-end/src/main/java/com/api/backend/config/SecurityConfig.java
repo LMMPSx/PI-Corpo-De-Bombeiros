@@ -42,7 +42,9 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .authorizeHttpRequests(authz -> authz
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers("/auth/**").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/usuarios").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin")
+                                .requestMatchers(HttpMethod.POST, "/usuario/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin")
+                                .requestMatchers(HttpMethod.DELETE, "/usuario/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin")
+                                .requestMatchers(HttpMethod.PUT, "/usuario/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin")
                                 .requestMatchers("/ocorrencias/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin", "ROLE_Analista")
                                 .requestMatchers("/log/**").hasAnyAuthority("ROLE_Chefe", "ROLE_Admin")
                                 .anyRequest().authenticated()

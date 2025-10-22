@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { fetchUsuarios, deleteUsuario } from '../../services/usuarioService'; // Importe o novo serviço
+import { logout } from "../../services/AuthService";
 
 import "./Usuario.css";
 
@@ -41,66 +43,90 @@ function UsuarioCard({ user, onEditar, onExcluir }) {
 
 // Componente principal
 export default function GestaoUsuarios() {
-  const [usuarios, setUsuarios] = useState([]);
-  const navigate = useNavigate();
+    const [usuarios, setUsuarios] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null); // Estado para capturar o erro
+    const navigate = useNavigate();
 
-  // Carrega os usuários do localStorage quando o componente é montado
-  useEffect(() => {
-    const usuariosSalvos = JSON.parse(localStorage.getItem("usuarios")) || [];
+    useEffect(() => {
+        if (error && (error.response?.status === 401 || error.response?.status === 403)) {
+            console.warn("Sessão expirada ou acesso negado. Redirecionando para login...");
+            logout(); // Faz o logout no AuthService
+            navigate("/login"); // Redireciona usando navigate
+        }
+    }, [error, navigate]);
 
-    // Se não houver nada salvo, usa os usuários iniciais
-    if (usuariosSalvos.length === 0) {
-      const initialUsers = [
-        { nome: "Victor Melo", email: "victor@email.com", perfil: "Admin" },
-        { nome: "Maria Silva", email: "maria@email.com", perfil: "Usuário" },
-        { nome: "João Santos", email: "joao@email.com", perfil: "Supervisor" },
-      ];
-      localStorage.setItem("usuarios", JSON.stringify(initialUsers));
-      setUsuarios(initialUsers);
-    } else {
-      setUsuarios(usuariosSalvos);
-    }
-  }, []);
+    // Novo useEffect para carregar do backend
+    useEffect(() => {
+        const loadUsuarios = async () => {
+            try {
+                setLoading(true);
+                const data = await fetchUsuarios();
+                setUsuarios(data);
+                setError(null); // Limpa o erro em caso de sucesso
+            } catch (err) {
+                console.error("Falha ao carregar usuários:", err);
+                setError(err); // Define o erro (incluindo o objeto de resposta do Axios)
+                setUsuarios([]);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-  // Editar usuário
-  const handleEditar = (userEmail) => {
-    navigate(`/editar-usuario/${userEmail}`);
-  };
+        loadUsuarios();
+    }, []); // Array de dependências vazio para rodar apenas uma vez na montagem
 
-  // Excluir usuário
-  const handleExcluir = (userEmail) => {
+    // Editar usuário (mantém a navegação)
+    const handleEditar = (userCpf) => {
+    navigate(`/editar-usuario/${userCpf}`); // Passa o CPF na URL
+    };
+
+// Excluir usuário - agora com CPF
+const handleExcluir = async (userCpf) => { // Recebe CPF
     if (window.confirm("Tem certeza que deseja excluir este usuário?")) {
-      const novaLista = usuarios.filter((user) => user.email !== userEmail);
-      setUsuarios(novaLista);
-      localStorage.setItem("usuarios", JSON.stringify(novaLista)); // Atualiza o localStorage
+        try {
+            await deleteUsuario(userCpf); // Usa o CPF
+
+            // Remove da lista local após sucesso
+            setUsuarios(prevUsuarios => prevUsuarios.filter(user => user.cpf !== userCpf)); // Filtra pelo CPF
+
+            alert(`Usuário com CPF ${userCpf} excluído com sucesso!`);
+        } catch (error) {
+            console.error("Falha na exclusão:", error);
+            alert("Erro ao excluir o usuário. Tente novamente.");
+        }
     }
-  };
+};
 
-  return (
-    <div className="gestao-page-wrapper">
-      <div className="gestao-page-container">
-        <div className="gestao-header">
-          <h1>Gerenciar Usuários</h1>
-          <Link to="/usuarios/cadastrar" className="btn-cadastrar">
-            Cadastrar
-          </Link>
+return (
+        <div className="gestao-page-wrapper">
+            <div className="gestao-page-container">
+                 <div className="gestao-header">
+                    <h1>Gerenciar Usuários</h1>
+                    <Link to="/usuarios/cadastrar" className="btn-cadastrar">
+                      Cadastrar
+                    </Link>
+                  </div> 
+                
+                <div className="user-list-container">
+                    {loading ? (
+                        <p>Carregando usuários...</p>
+                    ) : error ? (
+                        <p className="error-message">{error}</p>
+                    ) : usuarios.length > 0 ? (
+                        usuarios.map((user) => (
+                            <UsuarioCard
+                                key={user.cpf} // Use key única, como email ou id
+                                user={user}
+                                onEditar={() => handleEditar(user.cpf)} 
+                                onExcluir={() => handleExcluir(user.cpf)} // Passa o CPF
+                            />
+                        ))
+                    ) : (
+                        <p>Nenhum usuário cadastrado ainda.</p>
+                    )}
+                </div>
+            </div>
         </div>
-
-        <div className="user-list-container">
-          {usuarios.length > 0 ? (
-            usuarios.map((user) => (
-              <UsuarioCard
-                key={user.email}
-                user={user}
-                onEditar={handleEditar}
-                onExcluir={handleExcluir}
-              />
-            ))
-          ) : (
-            <p>Nenhum usuário cadastrado ainda.</p>
-          )}
-        </div>
-      </div>
-    </div>
-  );
+    );
 }

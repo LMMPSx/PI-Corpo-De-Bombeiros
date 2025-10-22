@@ -20,7 +20,7 @@ import Loading from "./components/Loading/Loading";
 import { ConfigProvider } from "./contexts/ConfigContext";
 
 // Páginas de usuários
-import CadastrarUsuario from "./pages/Cadastro/CadastrarUsuario";
+import CadastrarUsuario from "./pages/Cadastro/cadastrarUsuario";
 import EditarUsuario from "./pages/Perfil/editarperfil";
 
 import "./App.css";
@@ -79,7 +79,7 @@ export default function App() {
             {/* 👇 Gerenciamento de usuários */}
             <Route path="/usuarios" element={<Usuarios />} />
             <Route path="/usuarios/cadastrar" element={<CadastrarUsuario />} />
-            <Route path="/editar-usuario/:email" element={<EditarUsuario />} />
+            <Route path="/editar-usuario/:cpf" element={<EditarUsuario />} />
 
             <Route path="/configuracoes" element={<Configuracoes />} />
             <Route path="/sobre" element={<Sobre />} />

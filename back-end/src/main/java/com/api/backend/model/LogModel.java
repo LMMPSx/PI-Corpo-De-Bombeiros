@@ -1,6 +1,5 @@
 package com.api.backend.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +14,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class LogModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_Log")
@@ -40,8 +38,13 @@ public class LogModel {
     @Column(name = "Data_Alteracao", nullable = false)
     private LocalDateTime dataAlteracao;
 
-    @ManyToOne @JoinColumn(name = "FK_ID_Usuario")
-    private UsuarioModel fkIdUsuario;
+    // =======================================================
+    // ✅ CORREÇÃO: Renomeado de fkIdUsuario para 'usuario'
+    // para corresponder ao mappedBy = "usuario" em UsuarioModel.
+    // =======================================================
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "FK_ID_Usuario", nullable = false) // Mantém o nome da coluna no DB
+    private UsuarioModel usuario; // <-- Nome do campo corrigido
 
     public enum TipoAlteracao {
         CREATE,

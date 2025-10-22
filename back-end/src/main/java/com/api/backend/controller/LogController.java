@@ -30,11 +30,11 @@ public class    LogController {
 
     @GetMapping("/usuario/id/{id}")
     public ResponseEntity<List<LogResponse>> findByIdUsuario(@PathVariable Integer id) {
-        return ResponseEntity.ok(logService.findByIdUsuario(id));
+        return ResponseEntity.ok(logService.findByUsuario_Id_Usuario(id));
     }
 
     @GetMapping("/usuario/nome/{usuario}")
     public ResponseEntity<List<LogResponse>> findByIdUsuario_NomeUsuario(@PathVariable String usuario) {
-        return ResponseEntity.ok(logService.findByIdUsuario_NomeUsuario(usuario));
+        return ResponseEntity.ok(logService.findByUsuario_NomeUsuario(usuario));
     }
 }

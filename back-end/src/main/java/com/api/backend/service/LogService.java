@@ -24,7 +24,7 @@ public class LogService {
                 log.getValorAntigo(),
                 log.getValorNovo(),
                 log.getDataAlteracao(),
-                log.getFkIdUsuario() != null ? log.getFkIdUsuario().getNomeUsuario() : "Sistema"
+                log.getUsuario() != null ? log.getUsuario().getNomeUsuario() : "Sistema"
         );
     }
 
@@ -42,15 +42,15 @@ public class LogService {
                 .collect(Collectors.toList());
     }
 
-    public List<LogResponse> findByIdUsuario(Integer idUsuario) {
-        return logRepository.findByFkIdUsuario_IdUsuario(idUsuario)
+    public List<LogResponse> findByUsuario_Id_Usuario(Integer idUsuario) {
+        return logRepository.findByUsuario_IdUsuario(idUsuario)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
 
-    public List<LogResponse> findByIdUsuario_NomeUsuario(String nomeUsuario) {
-        return logRepository.findByFkIdUsuario_NomeUsuario(nomeUsuario)
+    public List<LogResponse> findByUsuario_NomeUsuario(String nomeUsuario) {
+        return logRepository.findByUsuario_NomeUsuario(nomeUsuario)
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
