@@ -7,7 +7,6 @@ Andrew Kauê - PO e Front-end
 Josué Oliveira - Scrum master e Front-end
 Luiz Miguel - Back-end
 Maria Eduarda - Designer e Figma
-Sam Diego - Back-end
 Vinicius Cândido - Back-end
 Victor Sette - Front-end
 
