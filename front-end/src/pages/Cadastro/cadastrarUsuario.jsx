@@ -50,18 +50,20 @@ const CadastrarUsuario = () => {
 
         try {
             // Separa o arquivo da foto do resto dos dados
-            const { userPhotoFile, perfil, ...userData } = formData;
+            const { userPhotoFile, ...userData } = formData;
             
             // =========================================================================
             // 🚨 ADICIONEI ESTE LOG DE VERIFICAÇÃO. CONFIRA O CONSOLE DO NAVEGADOR!
             // Ele deve mostrar um objeto File, e não 'null' ou um objeto vazio '{}'.
-            console.log("Valor de userPhotoFile antes de enviar:", userPhotoFile); 
             // =========================================================================
             
             // O backend espera 'tipoUsuario', mas o frontend usa 'perfil'
             const finalUserData = { 
-                ...userData,
-                tipoUsuario: perfil // Renomeia para o DTO do Java
+                nome: userData.nome,
+                cpf: userData.cpf,
+                email: userData.email,
+                senha: userData.senha,
+                tipoUsuario: userData.perfil // Renomeia para o DTO do Java
             };
 
             // Chama o service para cadastrar no backend
