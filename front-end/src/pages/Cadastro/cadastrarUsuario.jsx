@@ -45,53 +45,24 @@ const CadastrarUsuario = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setLoading(true);
+    e.preventDefault();
+    setLoading(true);
 
-        try {
-            // Separa o arquivo da foto do resto dos dados
-            const { userPhotoFile, ...userData } = formData;
-            
-            // =========================================================================
-            // 🚨 ADICIONEI ESTE LOG DE VERIFICAÇÃO. CONFIRA O CONSOLE DO NAVEGADOR!
-            // Ele deve mostrar um objeto File, e não 'null' ou um objeto vazio '{}'.
-            // =========================================================================
-            
-            // O backend espera 'tipoUsuario', mas o frontend usa 'perfil'
-            const finalUserData = { 
-                nome: userData.nome,
-                cpf: userData.cpf,
-                email: userData.email,
-                senha: userData.senha,
-                tipoUsuario: userData.perfil // Renomeia para o DTO do Java
-            };
+    try {
+        const { userPhotoFile, ...restOfData } = formData;
 
-            // Chama o service para cadastrar no backend
-            const novoUsuario = await createUsuario(finalUserData, userPhotoFile);
+        // Usa a mesma lógica do editar
+        await createUsuario(restOfData, userPhotoFile);
 
-            alert(`Usuário ${novoUsuario.nome} cadastrado com sucesso!`);
-            
-            navigate('/usuarios');
-            
-        } catch (error) {
-            let errorMessage = "Erro ao cadastrar usuário. Verifique os dados.";
-            
-            // Tenta obter a mensagem de erro do Spring Boot
-            const backendMessage = error.response?.data?.message;
-
-            if (backendMessage) {
-                errorMessage = backendMessage;
-            } else if (error.response?.status === 409) { // Conflito (CPF/Email já existe)
-                errorMessage = "Este CPF ou E-mail já está em uso.";
-            }
-
-            alert(errorMessage);
-            console.error("Detalhes do erro:", error.response || error);
-
-        } finally {
-            setLoading(false);
-        }
-    };
+        alert("Usuário cadastrado com sucesso!");
+        navigate('/usuarios');
+    } catch (error) {
+        console.error("Erro ao cadastrar:", error);
+        alert("Erro ao cadastrar usuário. Verifique o console.");
+    } finally {
+        setLoading(false);
+    }
+};
 
     return (
         <div className="register-user-page">

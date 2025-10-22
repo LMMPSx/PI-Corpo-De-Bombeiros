@@ -75,61 +75,47 @@ export const deleteUsuario = async (userCpf) => {
  * @returns {Promise<object>} Uma promessa que resolve com o objeto do usuário criado.
  */
 export const createUsuario = async (userData, userPhoto) => {
-    
     const formPayload = new FormData();
-    
-    // 1. ANEXAR O JSON PRIMEIRO (Chave: 'usuario')
+
+    // 1️⃣ Monta o JSON do usuário — exatamente como o backend espera
     const usuarioJson = JSON.stringify({
         nomeUsuario: userData.nome,
         cpf: userData.cpf,
         email: userData.email,
-        tipoUsuario: userData.tipoUsuario,
+        tipoUsuario: userData.perfil, // mesmo nome usado em editar
         senha: userData.senha,
     });
-    
+
     const usuarioBlob = new Blob([usuarioJson], { type: 'application/json' });
-    formPayload.append('usuario', usuarioBlob);
+    formPayload.append('usuario', usuarioBlob); // @RequestPart("usuario")
 
-    // 2. ANEXAR A FOTO EM SEGUNDO (Chave: 'foto')
+    // 2️⃣ Se houver foto, anexa no mesmo FormData
     if (userPhoto && userPhoto instanceof File) {
-        formPayload.append('foto', userPhoto, userPhoto.name); 
+        formPayload.append('foto', userPhoto, userPhoto.name); // @RequestPart("foto")
     }
 
-    // Pega o token de autenticação (AJUSTE CONFORME SEU MÉTODO DE ARMAZENAMENTO)
+    // 3️⃣ Token JWT e URL final
     const token = localStorage.getItem('jwtToken');
-    console.log('Token Encontrado:', token ? 'Sim' : 'Não'); // Adicione este log!
-    if (!token) {
-        // Adicione aqui uma lógica para redirecionar para o login ou lançar um erro explícito de autenticação.
-        throw new Error("Token de autenticação não encontrado. Usuário não logado.");
-    }
+    if (!token) throw new Error("Token de autenticação não encontrado.");
+
     const authorizationHeader = `Bearer ${token}`;
     const finalUrl = `${FULL_API_BASE_URL}${USUARIO_BASE_URL}/create`;
 
-    
-
     try {
-        const response = await axios.post( 
-            finalUrl, 
-            formPayload,
-            {
-                headers: {
-                    'Content-Type': undefined, 
-                    'Authorization': authorizationHeader, 
-                },
-            }
-        );
-        
-        return mapJavaToReact(response.data); 
+        const response = await axios.post(finalUrl, formPayload, {
+            headers: {
+                'Authorization': authorizationHeader,
+                // ❌ não defina Content-Type manualmente — o FormData faz isso automaticamente
+            },
+        });
+
+        return mapJavaToReact(response.data);
     } catch (error) {
-        console.error("ERRO AO CADASTRAR USUÁRIO NO FRONTEND:");
-        console.error("  -> Status HTTP:", error.response?.status);
-        console.error("  -> Mensagem do Servidor (Corpo):", error.response?.data);
-        console.error("  -> Objeto de Erro Completo:", error);
-        
+        console.error("ERRO AO CADASTRAR USUÁRIO:");
+        console.error("-> Status HTTP:", error.response?.status);
+        console.error("-> Mensagem do Servidor:", error.response?.data);
         throw error;
     }
-
-    
 };
 
 

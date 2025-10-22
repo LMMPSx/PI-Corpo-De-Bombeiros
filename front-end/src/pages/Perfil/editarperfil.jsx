@@ -148,7 +148,7 @@ const EditarUsuario = () => {
                 <option value="" disabled>Selecione o perfil</option>
                 <option value="Chefe">Chefe</option>
                 <option value="Analista">Analista</option>
-                <option value="Administrador">Administrador</option>
+                <option value="Admin">Administrador</option>
               </select>
 
               <input
