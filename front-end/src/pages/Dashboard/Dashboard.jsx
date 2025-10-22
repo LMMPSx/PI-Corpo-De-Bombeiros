@@ -1,6 +1,6 @@
 // pages/Dashboard/Dashboard.jsx (atualizado)
 import React, { useState, useEffect } from 'react';
-import { useConfig } from '../../contexts/ConfigContext';
+import { useConfig } from '../../Contexts/ConfigContext';
 import MapaOcorrencias from '../../components/MapaOcorrencias/MapaOcorrencias';
 import EstatisticasRapidas from '../../components/EstatisticasRapidas/EstatisticasRapidas';
 import UltimasOcorrencias from '../../components/UltimasOcorrencias/UltimasOcorrencias';
