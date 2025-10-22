@@ -1,10 +1,22 @@
+/* NovaOcorrencia.css - RESPONSIVO */
 .nova-ocorrencia-container {
-  max-width: 900px;
+  max-width: 2000px;
   margin: 0 auto;
-  padding: 20px;
+
+  padding: 30px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
-  width: 60rem;
+  box-sizing: border-box;
+  margin-left: 200px; /* Diminuído para aumentar a tela à direita */
+  margin-top: 70px;
+  width: calc(100% - 200px); /* Ajuste correspondente */
+  transition: all 0.3s ease;
+}
+
+/* Quando sidebar está fechada */
+.sidebar-closed .nova-ocorrencia-container {
+  margin-left: 0;
+  width: 100%;
 }
 
 .nova-ocorrencia-header {
@@ -13,16 +25,19 @@
 
 .nova-ocorrencia-header h1 {
   color: #333;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 600;
   margin: 0;
+  text-align: left;
 }
 
 .nova-ocorrencia-form {
   background-color: #092642;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  max-width: 100%;
 }
 
 .form-row {
@@ -36,7 +51,7 @@
 }
 
 .form-group {
-  margin-bottom: 0;
+  margin-bottom: 15px;
 }
 
 label {
@@ -44,31 +59,37 @@ label {
   margin-bottom: 8px;
   font-weight: 500;
   color: #ffffff;
+  font-size: 14px;
 }
 
 input, select, textarea {
   width: 100%;
-  padding: 15px 12px;
+  padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 14px;
   box-sizing: border-box;
+  background: white;
+  transition: all 0.3s ease;
+  max-width: 100%;
 }
 
 input:focus, select:focus, textarea:focus {
   outline: none;
   border-color: #4a90e2;
-  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+  box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
 }
 
 /* Localização com botões */
 .location-input-container {
   position: relative;
   display: flex;
+  max-width: 100%;
 }
 
 .location-input-container input {
   padding-right: 80px;
+  max-width: 100%;
 }
 
 .location-btn, .map-btn {
@@ -80,7 +101,10 @@ input:focus, select:focus, textarea:focus {
   border: none;
   font-size: 16px;
   cursor: pointer;
-  padding: 5px;
+  padding: 6px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  max-width: 40px;
 }
 
 .map-btn {
@@ -89,38 +113,42 @@ input:focus, select:focus, textarea:focus {
 
 .location-btn:hover, .map-btn:hover {
   background-color: #f0f0f0;
-  border-radius: 4px;
 }
 
 .separator {
   height: 1px;
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.3);
   margin: 30px 0;
+  max-width: 100%;
 }
 
-.anexos-section h2 {
+.anexos-section h2, .assinatura-section h2 {
   margin-top: 0;
   margin-bottom: 20px;
   font-size: 18px;
-  color: #ffffff;
+  color: #f8f8f8;
 }
 
 .anexos-upload {
   margin-bottom: 30px;
+  max-width: 100%;
 }
 
 .upload-btn {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 10px 16px;
+  padding: 12px 16px;
   background-color: #f8f9fa;
-  border: 1px dashed #ccc;
-  border-radius: 4px;
+  border: 2px dashed #ccc;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   color: #555;
   transition: all 0.2s;
+  justify-content: center;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .upload-btn:hover {
@@ -132,39 +160,45 @@ input:focus, select:focus, textarea:focus {
   display: block;
   margin-top: 8px;
   font-size: 12px;
-  color: #777;
+  color: #ccc;
+  max-width: 100%;
 }
 
-/* Lista de arquivos */
 .arquivos-list {
   margin-top: 15px;
+  max-width: 100%;
 }
 
 .arquivos-list h4 {
   margin-bottom: 10px;
   font-size: 14px;
-  color: #333;
+  color: #ffffff;
 }
 
 .arquivo-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  margin-bottom: 5px;
+  padding: 10px 12px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  margin-bottom: 8px;
   font-size: 13px;
+  color: white;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .remove-file {
   background: none;
   border: none;
-  color: #dc3545;
+  color: #ff6b6b;
   cursor: pointer;
   font-size: 14px;
-  padding: 2px 6px;
-  border-radius: 3px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+  max-width: 40px;
 }
 
 .remove-file:hover {
@@ -172,42 +206,69 @@ input:focus, select:focus, textarea:focus {
   color: white;
 }
 
-/* Assinatura digital */
+.assinatura-section {
+  margin: 25px 0;
+  max-width: 100%;
+}
+
 .signature-container {
   border: 1px solid #ddd;
-  border-radius: 4px;
-  padding: 10px;
+  border-radius: 8px;
+  padding: 15px;
+  background: white;
+  overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .signature-canvas {
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: crosshair;
   background-color: white;
   width: 100%;
+  height: 150px;
+  touch-action: none;
+  display: block;
+  box-sizing: border-box;
 }
 
-.clear-signature {
-  margin-top: 8px;
-  padding: 5px 10px;
+.assinatura-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.assinatura-actions button {
+  padding: 10px 16px;
   background-color: #6c757d;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 12px;
+  font-size: 14px;
+  transition: all 0.2s;
+  max-width: 100%;
+  box-sizing: border-box;
+  flex: 1;
+  min-width: 120px;
 }
 
-.clear-signature:hover {
+.assinatura-actions button:hover {
   background-color: #5a6268;
 }
 
 .protocolo-info {
   margin-top: 20px;
-  padding: 12px;
-  background-color: #f8f9fa;
-  border-radius: 4px;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
   font-size: 14px;
+  color: white;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .protocolo-info strong {
@@ -219,46 +280,86 @@ input:focus, select:focus, textarea:focus {
   justify-content: flex-end;
   gap: 15px;
   margin-top: 30px;
+  flex-wrap: wrap;
+  max-width: 100%;
+}
+
+.cancel-btn, .submit-btn {
+  padding: 14px 24px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+  min-width: 140px;
+  box-sizing: border-box;
+  text-align: center;
 }
 
 .cancel-btn {
-  padding: 10px 20px;
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #333;
-  transition: all 0.2s;
+  background-color: #6c757d;
+  color: white;
 }
 
 .cancel-btn:hover {
-  background-color: #e9ecef;
+  background-color: #5a6268;
 }
 
 .submit-btn {
-  padding: 10px 20px;
   background-color: #4a90e2;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
   color: white;
-  font-weight: 500;
-  transition: background-color 0.2s;
 }
 
 .submit-btn:hover {
   background-color: #3a7bc8;
 }
 
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* ========== RESPONSIVIDADE ========== */
+
+/* Tablet Grande (1024px) */
+@media (max-width: 1024px) {
+  .nova-ocorrencia-container {
+    margin-left: 0;
+    width: 100%;
+    max-width: 100%;
+    padding: 25px;
+    margin-top: 70px;
+  }
+  
+  .nova-ocorrencia-form {
+    padding: 25px;
+  }
+  
+  .form-row {
+    gap: 15px;
+  }
+  
+  .nova-ocorrencia-header h1 {
+    font-size: 24px;
+  }
+}
+
+/* Tablet (768px - 1024px) */
 @media (max-width: 768px) {
   .nova-ocorrencia-container {
-    padding: 10px;
+    padding: 20px;
+    margin-top: 60px;
   }
   
   .nova-ocorrencia-form {
     padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .nova-ocorrencia-header h1 {
+    font-size: 22px;
+    text-align: center;
   }
   
   .form-row {
@@ -269,4 +370,275 @@ input:focus, select:focus, textarea:focus {
   .location-input-container input {
     padding-right: 70px;
   }
+  
+  .location-btn, .map-btn {
+    right: 35px;
+    font-size: 14px;
+  }
+  
+  .map-btn {
+    right: 10px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .cancel-btn, .submit-btn {
+    width: 100%;
+    padding: 16px;
+    font-size: 15px;
+    min-width: auto;
+  }
+  
+  .signature-canvas {
+    height: 140px;
+  }
+  
+  .assinatura-actions {
+    justify-content: stretch;
+  }
+  
+  .assinatura-actions button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+/* Mobile Grande (600px - 768px) */
+@media (max-width: 600px) {
+  .nova-ocorrencia-container {
+    padding: 15px;
+    margin-top: 60px;
+  }
+  
+  .nova-ocorrencia-form {
+    padding: 18px;
+  }
+  
+  .nova-ocorrencia-header {
+    margin-bottom: 20px;
+  }
+  
+  .nova-ocorrencia-header h1 {
+    font-size: 20px;
+  }
+  
+  input, select, textarea {
+    padding: 12px 10px;
+    font-size: 14px;
+  }
+  
+  .location-input-container input {
+    padding-right: 60px;
+  }
+  
+  .location-btn, .map-btn {
+    font-size: 14px;
+    padding: 5px;
+    right: 30px;
+  }
+  
+  .map-btn {
+    right: 8px;
+  }
+  
+  .separator {
+    margin: 25px 0;
+  }
+  
+  .anexos-section h2, .assinatura-section h2 {
+    font-size: 17px;
+  }
+  
+  .upload-btn {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+  
+  .signature-canvas {
+    height: 130px;
+  }
+  
+  .assinatura-actions button {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+/* Mobile Pequeno (480px - 600px) */
+@media (max-width: 480px) {
+  .nova-ocorrencia-container {
+    padding: 12px;
+    margin-top: 60px;
+  }
+  
+  .nova-ocorrencia-form {
+    padding: 15px;
+    border-radius: 8px;
+  }
+  
+  .nova-ocorrencia-header h1 {
+    font-size: 18px;
+  }
+  
+  input, select, textarea {
+    padding: 11px 10px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+  
+  .location-input-container input {
+    padding-right: 55px;
+  }
+  
+  .location-btn, .map-btn {
+    font-size: 13px;
+    padding: 4px;
+    right: 25px;
+  }
+  
+  .map-btn {
+    right: 6px;
+  }
+  
+  .separator {
+    margin: 20px 0;
+  }
+  
+  .form-actions {
+    margin-top: 25px;
+    gap: 10px;
+  }
+  
+  .cancel-btn, .submit-btn {
+    padding: 14px;
+    font-size: 14px;
+  }
+  
+  .signature-canvas {
+    height: 120px;
+  }
+  
+  .protocolo-info {
+    padding: 12px;
+    font-size: 13px;
+  }
+  
+  label {
+    font-size: 13px;
+  }
+  
+  .assinatura-actions {
+    flex-direction: column;
+  }
+  
+  .assinatura-actions button {
+    width: 100%;
+  }
+}
+
+/* Mobile Muito Pequeno (até 320px) */
+@media (max-width: 320px) {
+  .nova-ocorrencia-container {
+    padding: 8px;
+    margin-top: 60px;
+  }
+  
+  .nova-ocorrencia-form {
+    padding: 12px;
+  }
+  
+  .nova-ocorrencia-header h1 {
+    font-size: 17px;
+  }
+  
+  label {
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  
+  input, select, textarea {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+  
+  .upload-btn {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .arquivo-item {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+  
+  .signature-canvas {
+    height: 100px;
+  }
+  
+  .assinatura-actions button {
+    padding: 10px;
+    font-size: 12px;
+  }
+  
+  .cancel-btn, .submit-btn {
+    padding: 12px;
+    font-size: 13px;
+  }
+}
+
+/* Orientação paisagem em mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .nova-ocorrencia-container {
+    padding: 15px;
+    margin-top: 60px;
+  }
+  
+  .nova-ocorrencia-form {
+    padding: 15px;
+  }
+  
+  .form-row {
+    margin-bottom: 15px;
+  }
+  
+  input, select, textarea {
+    padding: 10px 8px;
+  }
+  
+  .signature-canvas {
+    height: 100px;
+  }
+}
+
+/* Melhorias para touch devices */
+@media (hover: none) and (pointer: coarse) {
+  .location-btn:hover,
+  .map-btn:hover,
+  .upload-btn:hover,
+  .remove-file:hover,
+  .assinatura-actions button:hover,
+  .cancel-btn:hover,
+  .submit-btn:hover {
+    background-color: transparent;
+    transform: none;
+  }
+  
+  .location-btn:active,
+  .map-btn:active,
+  .upload-btn:active,
+  .remove-file:active,
+  .assinatura-actions button:active,
+  .cancel-btn:active,
+  .submit-btn:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Ajuste para garantir compatibilidade com sidebar/header */
+.sidebar-open .nova-ocorrencia-container,
+.sidebar-closed .nova-ocorrencia-container {
+  transition: all 0.3s ease;
 }

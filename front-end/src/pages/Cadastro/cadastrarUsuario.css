@@ -1,169 +1,270 @@
 /* src/pages/Perfil/cadastrarUsuario.css */
 
+:root {
+    --header-height: 70px;
+    --sidebar-width: 250px;
+    --cor-fundo: #f0f2f5;
+    --cor-sidebar: #0d1a2f;
+    --cor-vermelho: #a30018;
+    --cor-vermelho-hover: #c20025;
+    --cor-texto-principal: #333;
+    --cor-texto-secundario: #666;
+    --sombra: 0 8px 16px rgba(0, 0, 0, 0.4);
+    --sombra-suave: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
 /* ---------------------------------- */
 /* BASE / DESKTOP (MOBILE FIRST) */
 /* ---------------------------------- */
 
 .register-user-page {
-  padding: 20px;
-  background-color: #f0f2f5;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: Arial, sans-serif;
+    padding: 30px 20px;
+    background-color: var(--cor-fundo);
+    min-height: calc(100vh - var(--header-height));
+    margin-left: var(--sidebar-width);
+    margin-top: var(--header-height);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: 'Roboto', Arial, sans-serif;
+    transition: margin-left 0.3s ease;
+    box-sizing: border-box;
+}
+
+/* Ajuste quando sidebar está fechada */
+.sidebar-closed .register-user-page {
+    margin-left: 0;
 }
 
 .register-user-title {
-  color: #333;
-  font-size: 28px;
-  margin-bottom: 30px;
-  align-self: flex-start;
-  width: 100%;
-  max-width: 934px; /* Manter o max-width para telas grandes */
+    color: var(--cor-texto-principal);
+    font-size: 28px;
+    margin-bottom: 30px;
+    align-self: flex-start;
+    width: 100%;
+    max-width: 934px;
+    font-weight: 700;
 }
 
-/* Card Principal do Formulário */
 .register-user-card {
-  background-color: #0d1a2f;
-  border-radius: 15px;
-  padding: 30px; /* Reduzindo um pouco o padding para telas menores */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-  /* A largura será 100% menos o padding da página, facilitando o ajuste em telas pequenas */
-  width: 100%;
-  max-width: 934px; /* Limite para telas grandes */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 30px;
+    background-color: var(--cor-sidebar);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: var(--sombra);
+    width: 100%;
+    max-width: 934px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
 }
 
-/* Formulário e Campos de Input */
 .register-user-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 15px; /* Reduzindo o espaçamento em telas menores */
-  align-items: center;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
 }
 
-/* Estilo Base para Inputs e Selects */
 .form-input {
-  /* DIMENSÕES REQUERIDAS */
-  width: 100%;
-  height: 60px; /* Reduzindo a altura para melhor visualização em mobile */
+    width: 100%;
+    height: 60px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 15px;
+    background-color: white;
+    color: var(--cor-texto-principal);
+    font-size: 16px;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+    font-family: 'Roboto', Arial, sans-serif;
+}
 
-  padding: 10px 20px; /* Reduzindo o padding */
-  border: none;
-  border-radius: 15px;
-  background-color: white;
-  color: #333;
-  font-size: 16px; /* Reduzindo o tamanho da fonte */
-  outline: none;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
+.form-input:focus {
+    box-shadow: 0 0 0 3px var(--cor-vermelho);
+    transform: translateY(-2px);
 }
 
 .form-input::placeholder {
-  color: #666;
+    color: var(--cor-texto-secundario);
 }
 
-/* Campo de Perfil (Select) */
 .form-select-container {
-  width: 100%;
-  position: relative;
+    width: 100%;
+    position: relative;
 }
 
 .form-select {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  cursor: pointer;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    width: 100%;
 }
 
-/* Seta customizada do Perfil */
 .select-arrow {
-  position: absolute;
-  top: 50%;
-  right: 20px; /* Ajuste a posição para telas menores */
-  transform: translateY(-50%);
-  width: 0;
-  height: 0;
-  pointer-events: none;
-  border-left: 6px solid transparent; /* Seta menor */
-  border-right: 6px solid transparent; /* Seta menor */
-  border-top: 6px solid #666;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    pointer-events: none;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid var(--cor-texto-secundario);
+    transition: transform 0.3s ease;
 }
 
-/* Área de Adicionar Foto */
+.form-select:focus + .select-arrow {
+    transform: translateY(-50%) rotate(180deg);
+}
+
+/* ---------------------------------- */
+/* ÁREA DE FOTO - VERTICAL E CENTRALIZADA */
+/* ---------------------------------- */
+
+.add-photo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 10px 0 20px;
+}
+
 .photo-input-label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    color: var(--cor-texto-secundario);
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    transition: all 0.3s ease;
+    text-align: center;
+    border: 3px dashed #ccc;
+    flex-shrink: 0;
 }
 
+.photo-input-label:hover {
+    box-shadow: 0 0 0 3px var(--cor-vermelho) inset;
+    border-color: var(--cor-vermelho);
+    transform: scale(1.05);
+}
+
+/* Imagem de pré-visualização fixa no círculo */
+.photo-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Ícone e texto */
 .photo-icon {
-  font-size: 20px; /* Ícone menor */
-  color: #666;
+    font-size: 22px;
+    margin-left: 10px;
 }
 
-/* Botão Cadastrar */
-.submit-button {
-  /* DIMENSÕES AJUSTADAS PARA MOBILE */
-  width: 100%; /* Ocupa a largura total do card em mobile */
-  max-width: 250px;
-  height: 70px;
-  border-radius: 15px;
+/* ---------------------------------- */
+/* BOTÃO */
+/* ---------------------------------- */
 
-  margin-top: 20px;
-  background-color: #a30018;
-  color: white;
-  border: none;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-  transition: background-color 0.3s, box-shadow 0.3s;
+.submit-button {
+    width: 100%;
+    max-width: 250px;
+    height: 70px;
+    border-radius: 15px;
+    margin-top: 20px;
+    background-color: var(--cor-vermelho);
+    color: white;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: var(--sombra-suave);
+    transition: all 0.3s ease;
+    font-family: 'Roboto', Arial, sans-serif;
 }
 
 .submit-button:hover {
-  background-color: #c20025;
+    background-color: var(--cor-vermelho-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.submit-button:active {
+    transform: translateY(-1px);
 }
 
 /* ---------------------------------- */
-/* MEDIA QUERY: AJUSTE PARA TELAS MAIORES (> 768px) */
+/* RESPONSIVIDADE */
 /* ---------------------------------- */
-@media (min-width: 768px) {
-  .register-user-card {
-    padding: 40px; /* Restaurar padding original */
-  }
 
-  .register-user-form {
-    gap: 20px; /* Restaurar espaçamento original */
-  }
+@media (max-width: 768px) {
+    .photo-input-label {
+        width: 120px;
+        height: 120px;
+    }
 
-  .form-input {
-    height: 80px; /* Restaurar altura original */
-    padding: 15px 25px; /* Restaurar padding original */
-    font-size: 18px; /* Restaurar tamanho da fonte original */
-  }
+    .photo-preview {
+        width: 120px;
+        height: 120px;
+    }
+}
 
-  .select-arrow {
-    right: 25px; /* Restaurar posição da seta original */
-    border-left: 8px solid transparent;
-    border-right: 8px solid transparent;
-    border-top: 8px solid #666;
-  }
+@media (max-width: 480px) {
+    .photo-input-label {
+        width: 100px;
+        height: 100px;
+    }
 
-  .photo-icon {
-    font-size: 24px; /* Restaurar tamanho do ícone */
-  }
+    .photo-preview {
+        width: 100px;
+        height: 100px;
+    }
+}
 
-  .submit-button {
-    /* DIMENSÕES REQUERIDAS */
-    width: 322px;
-    height: 85.19px;
-    font-size: 24px; /* Restaurar tamanho da fonte */
-  }
+/* ---------------------------------- */
+/* ESTADOS DE LOADING / ERRO */
+/* ---------------------------------- */
+
+.submit-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.submit-button.loading {
+    position: relative;
+    color: transparent;
+}
+
+.submit-button.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 50%;
+    left: 50%;
+    margin-left: -10px;
+    margin-top: -10px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
