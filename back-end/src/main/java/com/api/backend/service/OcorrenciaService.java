@@ -3,9 +3,12 @@ package com.api.backend.service;
 import com.api.backend.dto.OcorrenciaResponse;
 import com.api.backend.dto.OcorrenciaRequest;
 import com.api.backend.model.OcorrenciaModel;
-import com.api.backend.repository.*;
+import com.api.backend.repository.OcorrenciaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile; // Novo import
+import org.springframework.web.server.ResponseStatusException;
+import org.springframework.http.HttpStatus; // Novo import para HttpStatus
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,6 +19,8 @@ import java.util.stream.Collectors;
 public class OcorrenciaService {
 
     private final OcorrenciaRepository ocorrenciaRepository;
+    // Injete o CloudinaryService para lidar com o upload de arquivos
+    private final CloudinaryService cloudinaryService;
 
     private OcorrenciaResponse toDTO(OcorrenciaModel ocorrencia) {
         return new OcorrenciaResponse(
@@ -35,7 +40,8 @@ public class OcorrenciaService {
         );
     }
 
-    private OcorrenciaModel toModel(OcorrenciaRequest ocorrenciaRequest) {
+    // Método auxiliar para criar o Model a partir do Request (agora recebe os caminhos dos arquivos)
+    private OcorrenciaModel toModel(OcorrenciaRequest ocorrenciaRequest, String anexoPath, String assinaturaPath) {
         return OcorrenciaModel.builder()
                 .naturezaOcorrencia(OcorrenciaModel.NaturezaOcorrencia.valueOf(ocorrenciaRequest.getNaturezaOcorrencia()))
                 .nomeSolicitante(ocorrenciaRequest.getNomeSolicitante())
@@ -45,9 +51,9 @@ public class OcorrenciaService {
                 .latitude(ocorrenciaRequest.getLatitude())
                 .longitude(ocorrenciaRequest.getLongitude())
                 .prioridadeOcorrencia(OcorrenciaModel.PrioridadeOcorrencia.valueOf(ocorrenciaRequest.getPrioridadeOcorrencia()))
-                .anexoOcorrencia(ocorrenciaRequest.getAnexoOcorrencia())
+                .anexoOcorrencia(anexoPath) // Usa o caminho do Cloudinary
                 .statusOcorrencia(OcorrenciaModel.StatusOcorrencia.valueOf(ocorrenciaRequest.getStatusOcorrencia()))
-                .assinaturaOcorrencia(ocorrenciaRequest.getAssinaturaOcorrencia())
+                .assinaturaOcorrencia(assinaturaPath) // Usa o caminho do Cloudinary
                 .build();
     }
 
@@ -61,7 +67,7 @@ public class OcorrenciaService {
 
     public OcorrenciaResponse findById(Integer id) {
         OcorrenciaModel ocorrencia = ocorrenciaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ocorrência não encontrada"));
         return toDTO(ocorrencia);
     }
 
@@ -79,17 +85,63 @@ public class OcorrenciaService {
                 .collect(Collectors.toList());
     }
 
+    // 🆕 MÉTODO CREATE (agora aceita MultipartFile para anexos)
+    public OcorrenciaResponse create(
+            OcorrenciaRequest ocorrenciaRequest,
+            MultipartFile anexo,
+            MultipartFile assinatura
+    ) {
+        String anexoPath = null;
+        String assinaturaPath = null;
 
-    public OcorrenciaResponse create(OcorrenciaRequest ocorrenciaRequest) {
-        OcorrenciaModel ocorrencia = toModel(ocorrenciaRequest);
+        // Gera um ID base para os arquivos no Cloudinary (evitando duplicidade de nomes)
+        String basePublicId = "ocorrencia-" + System.currentTimeMillis();
+        String folder = "bombeiros/ocorrencias";
+
+        // 1. Upload Anexo
+        if (anexo != null && !anexo.isEmpty()) {
+            anexoPath = cloudinaryService.uploadFile(anexo, folder, basePublicId + "-anexo");
+        }
+
+        // 2. Upload Assinatura
+        if (assinatura != null && !assinatura.isEmpty()) {
+            assinaturaPath = cloudinaryService.uploadFile(assinatura, folder, basePublicId + "-assinatura");
+        }
+
+        // 3. Converte para Model, usando os caminhos obtidos
+        OcorrenciaModel ocorrencia = toModel(ocorrenciaRequest, anexoPath, assinaturaPath);
+
         OcorrenciaModel ocorrenciaSalva = ocorrenciaRepository.save(ocorrencia);
         return toDTO(ocorrenciaSalva);
     }
 
-    public OcorrenciaResponse update(Integer id, OcorrenciaRequest ocorrenciaRequest) {
+    // 🆕 MÉTODO UPDATE (agora aceita MultipartFile para anexos)
+    public OcorrenciaResponse update(
+            Integer id,
+            OcorrenciaRequest ocorrenciaRequest,
+            MultipartFile anexo,
+            MultipartFile assinatura
+    ) {
         OcorrenciaModel ocorrenciaExistente = ocorrenciaRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Ocorrência não encontrada"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Ocorrência não encontrada"));
 
+        // Lógica de atualização dos anexos, se novos arquivos foram fornecidos
+        String folder = "bombeiros/ocorrencias";
+        String basePublicId = "ocorrencia-" + id; // Usa o ID da ocorrência para manter o mesmo Public ID
+
+        // 1. Atualiza Anexo
+        if (anexo != null && !anexo.isEmpty()) {
+            String novoAnexoPath = cloudinaryService.uploadFile(anexo, folder, basePublicId + "-anexo");
+            ocorrenciaExistente.setAnexoOcorrencia(novoAnexoPath);
+        }
+
+        // 2. Atualiza Assinatura
+        if (assinatura != null && !assinatura.isEmpty()) {
+            String novaAssinaturaPath = cloudinaryService.uploadFile(assinatura, folder, basePublicId + "-assinatura");
+            ocorrenciaExistente.setAssinaturaOcorrencia(novaAssinaturaPath);
+        }
+
+        // Lógica de atualização dos outros campos
         if (ocorrenciaRequest.getNaturezaOcorrencia() != null && !ocorrenciaRequest.getNaturezaOcorrencia().trim().isEmpty()) {
             ocorrenciaExistente.setNaturezaOcorrencia(OcorrenciaModel.NaturezaOcorrencia.valueOf(ocorrenciaRequest.getNaturezaOcorrencia()));
         }
@@ -118,17 +170,11 @@ public class OcorrenciaService {
             ocorrenciaExistente.setPrioridadeOcorrencia(OcorrenciaModel.PrioridadeOcorrencia.valueOf(ocorrenciaRequest.getPrioridadeOcorrencia()));
         }
 
-        if (ocorrenciaRequest.getAnexoOcorrencia() != null && !ocorrenciaRequest.getAnexoOcorrencia().trim().isEmpty()) {
-            ocorrenciaExistente.setAnexoOcorrencia(ocorrenciaRequest.getAnexoOcorrencia());
-        }
-
         if (ocorrenciaRequest.getStatusOcorrencia() != null && !ocorrenciaRequest.getStatusOcorrencia().trim().isEmpty()) {
             ocorrenciaExistente.setStatusOcorrencia(OcorrenciaModel.StatusOcorrencia.valueOf(ocorrenciaRequest.getStatusOcorrencia()));
         }
 
-        if (ocorrenciaRequest.getAssinaturaOcorrencia() != null && !ocorrenciaRequest.getAssinaturaOcorrencia().trim().isEmpty()) {
-            ocorrenciaExistente.setAssinaturaOcorrencia(ocorrenciaRequest.getAssinaturaOcorrencia());
-        }
+        // Note: anexoOcorrencia e assinaturaOcorrencia são atualizados via MultipartFile acima.
 
         OcorrenciaModel ocorrenciaAtualizada = ocorrenciaRepository.save(ocorrenciaExistente);
         return toDTO(ocorrenciaAtualizada);
@@ -136,7 +182,7 @@ public class OcorrenciaService {
 
     public void delete(Integer id) {
         if(!ocorrenciaRepository.existsById(id)) {
-            throw new RuntimeException("Ocorrência não encontrada");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Ocorrência não encontrada");
         }
         ocorrenciaRepository.deleteById(id);
     }

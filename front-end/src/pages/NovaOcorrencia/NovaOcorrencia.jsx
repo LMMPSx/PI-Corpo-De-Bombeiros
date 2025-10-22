@@ -1,5 +1,7 @@
+// NovaOcorrencia.jsx
 import React, { useState, useRef } from 'react';
 import './NovaOcorrencia.css';
+import { createOcorrencia } from '../../services/ocorrenciaService';
 
 const NovaOcorrencia = () => {
   const [formData, setFormData] = useState({
@@ -8,8 +10,8 @@ const NovaOcorrencia = () => {
     data: '',
     descricao: '',
     localizacao: '',
-    prioridade: 'media',
-    status: 'aberta'
+    prioridade: '',
+    status: ''
   });
 
   const [assinatura, setAssinatura] = useState('');
@@ -17,60 +19,39 @@ const NovaOcorrencia = () => {
   const fileInputRef = useRef(null);
   const canvasRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    setArquivos(prev => [...prev, ...files]);
-  };
-
-  const removeFile = (index) => {
-    setArquivos(prev => prev.filter((_, i) => i !== index));
+    setArquivos(files);
   };
 
   const getCurrentLocation = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
+        ({ coords }) => {
+          const { latitude, longitude } = coords;
           setFormData(prev => ({
             ...prev,
             localizacao: `${latitude}, ${longitude}`
           }));
-          
-          // Abrir mapa com a localização
           window.open(`https://www.google.com/maps?q=${latitude},${longitude}`, '_blank');
         },
-        (error) => {
-          alert('Erro ao obter localização: ' + error.message);
-        }
+        (error) => alert('Erro ao obter localização: ' + error.message)
       );
-    } else {
-      alert('Geolocalização não suportada pelo navegador');
-    }
+    } else alert('Geolocalização não suportada pelo navegador');
   };
 
-  const openMapForLocation = () => {
-    if (formData.localizacao) {
-      window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(formData.localizacao)}`, '_blank');
-    } else {
-      alert('Digite uma localização primeiro');
-    }
-  };
-
-  // Funções para assinatura digital
+  // 🖋️ Funções de assinatura
   const startDrawing = (e) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     const rect = canvas.getBoundingClientRect();
-    
     ctx.beginPath();
     ctx.moveTo(e.clientX - rect.left, e.clientY - rect.top);
     setIsDrawing(true);
@@ -78,11 +59,9 @@ const NovaOcorrencia = () => {
 
   const draw = (e) => {
     if (!isDrawing) return;
-    
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
     const rect = canvas.getBoundingClientRect();
-    
     ctx.lineTo(e.clientX - rect.left, e.clientY - rect.top);
     ctx.stroke();
   };
@@ -92,8 +71,6 @@ const NovaOcorrencia = () => {
     const ctx = canvas.getContext('2d');
     ctx.closePath();
     setIsDrawing(false);
-    
-    // Salvar assinatura como base64
     setAssinatura(canvas.toDataURL());
   };
 
@@ -104,19 +81,52 @@ const NovaOcorrencia = () => {
     setAssinatura('');
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const dadosCompletos = {
-      ...formData,
-      assinatura,
-      arquivos: arquivos.map(file => file.name)
-    };
-    console.log('Dados do formulário:', dadosCompletos);
-    // Aqui você implementaria a lógica de envio
+  const fetchLatLonFromAddress = async (endereco) => {
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(endereco)}`);
+      const data = await response.json();
+      if (data.length === 0) throw new Error("Endereço não encontrado");
+      return {
+        latitude: parseFloat(data[0].lat),
+        longitude: parseFloat(data[0].lon)
+      };
+    } catch (err) {
+      console.error(err);
+      alert("Não foi possível localizar o endereço");
+      return { latitude: null, longitude: null };
+    }
   };
 
-  const handleCancel = () => {
-    if (window.confirm('Tem certeza que deseja cancelar? Os dados não salvos serão perdidos.')) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    try {
+      // Busca latitude e longitude do endereço digitado
+      const { latitude, longitude } = await fetchLatLonFromAddress(formData.localizacao);
+
+      if (!latitude || !longitude) {
+        setLoading(false);
+        return;
+      }
+
+      // Monta objeto a enviar
+      const ocorrenciaEnviar = {
+        ...formData,
+        titulo: formData.descricao.slice(0, 20), // título curto baseado na descrição
+        localizacao: formData.localizacao,
+        latitude,
+        longitude
+      };
+
+      console.log("📤 Enviando ocorrência:", ocorrenciaEnviar);
+
+      const response = await createOcorrencia(ocorrenciaEnviar, arquivos, assinatura);
+
+      console.log("✅ Ocorrência criada com sucesso:", response);
+      alert("Ocorrência criada com sucesso!");
+
+      // Resetar formulário
       setFormData({
         natureza: '',
         responsavel: '',
@@ -126,7 +136,28 @@ const NovaOcorrencia = () => {
         prioridade: 'media',
         status: 'aberta'
       });
-      setAssinatura('');
+      setArquivos([]);
+      clearSignature();
+
+    } catch (error) {
+      console.error("❌ Erro ao criar ocorrência:", error);
+      alert("Erro ao criar ocorrência. Verifique os dados e tente novamente.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCancel = () => {
+    if (window.confirm('Tem certeza que deseja cancelar?')) {
+      setFormData({
+        natureza: '',
+        responsavel: '',
+        data: '',
+        descricao: '',
+        localizacao: '',
+        prioridade: 'media',
+        status: 'aberta'
+      });
       setArquivos([]);
       clearSignature();
     }
@@ -134,62 +165,45 @@ const NovaOcorrencia = () => {
 
   return (
     <div className="nova-ocorrencia-container">
-      <div className="nova-ocorrencia-header">
-        <h1>Nova ocorrência</h1>
-      </div>
+      <h1>Nova Ocorrência</h1>
 
       <form onSubmit={handleSubmit} className="nova-ocorrencia-form">
-        {/* Primeira linha - 2 campos */}
+        {/* Natureza + Responsável */}
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="natureza">Natureza da ocorrência</label>
-            <select
-              id="natureza"
-              name="natureza"
-              value={formData.natureza}
-              onChange={handleChange}
-              required
-            >
-              <option value="">Selecione a natureza</option>
-              <option value="urgente">Urgente</option>
-              <option value="rotina">Rotina</option>
-              <option value="preventiva">Preventiva</option>
+            <label>Natureza</label>
+            <select name="natureza" value={formData.natureza} onChange={handleChange} required>
+              <option value="">Selecione</option>
+              <option value="Urgente">Urgente</option>
+              <option value="Rotina">Rotina</option>
+              <option value="Preventiva">Preventiva</option>
             </select>
           </div>
 
           <div className="form-group">
-            <label htmlFor="responsavel">Responsável</label>
+            <label>Responsável</label>
             <input
               type="text"
-              id="responsavel"
               name="responsavel"
               value={formData.responsavel}
               onChange={handleChange}
-              placeholder="Digite o nome do responsável"
+              placeholder="Nome do responsável"
               required
             />
           </div>
         </div>
 
-        {/* Segunda linha - 2 campos */}
+        {/* Data + Descrição */}
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="data">Data</label>
-            <input
-              type="date"
-              id="data"
-              name="data"
-              value={formData.data}
-              onChange={handleChange}
-              required
-            />
+            <label>Data</label>
+            <input type="date" name="data" value={formData.data} onChange={handleChange} required />
           </div>
 
           <div className="form-group">
-            <label htmlFor="descricao">Descrição</label>
+            <label>Descrição</label>
             <input
               type="text"
-              id="descricao"
               name="descricao"
               value={formData.descricao}
               onChange={handleChange}
@@ -199,154 +213,89 @@ const NovaOcorrencia = () => {
           </div>
         </div>
 
-        {/* Terceira linha - 2 campos */}
+        {/* Localização + Prioridade */}
         <div className="form-row">
           <div className="form-group">
-            <label htmlFor="localizacao">Localização</label>
+            <label>Localização</label>
             <div className="location-input-container">
               <input
                 type="text"
-                id="localizacao"
                 name="localizacao"
                 value={formData.localizacao}
                 onChange={handleChange}
-                placeholder="Digite a localização"
+                placeholder="Digite ou use o GPS"
                 required
               />
-              <button 
-                type="button" 
-                className="location-btn"
-                onClick={getCurrentLocation}
-                title="Usar localização atual"
-              >
-                <i className="bi bi-geo-alt"></i>
-              </button>
-              <button 
-                type="button" 
-                className="map-btn"
-                onClick={openMapForLocation}
-                title="Abrir no mapa"
-              >
-                <i className="bi bi-map"></i>
+              <button type="button" onClick={getCurrentLocation} title="Usar localização atual">
+                📍
               </button>
             </div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="prioridade">Prioridade</label>
-            <select
-              id="prioridade"
-              name="prioridade"
-              value={formData.prioridade}
-              onChange={handleChange}
-            >
-              <option value="baixa">Baixa</option>
-              <option value="media">Média</option>
-              <option value="alta">Alta</option>
-              <option value="urgente">Urgente</option>
+            <label>Prioridade</label>
+            <select name="prioridade" value={formData.prioridade} onChange={handleChange}>
+              <option value="Baixa">Baixa</option>
+              <option value="Média">Média</option>
+              <option value="Alta">Alta</option>
+              <option value="Crítica">Crítica</option>
             </select>
           </div>
         </div>
 
-        <div className="separator"></div>
+        {/* Status */}
+        <div className="form-group">
+          <label>Status</label>
+          <select name="status" value={formData.status} onChange={handleChange}>
+            <option value="Aberta">Aberta</option>
+            <option value="Em_Andamento">Em Andamento</option>
+            <option value="Pendente">Pendente</option>
+            <option value="Resolvida">Resolvida</option>
+          </select>
+        </div>
 
+        {/* Upload de Arquivos */}
         <div className="anexos-section">
           <h2>Anexos</h2>
-          
-          <div className="anexos-upload">
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              multiple
-              accept=".pdf,.jpg,.jpeg,.png"
-              style={{ display: 'none' }}
-            />
-            <button 
-              type="button" 
-              className="upload-btn"
-              onClick={() => fileInputRef.current.click()}
-            >
-              <span className="upload-icon"><i className="bi bi-paperclip"></i></span>
-              Anexar arquivos
-            </button>
-            <span className="upload-hint">Formatos suportados: PDF, JPG, PNG</span>
-            
-            {/* Lista de arquivos anexados */}
-            {arquivos.length > 0 && (
-              <div className="arquivos-list">
-                <h4>Arquivos anexados:</h4>
-                {arquivos.map((file, index) => (
-                  <div key={index} className="arquivo-item">
-                    <span>{file.name}</span>
-                    <button 
-                      type="button" 
-                      className="remove-file"
-                      onClick={() => removeFile(index)}
-                    >
-                      ✕
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            multiple
+            accept=".pdf,.jpg,.jpeg,.png"
+          />
+          {arquivos.length > 0 && (
+            <ul>
+              {arquivos.map((file, i) => (
+                <li key={i}>{file.name}</li>
+              ))}
+            </ul>
+          )}
+        </div>
 
-          {/* Quarta linha - 2 campos */}
-          <div className="form-row">
-            <div className="form-group">
-              <label htmlFor="status">Status</label>
-              <select
-                id="status"
-                name="status"
-                value={formData.status}
-                onChange={handleChange}
-              >
-                <option value="aberta">Aberta</option>
-                <option value="em_andamento">Em Andamento</option>
-                <option value="pendente">Pendente</option>
-                <option value="resolvida">Resolvida</option>
-              </select>
-            </div>
-
-            <div className="form-group">
-              <label>Assinatura digital</label>
-              <div className="signature-container">
-                <canvas
-                  ref={canvasRef}
-                  width={300}
-                  height={100}
-                  className="signature-canvas"
-                  onMouseDown={startDrawing}
-                  onMouseMove={draw}
-                  onMouseUp={stopDrawing}
-                  onMouseLeave={stopDrawing}
-                />
-                
-              </div>
-              <button 
-                  type="button" 
-                  className="clear-signature"
-                  onClick={clearSignature}
-                >
-                  Limpar
-                </button>
-            </div>
-          </div>
-
-          <div className="protocolo-info">
-            <span>Número de protocolo: </span>
-            <strong>#{(Math.random() * 10000).toFixed(0).padStart(4, '0')}</strong>
+        {/* Assinatura */}
+        <div className="assinatura-section">
+          <h2>Assinatura Digital</h2>
+          <canvas
+            ref={canvasRef}
+            width={400}
+            height={150}
+            onMouseDown={startDrawing}
+            onMouseMove={draw}
+            onMouseUp={stopDrawing}
+            style={{ border: '1px solid #ccc', backgroundColor: '#fff' }}
+          />
+          <div className="assinatura-actions">
+            <button type="button" onClick={clearSignature}>Limpar</button>
           </div>
         </div>
 
+        {/* Botões */}
         <div className="form-actions">
-          <button type="button" className="cancel-btn" onClick={handleCancel}>
-            Cancelar
+          <button type="submit" disabled={loading}>
+            {loading ? 'Enviando...' : 'Salvar Ocorrência'}
           </button>
-          <button type="submit" className="submit-btn">
-            Salvar
-          </button>
+          <button type="button" onClick={handleCancel}>Cancelar</button>
         </div>
       </form>
     </div>
