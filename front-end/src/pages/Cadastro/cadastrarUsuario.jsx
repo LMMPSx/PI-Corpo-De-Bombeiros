@@ -44,23 +44,28 @@ const CadastrarUsuario = () => {
         }
     };
 
-    const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // ✅ PRIMEIRO: Garantir que o perfil foi selecionado
+    if (!formData.perfil) {
+        alert("Por favor, selecione um perfil!");
+        return; // Para aqui se não tiver perfil
+    }
+    
+    // ✅ SÓ DEPOIS: Ativar loading
     setLoading(true);
 
     try {
         const { userPhotoFile, ...restOfData } = formData;
-
-        // Usa a mesma lógica do editar
         await createUsuario(restOfData, userPhotoFile);
-
         alert("Usuário cadastrado com sucesso!");
         navigate('/usuarios');
     } catch (error) {
         console.error("Erro ao cadastrar:", error);
-        alert("Erro ao cadastrar usuário. Verifique o console.");
+        alert("Erro ao cadastrar usuário.");
     } finally {
-        setLoading(false);
+        setLoading(false); // Volta ao normal
     }
 };
 
