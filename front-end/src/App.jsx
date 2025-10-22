@@ -17,7 +17,7 @@ import Header from "./components/Header/Header";
 import Loading from "./components/Loading/Loading";
 
 // 🔥 Contexto Global (inclui o de usuários)
-import { ConfigProvider } from "./contexts/ConfigContext";
+import { ConfigProvider } from "./Contexts/ConfigContext";
 
 // Páginas de usuários
 import CadastrarUsuario from "./pages/Cadastro/cadastrarUsuario";

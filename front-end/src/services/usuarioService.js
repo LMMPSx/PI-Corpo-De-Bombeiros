@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const USUARIO_BASE_URL = "/usuario";
 const USUARIOS_ALL_URL = `${USUARIO_BASE_URL}/all`; 
-const FULL_API_BASE_URL = 'http://localhost:8080'; // URL completa do Backend
+const FULL_API_BASE_URL = 'https://pi-corpo-de-bombeiros-production.up.railway.app'; // URL completa do Backend
 
 /**
  * Mapeia um objeto UsuarioResponse (Java DTO) para o formato esperado pelo React.

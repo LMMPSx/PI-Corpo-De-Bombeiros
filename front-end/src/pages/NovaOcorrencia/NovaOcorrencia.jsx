@@ -10,8 +10,8 @@ const NovaOcorrencia = () => {
     data: '',
     descricao: '',
     localizacao: '',
-    prioridade: 'media',
-    status: 'aberta'
+    prioridade: '',
+    status: ''
   });
 
   const [assinatura, setAssinatura] = useState('');
@@ -133,8 +133,8 @@ const NovaOcorrencia = () => {
         data: '',
         descricao: '',
         localizacao: '',
-        prioridade: 'media',
-        status: 'aberta'
+        prioridade: '',
+        status: ''
       });
       setArquivos([]);
       clearSignature();
@@ -155,8 +155,8 @@ const NovaOcorrencia = () => {
         data: '',
         descricao: '',
         localizacao: '',
-        prioridade: 'media',
-        status: 'aberta'
+        prioridade: '',
+        status: ''
       });
       setArquivos([]);
       clearSignature();
