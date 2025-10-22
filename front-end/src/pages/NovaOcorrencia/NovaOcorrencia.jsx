@@ -10,8 +10,8 @@ const NovaOcorrencia = () => {
     data: '',
     descricao: '',
     localizacao: '',
-    prioridade: '',
-    status: ''
+    prioridade: 'media',
+    status: 'aberta'
   });
 
   const [assinatura, setAssinatura] = useState('');
