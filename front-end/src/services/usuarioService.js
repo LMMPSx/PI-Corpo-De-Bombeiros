@@ -96,9 +96,16 @@ export const createUsuario = async (userData, userPhoto) => {
     }
 
     // Pega o token de autenticação (AJUSTE CONFORME SEU MÉTODO DE ARMAZENAMENTO)
-    const token = localStorage.getItem('jwtToken'); 
-    const authorizationHeader = token ? `Bearer ${token}` : '';
+    const token = localStorage.getItem('jwtToken');
+    console.log('Token Encontrado:', token ? 'Sim' : 'Não'); // Adicione este log!
+    if (!token) {
+        // Adicione aqui uma lógica para redirecionar para o login ou lançar um erro explícito de autenticação.
+        throw new Error("Token de autenticação não encontrado. Usuário não logado.");
+    }
+    const authorizationHeader = `Bearer ${token}`;
     const finalUrl = `${FULL_API_BASE_URL}${USUARIO_BASE_URL}/create`;
+
+    
 
     try {
         const response = await axios.post( 
