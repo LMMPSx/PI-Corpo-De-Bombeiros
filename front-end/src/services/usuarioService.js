@@ -83,7 +83,7 @@ export const createUsuario = async (userData, userPhoto) => {
         nomeUsuario: userData.nome,
         cpf: userData.cpf,
         email: userData.email,
-        tipoUsuario: userData.perfil, // Mapeado de volta para 'perfil' do React
+        tipoUsuario: userData.tipoUsuario,
         senha: userData.senha,
     });
     
