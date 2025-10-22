@@ -1,6 +1,6 @@
 // components/Loading/Loading.jsx
 import React from 'react'
-import { useConfig } from '../../contexts/ConfigContext'
+import { useConfig } from '../../Contexts/ConfigContext';
 import './Loading.css'
 
 function Loading() {
