@@ -208,7 +208,7 @@ const Ocorrencias = () => {
                                 {filteredOcorrencias.map((item) => {
                                     const rowData = formatOcorrenciaRow(item);
                                     return (
-                                        // 🔴 CORREÇÃO DE HIDRATAÇÃO
+                                        //  CORREÇÃO DE HIDRATAÇÃO
                                         <tr key={rowData.id}>
                                             <td>{rowData.prioridade}</td><td>{rowData.tipo}</td><td>{rowData.periodo}</td><td>{rowData.regiao}</td><td>{rowData.status}</td>
                                         </tr>
