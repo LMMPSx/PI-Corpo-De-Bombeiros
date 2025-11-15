@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = "https://pi-corpo-de-bombeiros-production.up.railway.app"
+const API_BASE_URL = "https://pi-corpo-de-bombeiros-production-c7b5.up.railway.app"
 
 const api = axios.create({
     baseURL: API_BASE_URL,
