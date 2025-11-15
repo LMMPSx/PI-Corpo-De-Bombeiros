@@ -2,7 +2,7 @@ import axios from 'axios';
 import { apiAuthenticated } from './AuthService'; // Certifique-se de que este import está correto
 
 const OCORRENCIA_BASE_URL = '/ocorrencias';
-const FULL_API_BASE_URL = 'https://pi-corpo-de-bombeiros-production.up.railway.app'; // Ajuste conforme seu backend
+const FULL_API_BASE_URL = 'https://pi-corpo-de-bombeiros-production-c7b5.up.railway.app'; // Ajuste conforme seu backend
 
 /**
  * Mapeia o OcorrenciaResponse do Java para o formato esperado no frontend
