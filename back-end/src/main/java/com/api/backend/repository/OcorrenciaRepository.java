@@ -9,8 +9,6 @@ import java.util.List;
 
 @Repository
 public interface OcorrenciaRepository extends JpaRepository<OcorrenciaModel, Integer> {
-    List<OcorrenciaModel> findByDataOcorrenciaBetween(LocalDate inicio, LocalDate fim);
-
     List<OcorrenciaModel> findByStatusOcorrencia(String Status);
 
     List<OcorrenciaModel> findByPrioridadeOcorrencia(String Prioridade);
