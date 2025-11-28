@@ -1,0 +1,8 @@
+Flask
+pandas
+mysql-connector-python
+flask-cors
+python-dotenv
+dash
+plotly
+statsmodels

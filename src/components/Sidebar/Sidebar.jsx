@@ -6,6 +6,7 @@ const Sidebar = ({ isOpen, onClose }) => {
 
   const menuItems = [
     { path: '/dashboard', label: 'Início', icon: 'house' },
+    { path: '/dashboard-python', label: 'Dashboard Analítico', icon: 'graph-up' },
     { path: '/ocorrencias', label: 'Ocorrências', icon: 'exclamation-triangle' },
     { path: '/nova-ocorrencia', label: 'Nova Ocorrência', icon: 'plus-circle' },
     { path: '/relatorios', label: 'Gerar Relatório (PDF)', icon: 'file-pdf' },

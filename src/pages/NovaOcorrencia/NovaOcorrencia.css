@@ -4,27 +4,103 @@
   padding: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   min-height: 100vh;
-  width: 60rem;
 }
 
-.nova-ocorrencia-header {
+.nova-ocorrencia-container h1 {
+  color: #333;
+  text-align: center;
   margin-bottom: 30px;
 }
 
-.nova-ocorrencia-header h1 {
-  color: #333;
-  font-size: 24px;
-  font-weight: 600;
-  margin: 0;
+/* Indicador de passos */
+.steps-indicator {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+  gap: 40px;
 }
 
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  position: relative;
+}
+
+.step::after {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 50px;
+  right: -100px;
+  height: 2px;
+  background-color: #ddd;
+  z-index: 1;
+}
+
+.step:last-child::after {
+  display: none;
+}
+
+.step.active {
+  color: #4a90e2;
+}
+
+.step span {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  position: relative;
+  z-index: 2;
+}
+
+.step.active span {
+  background-color: #4a90e2;
+  color: white;
+}
+
+/* Formulário */
 .nova-ocorrencia-form {
   background-color: #092642;
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 30px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
 
+.form-section {
+  transition: all 0.3s ease;
+}
+
+.form-section.hidden {
+  display: none;
+}
+
+.form-section.active {
+  display: block;
+}
+
+.form-section h2 {
+  color: #ffffff;
+  margin-bottom: 25px;
+  font-size: 20px;
+  border-bottom: 2px solid #4a90e2;
+  padding-bottom: 10px;
+}
+
+.form-section h3 {
+  color: #ffffff;
+  margin: 25px 0 15px 0;
+  font-size: 16px;
+}
+
+/* Layout do formulário */
 .form-row {
   display: flex;
   gap: 20px;
@@ -36,7 +112,11 @@
 }
 
 .form-group {
-  margin-bottom: 0;
+  margin-bottom: 20px;
+}
+
+.form-group.full-width {
+  width: 100%;
 }
 
 label {
@@ -48,11 +128,12 @@ label {
 
 input, select, textarea {
   width: 100%;
-  padding: 15px 12px;
+  padding: 12px;
   border: 1px solid #ddd;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 14px;
   box-sizing: border-box;
+  background-color: white;
 }
 
 input:focus, select:focus, textarea:focus {
@@ -61,222 +142,156 @@ input:focus, select:focus, textarea:focus {
   box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
 }
 
-/* Localização com botões */
+/* Localização */
 .location-input-container {
-  position: relative;
   display: flex;
+  gap: 10px;
 }
 
 .location-input-container input {
-  padding-right: 80px;
+  flex: 1;
 }
 
-.location-btn, .map-btn {
-  position: absolute;
-  right: 40px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: none;
+.location-input-container button {
+  padding: 12px 16px;
+  background-color: #28a745;
+  color: white;
   border: none;
-  font-size: 16px;
+  border-radius: 8px;
   cursor: pointer;
-  padding: 5px;
+  white-space: nowrap;
 }
 
-.map-btn {
-  right: 10px;
+.location-input-container button:hover {
+  background-color: #218838;
 }
 
-.location-btn:hover, .map-btn:hover {
-  background-color: #f0f0f0;
-  border-radius: 4px;
-}
-
+/* Separador */
 .separator {
-  height: 1px;
-  background-color: #ffffff;
-  margin: 30px 0;
-}
-
-.anexos-section h2 {
-  margin-top: 0;
-  margin-bottom: 20px;
-  font-size: 18px;
+  text-align: center;
+  margin: 25px 0;
+  position: relative;
   color: #ffffff;
 }
 
-.anexos-upload {
-  margin-bottom: 30px;
+.separator::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #ddd;
 }
 
-.upload-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 16px;
-  background-color: #f8f9fa;
-  border: 1px dashed #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #555;
-  transition: all 0.2s;
+.separator span {
+  background-color: #092642;
+  padding: 0 15px;
+  position: relative;
+  z-index: 1;
 }
 
-.upload-btn:hover {
-  background-color: #e9ecef;
-  border-color: #999;
+/* Anexos */
+.anexos-section {
+  margin: 25px 0;
 }
 
-.upload-hint {
-  display: block;
-  margin-top: 8px;
-  font-size: 12px;
-  color: #777;
+.anexos-section h3 {
+  margin-bottom: 15px;
 }
 
-/* Lista de arquivos */
 .arquivos-list {
-  margin-top: 15px;
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
 }
 
-.arquivos-list h4 {
-  margin-bottom: 10px;
-  font-size: 14px;
-  color: #333;
-}
-
-.arquivo-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 8px 12px;
+.arquivos-list li {
   background-color: #f8f9fa;
-  border-radius: 4px;
+  padding: 8px 12px;
   margin-bottom: 5px;
-  font-size: 13px;
-}
-
-.remove-file {
-  background: none;
-  border: none;
-  color: #dc3545;
-  cursor: pointer;
-  font-size: 14px;
-  padding: 2px 6px;
-  border-radius: 3px;
-}
-
-.remove-file:hover {
-  background-color: #dc3545;
-  color: white;
-}
-
-/* Assinatura digital */
-.signature-container {
-  border: 1px solid #ddd;
   border-radius: 4px;
-  padding: 10px;
+  border-left: 3px solid #4a90e2;
+}
+
+/* Assinatura */
+.assinatura-section {
+  margin: 25px 0;
 }
 
 .signature-canvas {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: crosshair;
+  border: 1px solid #ddd;
+  border-radius: 8px;
   background-color: white;
-  width: 100%;
+  cursor: crosshair;
+  margin-bottom: 10px;
 }
 
-.clear-signature {
-  margin-top: 8px;
-  padding: 5px 10px;
+.assinatura-actions {
+  text-align: right;
+}
+
+.assinatura-actions button {
+  padding: 8px 16px;
   background-color: #6c757d;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 12px;
 }
 
-.clear-signature:hover {
+.assinatura-actions button:hover {
   background-color: #5a6268;
 }
 
-.protocolo-info {
-  margin-top: 20px;
-  padding: 12px;
-  background-color: #f8f9fa;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.protocolo-info strong {
-  color: #4a90e2;
-}
-
+/* Botões */
 .form-actions {
   display: flex;
-  justify-content: flex-end;
-  gap: 15px;
+  justify-content: space-between;
   margin-top: 30px;
+  gap: 15px;
 }
 
-.cancel-btn {
-  padding: 10px 20px;
-  background-color: #f8f9fa;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  color: #333;
-  transition: all 0.2s;
-}
-
-.cancel-btn:hover {
-  background-color: #e9ecef;
-}
-
-.submit-btn {
-  padding: 10px 20px;
-  background-color: #4a90e2;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
+.cancel-btn, .prev-btn {
+  padding: 12px 24px;
+  background-color: #6c757d;
   color: white;
-  font-weight: 500;
-  transition: background-color 0.2s;
-}
-.coordenadas {
-  background-color: #f8f9fa;
-  padding: 8px 12px;
-  border-radius: 4px;
-  font-size: 12px;
-  color: #666;
-  border: 1px solid #ddd;
-  margin: 5px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
-.coordenadas div {
-  margin: 2px 0;
+.cancel-btn:hover, .prev-btn:hover {
+  background-color: #5a6268;
 }
-.submit-btn:hover {
+
+.next-btn, .submit-btn {
+  padding: 12px 24px;
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.next-btn:hover, .submit-btn:hover {
   background-color: #3a7bc8;
 }
 
+.submit-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Responsivo */
 @media (max-width: 768px) {
   .nova-ocorrencia-container {
     padding: 10px;
   }
   
- canvas {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  cursor: crosshair;
-  background-color: white;
-  width: 100%;
-}
-
   .nova-ocorrencia-form {
     padding: 20px;
   }
@@ -286,7 +301,23 @@ input:focus, select:focus, textarea:focus {
     gap: 15px;
   }
   
-  .location-input-container input {
-    padding-right: 70px;
+  .steps-indicator {
+    gap: 20px;
+  }
+  
+  .step::after {
+    display: none;
+  }
+  
+  .location-input-container {
+    flex-direction: column;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .signature-canvas {
+    width: 100% !important;
   }
 }

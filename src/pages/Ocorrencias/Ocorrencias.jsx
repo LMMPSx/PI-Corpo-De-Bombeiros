@@ -191,26 +191,42 @@ const Ocorrencias = () => {
                 </div>
                 <div className="tabela-container">
                     
-                    {loading && <p className="status-message">Carregando ocorrências...</p>}
+                    {loading && <p className="tabela-carregando">Carregando ocorrências...</p>}
                     {error && <p className="error-message">Erro: {error}</p>}
                     
                     {!loading && !error && filteredOcorrencias.length === 0 && (
-                         <p className="status-message">Nenhuma ocorrência encontrada com os filtros atuais.</p>
+                         <p className="tabela-vazia">Nenhuma ocorrência encontrada com os filtros atuais.</p>
                     )}
 
                     {!loading && filteredOcorrencias.length > 0 && (
-                        <table>
+                        <table className="tabela-mobile">
                             <thead>
-                                {/* 🔴 CORREÇÃO DE HIDRATAÇÃO */}
-                                <tr><th>Prioridade</th><th>Tipo</th><th>Período</th><th>Localização</th><th>Status</th></tr>
+                                <tr>
+                                    <th>Prioridade</th>
+                                    <th>Tipo</th>
+                                    <th>Período</th>
+                                    <th>Localização</th>
+                                    <th>Status</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 {filteredOcorrencias.map((item) => {
                                     const rowData = formatOcorrenciaRow(item);
                                     return (
-                                        //  CORREÇÃO DE HIDRATAÇÃO
                                         <tr key={rowData.id}>
-                                            <td>{rowData.prioridade}</td><td>{rowData.tipo}</td><td>{rowData.periodo}</td><td>{rowData.regiao}</td><td>{rowData.status}</td>
+                                            <td>
+                                                <span className={`badge-prioridade ${rowData.prioridade.toLowerCase()}`}>
+                                                    {rowData.prioridade}
+                                                </span>
+                                            </td>
+                                            <td className="tipo-cell">{rowData.tipo}</td>
+                                            <td className="data-cell">{rowData.periodo}</td>
+                                            <td className="localizacao-cell">{rowData.regiao}</td>
+                                            <td>
+                                                <span className={`badge-status ${rowData.status.toLowerCase().replace('_', '')}`}>
+                                                    {rowData.status.replace('_', ' ')}
+                                                </span>
+                                            </td>
                                         </tr>
                                     );
                                 })}
