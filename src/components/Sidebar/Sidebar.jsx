@@ -40,7 +40,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
           <div className="logo-container">
-            <img src="/src/assets/logo.png" className="iconHeader" alt="Logo CBMPE" />
+            <img src="../../assets/logo.png" className="iconHeader" alt="Logo CBMPE" />
           </div>
           <h3>CBMPE</h3>
         </div>
