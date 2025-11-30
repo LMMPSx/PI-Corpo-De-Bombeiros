@@ -1,34 +1,42 @@
 import axios from 'axios';
-import { apiAuthenticated } from './AuthService'; // Certifique-se de que este import está correto
+import { apiAuthenticated } from './AuthService';
 
 const OCORRENCIA_BASE_URL = '/ocorrencias';
-const FULL_API_BASE_URL = 'https://pi-corpo-de-bombeiros-production-c7b5.up.railway.app'; // Ajuste conforme seu backend
+const FULL_API_BASE_URL = 'https://pi-corpo-de-bombeiros-production-c7b5.up.railway.app';
 
 /**
- * Mapeia o OcorrenciaResponse do Java para o formato esperado no frontend
+ * Mapeia o objeto vindo do Java (Backend) para o formato usado no React.
+ * Baseado nas tabelas: 'ocorrencia' e 'endereco'.
  */
 const mapJavaToReact = (javaOcorrencia) => {
     if (!javaOcorrencia) return null;
 
+    // Tenta obter dados de endereço do objeto aninhado 'endereco' (padrão JPA)
+    // ou verifica se vieram na raiz (caso seja um DTO personalizado)
+    const lat = javaOcorrencia.endereco?.latitude || javaOcorrencia.latitude;
+    const lng = javaOcorrencia.endereco?.longitude || javaOcorrencia.longitude;
+    const endCompleto = javaOcorrencia.endereco 
+        ? `${javaOcorrencia.endereco.rua}, ${javaOcorrencia.endereco.numero} - ${javaOcorrencia.endereco.bairro}, ${javaOcorrencia.endereco.cidade}`
+        : javaOcorrencia.localizacao;
+
     return {
-        id: javaOcorrencia.idOcorrencia,
-        natureza: javaOcorrencia.naturezaOcorrencia,
-        solicitante: javaOcorrencia.nomeSolicitante,
-        data: javaOcorrencia.dataOcorrencia,
-        descricao: javaOcorrencia.descricao,
-        localizacao: javaOcorrencia.localizacao,
-        latitude: javaOcorrencia.latitude,
-        longitude: javaOcorrencia.longitude,
-        prioridade: javaOcorrencia.prioridadeOcorrencia,
-        anexo: javaOcorrencia.anexoOcorrencia,
-        status: javaOcorrencia.statusOcorrencia,
-        assinatura: javaOcorrencia.assinaturaOcorrencia
+        id: javaOcorrencia.idOcorrencia,                // PK: ID_Ocorrencia
+        natureza: javaOcorrencia.naturezaOcorrencia,    // Enum: Urgente, Rotina, Preventiva
+        solicitante: javaOcorrencia.nomeSolicitante,    // Coluna: Nome_Solicitante
+        data: javaOcorrencia.dataOcorrencia,            // Coluna: Data_Ocorrencia
+        descricao: javaOcorrencia.descricao,            // Coluna: Descricao
+        prioridade: javaOcorrencia.prioridadeOcorrencia,// Enum: Baixa, Média, Alta, Crítica
+        status: javaOcorrencia.statusOcorrencia,        // Enum: Aberta, Em_Andamento, Pendente, Resolvida
+        anexo: javaOcorrencia.anexoOcorrencia,          // Coluna: Anexo_Ocorrencia
+        assinatura: javaOcorrencia.assinaturaOcorrencia,// Coluna: Assinatura_Ocorrencia
+        // Dados de Endereço (Tabela Endereco)
+        localizacao: endCompleto,
+        latitude: lat,
+        longitude: lng,
+        enderecoObj: javaOcorrencia.endereco // Mantém o objeto original caso precise de CEP/Cidade isolados
     };
 };
 
-/**
- * Busca todas as ocorrências
- */
 export const fetchOcorrencias = async () => {
     try {
         const response = await apiAuthenticated.get(`${OCORRENCIA_BASE_URL}/all`);
@@ -39,9 +47,6 @@ export const fetchOcorrencias = async () => {
     }
 };
 
-/**
- * Busca uma ocorrência por ID
- */
 export const fetchOcorrenciaById = async (id) => {
     try {
         const response = await apiAuthenticated.get(`${OCORRENCIA_BASE_URL}/id/${id}`);
@@ -53,58 +58,50 @@ export const fetchOcorrenciaById = async (id) => {
 };
 
 /**
- * Cria uma nova ocorrência (JSON + 1 anexo + assinatura)
- * * @param {Object} ocorrenciaData Dados da ocorrência (natureza, responsavel, etc.)
- * @param {File[]} anexoFiles Array de arquivos (usaremos o primeiro como o 'anexo')
- * @param {string} assinaturaDataUrl Data URL da assinatura digital (base64)
+ * Cria uma nova ocorrência.
+ * Nota: O Backend deve tratar o recebimento de 'latitude', 'longitude' e dados de endereço
+ * para popular a tabela 'endereco' e vincular o ID_Endereco na 'ocorrencia'.
  */
 export const createOcorrencia = async (ocorrenciaData, anexoFiles = [], assinaturaDataUrl = '') => {
     const formPayload = new FormData();
 
-    // 1️⃣ Adiciona os dados da ocorrência (JSON) como Blob
+    // 1. JSON Payload
+    // REMOVIDO: campo 'titulo' (não existe no banco de dados)
     const ocorrenciaJson = JSON.stringify({
         naturezaOcorrencia: ocorrenciaData.natureza,
-        nomeSolicitante: ocorrenciaData.responsavel, // Mapeia 'responsavel' do React para 'nomeSolicitante' do Java
-        dataOcorrencia: ocorrenciaData.data, // Adicionado para enviar a data do formulário
+        nomeSolicitante: ocorrenciaData.responsavel, // React usa 'responsavel', DB usa 'Nome_Solicitante'
+        dataOcorrencia: ocorrenciaData.data,
         descricao: ocorrenciaData.descricao,
-        localizacao: ocorrenciaData.localizacao,
         prioridadeOcorrencia: ocorrenciaData.prioridade,
         statusOcorrencia: ocorrenciaData.status,
+        // Campos que o backend deve usar para criar o registro na tabela 'endereco'
+        localizacao: ocorrenciaData.localizacao, 
         latitude: ocorrenciaData.latitude,
-        longitude: ocorrenciaData.longitude,
-        titulo: ocorrenciaData.titulo || "Ocorrência sem título"// Adiciona o título
+        longitude: ocorrenciaData.longitude
     });
+    
     const ocorrenciaBlob = new Blob([ocorrenciaJson], { type: 'application/json' });
-    // O nome 'ocorrencia' deve coincidir com o @RequestPart("ocorrencia") do Controller
     formPayload.append('ocorrencia', ocorrenciaBlob);
 
-    // 2️⃣ Adiciona o arquivo de Anexo (Backend espera 'anexo' singular)
+    // 2. Anexo
     const anexoFile = anexoFiles[0];
     if (anexoFile instanceof File) {
-        // O nome 'anexo' deve coincidir com o @RequestPart(value = "anexo") do Controller
         formPayload.append('anexo', anexoFile, anexoFile.name);
     }
 
-    // 3️⃣ Adiciona a assinatura digital (convertida de base64 para File)
+    // 3. Assinatura
     if (assinaturaDataUrl) {
         const response = await fetch(assinaturaDataUrl);
         const blob = await response.blob();
-        // Cria um File com nome 'assinatura.png'
         const assinaturaFile = new File([blob], 'assinatura.png', { type: 'image/png' });
-
-        // O nome 'assinatura' deve coincidir com o @RequestPart(value = "assinatura") do Controller
         formPayload.append('assinatura', assinaturaFile, assinaturaFile.name);
     }
 
     try {
-        // Usa a instância 'apiAuthenticated' que já deve lidar com o Token
         const response = await apiAuthenticated.post(
             `${OCORRENCIA_BASE_URL}/create`,
             formPayload,
-            {
-                // 'Content-Type': undefined deixa o navegador setar o 'multipart/form-data' e o 'boundary'
-                headers: { 'Content-Type': undefined } 
-            }
+            { headers: { 'Content-Type': undefined } }
         );
         return mapJavaToReact(response.data);
     } catch (error) {
@@ -113,13 +110,9 @@ export const createOcorrencia = async (ocorrenciaData, anexoFiles = [], assinatu
     }
 };
 
-/**
- * Atualiza uma ocorrência existente (JSON + arquivos)
- */
 export const updateOcorrencia = async (id, ocorrenciaData, anexoFile, assinaturaFile) => {
     const formPayload = new FormData();
 
-    // 1️⃣ Adiciona os dados da ocorrência (JSON) como Blob
     const ocorrenciaJson = JSON.stringify({
         naturezaOcorrencia: ocorrenciaData.natureza,
         nomeSolicitante: ocorrenciaData.solicitante,
@@ -129,38 +122,26 @@ export const updateOcorrencia = async (id, ocorrenciaData, anexoFile, assinatura
         longitude: ocorrenciaData.longitude,
         prioridadeOcorrencia: ocorrenciaData.prioridade,
         statusOcorrencia: ocorrenciaData.status,
-        // Mantém os arquivos existentes se não houver substituição
+        // Mantém string se não houver arquivo novo
         ...(typeof ocorrenciaData.anexo === 'string' && !anexoFile && { anexoOcorrencia: ocorrenciaData.anexo }),
         ...(typeof ocorrenciaData.assinatura === 'string' && !assinaturaFile && { assinaturaOcorrencia: ocorrenciaData.assinatura })
     });
 
     formPayload.append('ocorrencia', new Blob([ocorrenciaJson], { type: 'application/json' }));
 
-    // 2️⃣ Adiciona o novo anexo (se existir)
     if (anexoFile instanceof File) {
-        formPayload.append('anexo', anexoFile, anexoFile.name); // Nome 'anexo'
+        formPayload.append('anexo', anexoFile, anexoFile.name);
     }
-    // 3️⃣ Adiciona a nova assinatura (se existir)
     if (assinaturaFile instanceof File) {
-        formPayload.append('assinatura', assinaturaFile, assinaturaFile.name); // Nome 'assinatura'
+        formPayload.append('assinatura', assinaturaFile, assinaturaFile.name);
     }
 
-    // Nota: Aqui você está usando axios.put diretamente. Se você tem apiAuthenticated,
-    // o ideal seria usar apiAuthenticated.put. Mantenho a sua lógica original para 
-    // evitar introduzir bugs de autenticação, mas a duplicação de lógica é um risco.
-    const token = localStorage.getItem('jwtToken');
-    const authorizationHeader = token ? `Bearer ${token}` : '';
-
+    // Correção: Usando apiAuthenticated para garantir o token correto no PUT
     try {
-        const response = await axios.put(
-            `${FULL_API_BASE_URL}${OCORRENCIA_BASE_URL}/update/${id}`,
+        const response = await apiAuthenticated.put(
+            `${OCORRENCIA_BASE_URL}/update/${id}`,
             formPayload,
-            {
-                headers: {
-                    'Content-Type': undefined, // Permite que o navegador defina o boundary
-                    'Authorization': authorizationHeader
-                }
-            }
+            { headers: { 'Content-Type': undefined } }
         );
         return mapJavaToReact(response.data);
     } catch (error) {
@@ -169,9 +150,6 @@ export const updateOcorrencia = async (id, ocorrenciaData, anexoFile, assinatura
     }
 };
 
-/**
- * Deleta uma ocorrência pelo ID
- */
 export const deleteOcorrencia = async (id) => {
     try {
         await apiAuthenticated.delete(`${OCORRENCIA_BASE_URL}/delete/${id}`);
