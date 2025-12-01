@@ -65,36 +65,49 @@ export const fetchOcorrenciaById = async (id) => {
 export const createOcorrencia = async (ocorrenciaData, anexoFiles = [], assinaturaDataUrl = '') => {
     const formPayload = new FormData();
 
-    // 1. JSON Payload
-    // REMOVIDO: campo 'titulo' (não existe no banco de dados)
-    const ocorrenciaJson = JSON.stringify({
+    const enderecoRequest = {
+        cep: ocorrenciaData.endereco?.cep || "",
+        estado: ocorrenciaData.endereco?.estado || "",
+        cidade: ocorrenciaData.endereco?.cidade || "",
+        bairro: ocorrenciaData.endereco?.bairro || "",
+        rua: ocorrenciaData.endereco?.rua || "",
+        numero: ocorrenciaData.endereco?.numero || "",
+        complemento: ocorrenciaData.endereco?.complemento || "",
+        latitude: ocorrenciaData.latitude ? parseFloat(ocorrenciaData.latitude) : null,
+        longitude: ocorrenciaData.longitude ? parseFloat(ocorrenciaData.longitude) : null
+    };
+
+    const ocorrenciaRequest = {
         naturezaOcorrencia: ocorrenciaData.natureza,
-        nomeSolicitante: ocorrenciaData.responsavel, // React usa 'responsavel', DB usa 'Nome_Solicitante'
-        dataOcorrencia: ocorrenciaData.data,
+        nomeSolicitante: ocorrenciaData.responsavel,
         descricao: ocorrenciaData.descricao,
         prioridadeOcorrencia: ocorrenciaData.prioridade,
-        statusOcorrencia: ocorrenciaData.status,
-        // Campos que o backend deve usar para criar o registro na tabela 'endereco'
-        localizacao: ocorrenciaData.localizacao, 
-        latitude: ocorrenciaData.latitude,
-        longitude: ocorrenciaData.longitude
-    });
-    
-    const ocorrenciaBlob = new Blob([ocorrenciaJson], { type: 'application/json' });
+        statusOcorrencia: "Aberta", 
+        assinaturaOcorrencia: "assinatura_pendente",
+        anexoOcorrencia: "anexo_pendente",
+        endereco: enderecoRequest
+    };
+
+    const jsonString = JSON.stringify(ocorrenciaRequest);
+    const ocorrenciaBlob = new Blob([jsonString], { type: 'application/json' });
     formPayload.append('ocorrencia', ocorrenciaBlob);
 
-    // 2. Anexo
-    const anexoFile = anexoFiles[0];
-    if (anexoFile instanceof File) {
-        formPayload.append('anexo', anexoFile, anexoFile.name);
+    if (anexoFiles && anexoFiles.length > 0) {
+        const anexoFile = anexoFiles[0];
+        if (anexoFile instanceof File) {
+            formPayload.append('anexo', anexoFile, anexoFile.name);
+        }
     }
 
-    // 3. Assinatura
-    if (assinaturaDataUrl) {
-        const response = await fetch(assinaturaDataUrl);
-        const blob = await response.blob();
-        const assinaturaFile = new File([blob], 'assinatura.png', { type: 'image/png' });
-        formPayload.append('assinatura', assinaturaFile, assinaturaFile.name);
+    if (assinaturaDataUrl && assinaturaDataUrl.startsWith('data:image')) {
+        try {
+            const response = await fetch(assinaturaDataUrl);
+            const blob = await response.blob();
+            const assinaturaFile = new File([blob], 'assinatura.png', { type: 'image/png' });
+            formPayload.append('assinatura', assinaturaFile, 'assinatura.png');
+        } catch (err) {
+            console.error("Erro blob assinatura", err);
+        }
     }
 
     try {
@@ -103,9 +116,9 @@ export const createOcorrencia = async (ocorrenciaData, anexoFiles = [], assinatu
             formPayload,
             { headers: { 'Content-Type': undefined } }
         );
-        return mapJavaToReact(response.data);
+        return response.data;
     } catch (error) {
-        console.error("Erro ao criar ocorrência:", error.response?.data || error);
+        console.error("Erro create:", error);
         throw error;
     }
 };
