@@ -88,7 +88,7 @@ public class OcorrenciaService {
 
 
     public List<OcorrenciaResponse> findAll() {
-        return ocorrenciaRepository.findAll()
+        return ocorrenciaRepository.findAllWithEndereco() // <--- MUDANÇA CRUCIAL AQUI
                 .stream()
                 .map(this::toDTO)
                 .collect(Collectors.toList());
