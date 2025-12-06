@@ -7,38 +7,38 @@ import "./Usuario.css";
 
 function UsuarioCard({ user, onEditar, onExcluir }) {
   return (
-    <div className="user-card">
-      <div className="user-card-header">
-        <div className="avatar">
+    <div className="usuario-user-card">
+      <div className="usuario-user-card-header">
+        <div className="usuario-avatar">
           {user.foto ? (
-            <img src={user.foto} alt={user.nome} className="user-photo" />
+            <img src={user.foto} alt={user.nome} className="usuario-user-photo" />
           ) : (
-            <div className="no-photo">
+            <div className="usuario-no-photo">
               <FaUser />
             </div>
           )}
         </div>
-        <div className="user-badge">{user.perfil}</div>
+        <div className="usuario-user-badge">{user.perfil}</div>
       </div>
       
-      <div className="user-info">
-        <div className="info-item">
-          <FaUser className="info-icon" />
+      <div className="usuario-user-info">
+        <div className="usuario-info-item">
+          <FaUser className="usuario-info-icon" />
           <strong>{user.nome}</strong>
         </div>
-        <div className="info-item">
-          <FaEnvelope className="info-icon" />
+        <div className="usuario-info-item">
+          <FaEnvelope className="usuario-info-icon" />
           <span>{user.email}</span>
         </div>
-        <div className="info-item">
-          <FaIdCard className="info-icon" />
+        <div className="usuario-info-item">
+          <FaIdCard className="usuario-info-icon" />
           <span>{user.cpf}</span>
         </div>
       </div>
       
-      <div className="action-buttons">
+      <div className="usuario-action-buttons">
         <button
-          className="btn-action btn-edit"
+          className="usuario-btn-action usuario-btn-edit"
           onClick={() => onEditar(user.cpf)}
           aria-label={`Editar usuário ${user.nome}`}
         >
@@ -46,7 +46,7 @@ function UsuarioCard({ user, onEditar, onExcluir }) {
           Editar
         </button>
         <button
-          className="btn-action btn-delete"
+          className="usuario-btn-action usuario-btn-delete"
           onClick={() => onExcluir(user.cpf)}
           aria-label={`Excluir usuário ${user.nome}`}
         >
@@ -109,27 +109,27 @@ export default function GestaoUsuarios() {
     };
 
     return (
-        <div className="nova-ocorrencia-container">
-            <div className="nova-ocorrencia-header">
+        <div className="usuario-nova-ocorrencia-container">
+            <div className="usuario-nova-ocorrencia-header">
                 <h1>Gerenciar Usuários</h1>
-                <Link to="/usuarios/cadastrar" className="submit-btn">
+                <Link to="/usuarios/cadastrar" className="usuario-submit-btn">
                     <FaUserPlus />
                     Cadastrar Usuário
                 </Link>
             </div>
 
-            <div className="nova-ocorrencia-form">
+            <div className="usuario-nova-ocorrencia-form">
                 {loading ? (
-                    <div className="loading-state">
-                        <div className="loading-spinner"></div>
+                    <div className="usuario-loading-state">
+                        <div className="usuario-loading-spinner"></div>
                         <p>Carregando usuários...</p>
                     </div>
                 ) : error ? (
-                    <div className="error-state">
+                    <div className="usuario-error-state">
                         <p>Erro ao carregar usuários: {error.message}</p>
                     </div>
                 ) : usuarios.length > 0 ? (
-                    <div className="user-list-container">
+                    <div className="usuario-user-list-container">
                         {usuarios.map((user) => (
                             <UsuarioCard
                                 key={user.cpf}
@@ -140,10 +140,10 @@ export default function GestaoUsuarios() {
                         ))}
                     </div>
                 ) : (
-                    <div className="empty-state">
-                        <FaUser className="empty-icon" />
+                    <div className="usuario-empty-state">
+                        <FaUser className="usuario-empty-icon" />
                         <p>Nenhum usuário cadastrado ainda.</p>
-                        <Link to="/usuarios/cadastrar" className="submit-btn">
+                        <Link to="/usuarios/cadastrar" className="usuario-submit-btn">
                             <FaUserPlus />
                             Cadastrar Primeiro Usuário
                         </Link>

@@ -3,7 +3,7 @@
   top: 0;
   right: 0;
   left: 250px;
-  height: 100px;
+  height: 80px;
   background: linear-gradient(135deg, #092642 0%, #1a365d 100%);
   color: #ffffff;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
@@ -84,15 +84,21 @@
   gap: 25px;
 }
 
+.user-info span{
+  color: #ffffff;
+}
+
 .user-info {
   display: flex;
   align-items: center;
+  text-align: center;
   gap: 12px;
   padding: 8px 16px;
   background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   min-width: 200px;
+  height: 50px;
 }
 
 .user-avatar {

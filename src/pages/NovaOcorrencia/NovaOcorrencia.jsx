@@ -195,6 +195,7 @@ const NovaOcorrencia = () => {
             <div className="form-group">
               <label>Nome do Solicitante:</label>
               <input 
+                placeholder="Nome do Solicitante"
                 type="text" 
                 name="responsavel" 
                 value={formData.responsavel} 
@@ -216,6 +217,7 @@ const NovaOcorrencia = () => {
             <div className="form-group">
               <label>Descrição Detalhada:</label>
               <textarea 
+                placeholder="Descrição Detalhada:"
                 name="descricao" 
                 rows="4"
                 value={formData.descricao} 
@@ -224,7 +226,7 @@ const NovaOcorrencia = () => {
               />
             </div>
 
-            <button type="button" onClick={() => setCurrentStep(2)}>Próximo</button>
+            <button className='next' type="button" onClick={() => setCurrentStep(2)}>Próximo</button>
           </div>
         )}
 
@@ -234,6 +236,7 @@ const NovaOcorrencia = () => {
             <div className="form-group">
               <label>CEP:</label>
               <input 
+                placeholder='CEP'
                 type="text" 
                 name="cep" 
                 value={formData.cep} 
@@ -262,14 +265,14 @@ const NovaOcorrencia = () => {
                    <span style={{ color: 'red' }}>Não capturado</span>
                 )}
               </div>
-              <button type="button" onClick={getCurrentLocation} style={{ marginTop: '5px' }}>
+              <button className='localizacao' type="button" onClick={getCurrentLocation} style={{ marginTop: '5px' }}>
                 📍 Pegar Localização Atual
               </button>
             </div>
 
             <div className="buttons-row">
-              <button type="button" onClick={() => setCurrentStep(1)} className="btn-secondary">Voltar</button>
-              <button type="button" onClick={() => setCurrentStep(3)}>Próximo</button>
+              <button type="button" className='back' onClick={() =>  setCurrentStep(1)} >Voltar</button>
+              <button type="button" className='next' onClick={() => setCurrentStep(3)}>Próximo</button>
             </div>
           </div>
         )}
@@ -285,25 +288,25 @@ const NovaOcorrencia = () => {
 
             <div className="form-group">
               <label>Assinatura Digital:</label>
-              <div style={{ border: '1px solid #000', width: '300px', height: '150px', backgroundColor: '#fff' }}>
+              <div style={{ border: '1px solid #000', width: '860px', height: '250px', backgroundColor: '#fff' }}>
                 <canvas
                   ref={canvasRef}
-                  width={300}
-                  height={150}
+                  width={860}
+                  height={250}
                   onMouseDown={startDrawing}
                   onMouseMove={draw}
                   onMouseUp={stopDrawing}
                   onMouseLeave={stopDrawing}
                 />
               </div>
-              <button type="button" onClick={clearSignature} style={{ marginTop: '5px', fontSize: '0.8rem' }}>
+              <button className='next' type="button" onClick={clearSignature} style={{ marginTop: '5px', fontSize: '0.8rem' }}>
                 Limpar Assinatura
               </button>
             </div>
 
             <div className="buttons-row">
-              <button type="button" onClick={() => setCurrentStep(2)} className="btn-secondary">Voltar</button>
-              <button type="submit" disabled={loading} className="btn-success">
+              <button className='back' type="button" onClick={() => setCurrentStep(2)}>Voltar</button>
+              <button className='next' type="submit" disabled={loading}>
                 {loading ? 'Enviando...' : 'Finalizar e Criar'}
               </button>
             </div>

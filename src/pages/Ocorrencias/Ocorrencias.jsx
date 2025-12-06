@@ -1,25 +1,38 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Ocorrencias.css';
 import { fetchOcorrencias } from '../../services/ocorrenciaService'; 
 
 const Ocorrencias = () => {
+    // 🔴 HOOK PARA NAVEGAÇÃO
+    const navigate = useNavigate();
+    
     // 1. Estados para dados e controle
     const [ocorrencias, setOcorrencias] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [counts, setCounts] = useState({ Alta: 0, Média: 0, Baixa: 0, Crítica: 0 }); 
 
-    // 🔴 NOVO ESTADO: Armazena os valores dos filtros
+    // 🔴 ESTADOS PARA PAGINAÇÃO
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 10;
+
+    // 🔴 ESTADO: Armazena os valores dos filtros
     const [filters, setFilters] = useState({
         prioridade: '',
         tipo: '',
         status: '',
-        periodo: '', // Não implementaremos a lógica de data complexa, mas manteremos o estado
+        periodo: '',
         regiao: '',
         search: ''
     });
 
-    // 2. Função para buscar os dados (Inalterada)
+    // 🔴 FUNÇÃO: Navegar para a página de nova ocorrência
+    const handleRegistrarClick = () => {
+        navigate('/nova-ocorrencia');
+    };
+
+    // 2. Função para buscar os dados
     const loadOcorrencias = useCallback(async () => {
         setLoading(true);
         setError(null);
@@ -45,12 +58,12 @@ const Ocorrencias = () => {
         }
     }, []);
 
-    // 3. Efeito para carregar os dados na montagem (Inalterada)
+    // 3. Efeito para carregar os dados na montagem
     useEffect(() => {
         loadOcorrencias();
     }, [loadOcorrencias]);
 
-    // 4. Função auxiliar para formatar os dados da tabela (Inalterada)
+    // 4. Função auxiliar para formatar os dados da tabela
     const formatOcorrenciaRow = (item) => {
         const regiao = item.localizacao || 'N/A'; 
         const dataObjeto = new Date(item.data);
@@ -72,13 +85,14 @@ const Ocorrencias = () => {
         };
     };
 
-    // 🔴 NOVO: Função para lidar com a mudança nos filtros (Selects e Input de Pesquisa)
+    // 🔴 FUNÇÃO: Para lidar com a mudança nos filtros
     const handleFilterChange = (e) => {
         const { name, value } = e.target;
         setFilters(prev => ({ ...prev, [name]: value }));
+        setCurrentPage(1); // 🔴 Resetar para a primeira página ao filtrar
     };
 
-    // 🔴 NOVO: Lógica de Filtragem Local usando useMemo para performance
+    // 🔴 LÓGICA: Filtragem Local usando useMemo para performance
     const filteredOcorrencias = useMemo(() => {
         if (ocorrencias.length === 0) return [];
 
@@ -102,16 +116,37 @@ const Ocorrencias = () => {
             // A ocorrência só é exibida se TODOS os filtros baterem
             return prioridadeMatch && tipoMatch && statusMatch && searchMatch;
         });
-    }, [ocorrencias, filters]); // Recalcula sempre que ocorrencias ou filters mudarem
+    }, [ocorrencias, filters]);
 
-    // 5. Função para navegar para a página de registro (Inalterada)
-    const handleRegistrarClick = () => {
-        alert("Navegar para a página de registro de nova ocorrência...");
-    };
+    // 🔴 PAGINAÇÃO: Calcular itens para a página atual
+    const totalPages = Math.ceil(filteredOcorrencias.length / itemsPerPage);
     
-    // 🔴 NOVO: Funções para obter as opções únicas para os Selects
+    // 🔴 Calcular índice de início e fim
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentItems = filteredOcorrencias.slice(indexOfFirstItem, indexOfLastItem);
+
+    // 🔴 FUNÇÕES: Navegação entre páginas
+    const nextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const prevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const goToPage = (pageNumber) => {
+        if (pageNumber >= 1 && pageNumber <= totalPages) {
+            setCurrentPage(pageNumber);
+        }
+    };
+
+    // 🔴 FUNÇÃO: Para obter as opções únicas para os Selects
     const getUniqueOptions = (field) => {
-        // Usa Set para garantir valores únicos
         const uniqueValues = new Set(ocorrencias.map(o => o[field]).filter(Boolean));
         return Array.from(uniqueValues).sort();
     };
@@ -119,7 +154,6 @@ const Ocorrencias = () => {
     const uniquePrioridades = getUniqueOptions('prioridade');
     const uniqueNaturezas = getUniqueOptions('natureza');
     const uniqueStatus = getUniqueOptions('status');
-
 
     return (
         <div className="ocorrencias-container">
@@ -130,7 +164,7 @@ const Ocorrencias = () => {
                 </button>
             </div>
 
-            {/* Cards de Prioridade (Inalterado) */}
+            {/* Cards de Prioridade */}
             <div className="prioridade-cards">
                 <div className="card-prioridade critica"><span>{counts.Crítica}</span><p>Crítica</p></div>
                 <div className="card-prioridade alta"><span>{counts.Alta}</span><p>Alta</p></div>
@@ -138,14 +172,13 @@ const Ocorrencias = () => {
                 <div className="card-prioridade baixa"><span>{counts.Baixa}</span><p>Baixa</p></div>
             </div>
 
-            {/* 🔴 FILTROS INTEGRADOS */}
-             <div className="filtros-container">
-                 <div className="filtros-header">
+            {/* FILTROS INTEGRADOS */}
+            <div className="filtros-container">
+                <div className="filtros-header">
                     <i className="fa-solid fa-filter"></i>
                     <span>Filtrar por:</span>
-                 </div>
-                 <div className="filtros-inputs">
-                    
+                </div>
+                <div className="filtros-inputs">
                     <select name="prioridade" value={filters.prioridade} onChange={handleFilterChange}>
                         <option value="">Prioridade</option>
                         {uniquePrioridades.map(p => <option key={p} value={p}>{p}</option>)}
@@ -153,7 +186,7 @@ const Ocorrencias = () => {
                     
                     <select name="tipo" value={filters.tipo} onChange={handleFilterChange}>
                         <option value="">Tipo</option>
-                         {uniqueNaturezas.map(n => <option key={n} value={n}>{n}</option>)}
+                        {uniqueNaturezas.map(n => <option key={n} value={n}>{n}</option>)}
                     </select>
                     
                     <select name="periodo" value={filters.periodo} onChange={handleFilterChange} disabled>
@@ -179,15 +212,16 @@ const Ocorrencias = () => {
                             onChange={handleFilterChange} 
                         />
                     </div>
-                    {/* Botão Aplicar desnecessário, pois o filtro é reativo */}
                     <button className="btn-aplicar" onClick={() => loadOcorrencias()}>Atualizar Dados</button>
                 </div>
             </div>
 
-
             <div className="tabela-wrapper">
                 <div className="tabela-header">
                     <h3>Ocorrências ({filteredOcorrencias.length})</h3>
+                    <div className="pagination-info">
+                        Mostrando {indexOfFirstItem + 1}-{Math.min(indexOfLastItem, filteredOcorrencias.length)} de {filteredOcorrencias.length}
+                    </div>
                 </div>
                 <div className="tabela-container">
                     
@@ -195,43 +229,89 @@ const Ocorrencias = () => {
                     {error && <p className="error-message">Erro: {error}</p>}
                     
                     {!loading && !error && filteredOcorrencias.length === 0 && (
-                         <p className="tabela-vazia">Nenhuma ocorrência encontrada com os filtros atuais.</p>
+                        <p className="tabela-vazia">Nenhuma ocorrência encontrada com os filtros atuais.</p>
                     )}
 
-                    {!loading && filteredOcorrencias.length > 0 && (
-                        <table className="tabela-mobile">
-                            <thead>
-                                <tr>
-                                    <th>Prioridade</th>
-                                    <th>Tipo</th>
-                                    <th>Período</th>
-                                    <th>Localização</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {filteredOcorrencias.map((item) => {
-                                    const rowData = formatOcorrenciaRow(item);
-                                    return (
-                                        <tr key={rowData.id}>
-                                            <td>
-                                                <span className={`badge-prioridade ${rowData.prioridade.toLowerCase()}`}>
-                                                    {rowData.prioridade}
-                                                </span>
-                                            </td>
-                                            <td className="tipo-cell">{rowData.tipo}</td>
-                                            <td className="data-cell">{rowData.periodo}</td>
-                                            <td className="localizacao-cell">{rowData.regiao}</td>
-                                            <td>
-                                                <span className={`badge-status ${rowData.status.toLowerCase().replace('_', '')}`}>
-                                                    {rowData.status.replace('_', ' ')}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    );
-                                })}
-                            </tbody>
-                        </table>
+                    {!loading && currentItems.length > 0 && (
+                        <>
+                            <table className="tabela-mobile">
+                                <thead>
+                                    <tr>
+                                        <th>Prioridade</th>
+                                        <th>Tipo</th>
+                                        <th>Período</th>
+                                        <th>Localização</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {currentItems.map((item) => {
+                                        const rowData = formatOcorrenciaRow(item);
+                                        return (
+                                            <tr key={rowData.id}>
+                                                <td>
+                                                    <span className={`badge-prioridade ${rowData.prioridade.toLowerCase()}`}>
+                                                        {rowData.prioridade}
+                                                    </span>
+                                                </td>
+                                                <td className="tipo-cell">{rowData.tipo}</td>
+                                                <td className="data-cell">{rowData.periodo}</td>
+                                                <td className="localizacao-cell">{rowData.regiao}</td>
+                                                <td>
+                                                    <span className={`badge-status ${rowData.status.toLowerCase().replace('_', '')}`}>
+                                                        {rowData.status.replace('_', ' ')}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        );
+                                    })}
+                                </tbody>
+                            </table>
+
+                            {/* 🔴 PAGINAÇÃO */}
+                            <div className="pagination-controls">
+                                <button 
+                                    className="pagination-btn prev" 
+                                    onClick={prevPage}
+                                    disabled={currentPage === 1}
+                                >
+                                    <i className="fa-solid fa-chevron-left"></i> Anterior
+                                </button>
+                                
+                                <div className="pagination-numbers">
+                                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                                        let pageNumber;
+                                        if (totalPages <= 5) {
+                                            pageNumber = i + 1;
+                                        } else if (currentPage <= 3) {
+                                            pageNumber = i + 1;
+                                        } else if (currentPage >= totalPages - 2) {
+                                            pageNumber = totalPages - 4 + i;
+                                        } else {
+                                            pageNumber = currentPage - 2 + i;
+                                        }
+                                        
+                                        return (
+                                            <button
+                                                key={pageNumber}
+                                                className={`pagination-number ${currentPage === pageNumber ? 'active' : ''}`}
+                                                onClick={() => goToPage(pageNumber)}
+                                            >
+                                                {pageNumber}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                                
+                                <button 
+                                    className="pagination-btn next" 
+                                    onClick={nextPage}
+                                    disabled={currentPage === totalPages || totalPages === 0}
+                                >
+                                    Próximo <i className="fa-solid fa-chevron-right"></i>
+                                </button>
+                            </div>
+                        </>
                     )}
                 </div>
             </div>

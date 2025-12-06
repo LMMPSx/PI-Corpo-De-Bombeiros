@@ -1,6 +1,9 @@
+/* login.css atualizado */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
-body, html, #root {
+body.login-page-body, 
+html.login-page-html, 
+#root.login-page-root {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -9,7 +12,7 @@ body, html, #root {
   background-color: #092642;
 }
 
-.login-page {
+.login-page-custom {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,9 +23,9 @@ body, html, #root {
   position: relative;
 }
 
-.login-box {
+.login-box-custom {
   width: 610px;
-  height: 694px;
+  height: 500px;
   background-color: #092642;
   border: 5px solid #ffffff;
   border-radius: 15px;
@@ -31,22 +34,22 @@ body, html, #root {
   text-align: center;
 }
 
-.login-box h2 {
+.login-box-custom h2 {
   color: white;
   font-size: 16px;
   line-height: 1.6;
   margin-bottom: 30px;
 }
 
-.login-box h2 span {
+.login-box-custom h2 span {
   font-weight: bold;
 }
 
-.input-group {
+.input-group-custom {
   display: flex;
   align-items: center;
   width: 492px;
-  height: 104px;
+  height: 74px;
   background: #fffbfb;
   border-radius: 15px;
   margin: 20px auto;
@@ -54,32 +57,39 @@ body, html, #root {
   box-sizing: border-box;
 }
 
-.input-group input {
+.input-group-custom input {
   flex: 1;
   border: none;
   outline: none;
   font-size: 18px;
   background: transparent;
   color: #333;
+  font-family: "Montserrat", sans-serif !important;
 }
 
-.icon {
+.input-group-custom input:focus {
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+.icon-custom {
   width: 24px;
   height: 24px;
   margin-right: 10px;
   cursor: default;
 }
           
-.icon.small {
+.icon-custom.small {
   width: 20px;
   height: 20px;
 }
 
-.eye {
+.eye-custom {
   cursor: pointer;
 }
 
-.forgot {
+.forgot-custom {
   display: block;
   text-align: center;
   margin: 10px 0 25px 0px;
@@ -88,26 +98,28 @@ body, html, #root {
   text-decoration: underline;
 }
 
-.forgot:hover{
+.forgot-custom:hover{
     color: #b8b1b1;
 }
-.btn {
+
+.btn-custom {
   width: 200px;
   height: 50px;
-  background-color: #d62828;
-  color: white;
-  font-weight: bold;
-  font-size: 18px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  background-color: #d62828 !important;
+  color: white !important;
+  font-weight: bold !important;
+  font-size: 18px !important;
+  border: none !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  font-family: "Montserrat", sans-serif !important;
 }
 
-.btn:hover {
-  background-color: #a71d1d;
+.btn-custom:hover {
+  background-color: #a71d1d !important;
 }
 
-.logo-box {
+.logo-box-custom {
   width: 516px;
   height: 516px;
   position: relative;
@@ -115,42 +127,42 @@ body, html, #root {
   opacity: 1;
 }
 
-.logo-box img {
+.logo-box-custom img {
   width: 100%;
   height: auto;
 }
 
 /* 🔹 Responsividade */
 @media (max-width: 1400px) {
-  .login-page {
+  .login-page-custom {
     gap: 50px;
   }
-  .logo-box {
+  .logo-box-custom {
     width: 350px;
   }
 }
 
 @media (max-width: 900px) {
-  .login-page {
+  .login-page-custom {
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 20px;
   }
 
-  .login-box {
+  .login-box-custom {
     margin: 40px auto;
     width: 90%;
     height: auto;
   }
 
-  .input-group {
+  .input-group-custom {
     width: 100%;
     max-width: 400px;
     height: 80px;
   }
 
-  .logo-box {
+  .logo-box-custom {
     position: relative;
     width: 250px;
     height: auto;
@@ -161,27 +173,35 @@ body, html, #root {
 }
 
 @media (max-width: 500px) {
-  .login-box {
+  .login-box-custom {
     padding: 20px;
     width: 95%;
   }
 
-  .input-group {
+  .input-group-custom {
     height: 60px;
   }
 
-  .btn {
+  .btn-custom {
     width: 100%;
     max-width: 180px;
-    font-size: 16px;
+    font-size: 16px !important;
     height: 45px;
   }
 
-  .login-box h2 {
+  .login-box-custom h2 {
     font-size: 14px;
   }
 
-  .logo-box {
+  .logo-box-custom {
     width: 180px;
   }
+}
+
+/* Reset específico para prevenir interferência do Bootstrap */
+.login-page-custom input,
+.login-page-custom button,
+.login-page-custom a {
+  box-shadow: none !important;
+  outline: none !important;
 }

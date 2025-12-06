@@ -493,6 +493,133 @@
     background: #f1f1f1;
 }
 
+/* Adicione estas regras ao arquivo Ocorrencias.css existente */
+
+/* 🔴 PAGINAÇÃO */
+.pagination-info {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-top: 1px solid var(--cor-borda);
+    background: #f8f9fa;
+}
+
+.pagination-btn {
+    padding: 10px 20px;
+    border: 1px solid var(--cor-borda);
+    background: white;
+    color: var(--cor-texto-principal);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--cor-amarelo), #f0ad4e);
+    border-color: var(--cor-amarelo);
+    color: var(--cor-texto-principal);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(241, 201, 76, 0.3);
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-numbers {
+    display: flex;
+    gap: 8px;
+}
+
+.pagination-number {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--cor-borda);
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.pagination-number:hover {
+    background: #f0f0f0;
+    border-color: #ccc;
+}
+
+.pagination-number.active {
+    background: linear-gradient(135deg, var(--cor-amarelo), #f0ad4e);
+    color: var(--cor-texto-principal);
+    border-color: var(--cor-amarelo);
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(241, 201, 76, 0.3);
+}
+
+/* Melhorias para tabela paginada */
+.tabela-wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 600px; /* Altura mínima para manter consistência */
+}
+
+.tabela-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Responsividade da paginação */
+@media (max-width: 768px) {
+    .pagination-controls {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+    }
+    
+    .pagination-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .pagination-numbers {
+        order: -1;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .pagination-info {
+        text-align: center;
+    }
+}
+
+/* Melhorias para mobile */
+@media (max-width: 480px) {
+    .pagination-number {
+        width: 35px;
+        height: 35px;
+        font-size: 0.8rem;
+    }
+    
+    .pagination-btn {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+}
 /* ========== RESPONSIVIDADE ========== */
 
 /* Tablet Pequeno (768px+) */

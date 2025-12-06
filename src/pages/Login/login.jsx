@@ -41,32 +41,21 @@ export default function Login({ onLogin }) {
         }
 
     } catch (error) {
-        const errorMsg = err.response 
-                             ? err.response.data.message || 'Credenciais inválidas.' // Tenta pegar a mensagem do Spring
-                             : 'Erro de conexão com o servidor.'; // Falha de rede/CORS
+        const errorMsg = error.response 
+                             ? error.response.data.message || 'Credenciais inválidas.'
+                             : 'Erro de conexão com o servidor.';
 
-            setError(errorMsg);
-            alert(`Erro de Login: ${errorMsg}`);
+        setError(errorMsg);
+        alert(`Erro de Login: ${errorMsg}`);
 
     } finally {
         setLoading(false);
-
-    }
-
-
-    
-    if (emailCpf && password) {
-      if (onLogin && typeof onLogin === 'function') {
-        onLogin();
-      }
-    } else {
-      alert("Por favor, preencha todos os campos!");
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="login-box">
+    <div className="login-page-custom">
+      <div className="login-box-custom">
         <h2>
           PAINEL DE COLETA E <br />
           GESTÃO DE OCORRÊNCIAS <br />
@@ -74,47 +63,49 @@ export default function Login({ onLogin }) {
         </h2>
 
         <form onSubmit={handleLogin}>
-          <div className="input-group">
-            <img src={icone} alt="Ícone de Usuário" className="icon" />
+          <div className="input-group-custom">
+            <img src={icone} alt="Ícone de Usuário" className="icon-custom" />
             <input 
               type="text" 
               placeholder="CPF"
               value={emailCpf}
               onChange={(e) => setEmailCpf(e.target.value)}
               required
+              className="login-input"
             />
           </div>
 
-          <div className="input-group">
-            <img src={cadeado} alt="Ícone de Cadeado" className="icon" />
+          <div className="input-group-custom">
+            <img src={cadeado} alt="Ícone de Cadeado" className="icon-custom" />
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Senha"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="login-input"
             />
             <img
               src={Olho}
               alt="Ícone de Olho"
-              className="icon eye"
+              className="icon-custom eye-custom"
               onClick={() => setShowPassword(!showPassword)}
               style={{ cursor: "pointer" }}
             />
           </div>
           
-          <Link to="/esqueceu-senha" className="forgot">
+          <Link to="/esqueceu-senha" className="forgot-custom">
             Esqueceu sua senha?
           </Link>
           
-          <button type="submit" className="btn">
-            Entrar
+          <button type="submit" className="btn-custom" disabled={loading}>
+            {loading ? "Carregando..." : "Entrar"}
           </button>
         </form>
       </div>
 
-      <div className="logo-box">
-        <img src={logo} alt="Logo" className="logo" />
+      <div className="logo-box-custom">
+        <img src={logo} alt="Logo" className="logo-custom" />
       </div>
     </div>
   );

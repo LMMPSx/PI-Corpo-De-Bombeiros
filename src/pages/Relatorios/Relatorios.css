@@ -1,8 +1,10 @@
+/* Relatorios.css atualizado */
+
 .auditoria-container {
   background-color: #FFFFFF;
   min-height: 100vh;
   padding: 2rem;
-  font-family: Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', sans-serif;
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -14,14 +16,19 @@
   border-radius: 15px;
   padding: 30px 40px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1400px;
   color: white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
 }
 
 .auditoria-header h1 {
     margin-top: 0;
     margin-bottom: 30px;
     font-size: 28px;
+    font-weight: 600;
+    color: #ffffff;
+    border-bottom: 2px solid #c72a2a;
+    padding-bottom: 10px;
 }
 
 .filters-grid {
@@ -36,116 +43,350 @@
     display: block;
     margin-bottom: 8px;
     font-size: 14px;
+    font-weight: 500;
+    color: #e9ecef;
 }
 
-.filter-item select, .filter-item input {
+.filter-item select {
     width: 100%;
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid #ccc;
-    background-color: #f0f2f5;
+    border: 1px solid #495057;
+    background-color: #1e2a3a;
+    color: white;
     font-size: 16px;
     box-sizing: border-box;
+    transition: all 0.3s ease;
 }
 
-.btn-filtrar {
-    background-color: #ffc107;
-    color: #212529;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.2s;
-}
-
-.btn-filtrar:hover {
-    background-color: #e0a800;
+.filter-item select:focus {
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+    outline: none;
 }
 
 .table-wrapper {
     background-color: white;
     border-radius: 8px;
-    padding: 1rem;
+    padding: 1.5rem;
     overflow-x: auto;
     margin-bottom: 25px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .logs-table {
     width: 100%;
-    border-collapse: collapse;
     color: #333;
-}
-
-.logs-table th, .logs-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    white-space: nowrap;
+    font-size: 14px;
+    border-collapse: collapse;
 }
 
 .logs-table th {
-    background-color: #0d47a1;
+    background-color: #212529;
     color: white;
-    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 15px;
+    white-space: nowrap;
+    border: none;
 }
 
-.logs-table tbody tr:nth-child(even) {
+.logs-table td {
+    padding: 12px 15px;
+    vertical-align: middle;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.logs-table tbody tr:hover {
     background-color: #f8f9fa;
 }
 
 .auditoria-footer {
+    padding-top: 25px;
+    border-top: 1px solid #495057;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 15px;
+    flex-direction: column;
+    gap: 20px;
 }
 
+/* BOTÕES DE EXPORTAÇÃO CORRIGIDOS */
 .export-buttons {
     display: flex;
     gap: 15px;
+    justify-content: flex-start;
 }
 
 .btn-export {
-    background-color: #ffc107;
-    color: #212529;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s;
-}
-
-.btn-export:hover {
-    background-color: #e0a800;
-}
-
-.pagination {
-    font-size: 16px;
-    font-weight: bold;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    min-width: 160px;
+    text-decoration: none;
 }
 
-.pagination button {
+.btn-export:first-child {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.btn-export:first-child:hover {
+    background: linear-gradient(135deg, #218838, #1ba87e);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.3);
+}
+
+.btn-export:last-child {
+    background: linear-gradient(135deg, #dc3545, #e83e8c);
+    color: white;
+}
+
+.btn-export:last-child:hover {
+    background: linear-gradient(135deg, #c82333, #d63384);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(220, 53, 69, 0.3);
+}
+
+.btn-export i {
+    font-size: 18px;
+    margin-right: 8px;
+}
+
+/* PAGINAÇÃO CORRIGIDA */
+.pagination-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.pagination-info {
+    font-size: 14px;
+    color: #e9ecef;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+.pagination-controls {
+    background: none;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center;
+}
+
+.page-numbers {
+    display: flex;
+    gap: 8px;
+}
+
+.pagination-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid #ffc107;
+    background: transparent;
+    color: #ffc107;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.pagination-btn:hover:not(:disabled) {
     background-color: #ffc107;
     color: #212529;
-    border: none;
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
+    transform: scale(1.1);
 }
 
-.pagination button:disabled {
-    background-color: #6c757d;
+.pagination-btn:disabled {
+    opacity: 0.5;
     cursor: not-allowed;
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.page-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.page-number:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.page-number.active {
+    background-color: #ffc107;
+    color: #212529;
+    border-color: #ffc107;
+    transform: scale(1.1);
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+.page-size-info {
+    font-size: 12px;
+    color: #adb5bd;
+    margin-top: 5px;
+    text-align: center;
+}
+
+/* Estilos para badges de ação */
+.action-badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.action-badge.criacao {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.action-badge.alteracao {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.action-badge.exclusao {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.action-badge.login {
+    background-color: #cce5ff;
+    color: #004085;
+    border: 1px solid #b8daff;
+}
+
+.action-badge.logout {
+    background-color: #e2e3e5;
+    color: #383d41;
+    border: 1px solid #d6d8db;
+}
+
+/* Reset para botões (evitar Bootstrap) */
+.pagination-btn,
+.page-number,
+.btn-export {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+/* Ajustes para responsividade */
+@media (max-width: 768px) {
+    .auditoria-container {
+        padding: 1rem;
+    }
+    
+    .auditoria-content {
+        padding: 20px;
+    }
+    
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .auditoria-footer {
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .export-buttons {
+        width: 100%;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    .btn-export {
+        min-width: 140px;
+        padding: 10px 20px;
+    }
+    
+    .pagination-controls {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .page-numbers {
+        order: -1;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .pagination-btn,
+    .page-number {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+}
+
+/* Mobile muito pequeno */
+@media (max-width: 480px) {
+    .btn-export {
+        width: 100%;
+        max-width: 200px;
+        margin: 5px 0;
+    }
+    
+    .pagination-info {
+        font-size: 12px;
+    }
+    
+    .page-size-info {
+        font-size: 11px;
+    }
+}
+
+/* Acessibilidade */
+.btn-export:focus,
+.pagination-btn:focus,
+.page-number:focus {
+    outline: 2px solid #ffc107;
+    outline-offset: 2px;
+}
+
+/* Feedback visual para toques */
+.btn-export:active,
+.pagination-btn:active,
+.page-number:active {
+    transform: scale(0.98);
+}
+
+/* Loading states */
+.btn-export:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
 }

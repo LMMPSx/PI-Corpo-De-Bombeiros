@@ -64,13 +64,13 @@ const Header = ({ onToggleSidebar, onLogout, notificationCount = 0 }) => {
       
       <div className="header-right">
         <div className="user-info">
-          <div className="user-avatar">
+          {/* <div className="user-avatar">
             {userPhoto ? (
               <img src={userPhoto} alt={userName} className="user-photo" />
             ) : (
               <FaUserCircle className="avatar-icon" />
             )}
-          </div>
+          </div> */}
           <div className="user-details">
             <span className="user-name">{userName || 'Usuário'}</span>
             <div className="user-role">
