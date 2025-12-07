@@ -1,5 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import './Sidebar.css';
+import logo from "../../assets/logo.png";
 
 const Sidebar = ({ isOpen, onClose }) => {
   const location = useLocation();
@@ -40,7 +41,7 @@ const Sidebar = ({ isOpen, onClose }) => {
       <div className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
         <div className="sidebar-header">
           <div className="logo-container">
-            <img src="../../assets/logo.png" className="iconHeader" alt="Logo CBMPE" />
+            <img src={logo} className="iconHeader" alt="Logo CBMPE" />
           </div>
           <h3>CBMPE</h3>
         </div>
